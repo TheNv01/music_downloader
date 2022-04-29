@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginEnd="-10dp">
+
+
+    <ImageView
+        android:id="@+id/background_trending"
+        android:layout_width="146dp"
+        android:layout_height="216dp"
+        android:layout_marginTop="22dp"
+        android:src="@drawable/trending_test"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/img_background_text"
+        android:layout_width="136dp"
+        android:layout_height="37dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginBottom="7dp"
+        android:background="@color/transparent"
+        app:layout_constraintBottom_toBottomOf="@id/background_trending"
+        app:layout_constraintEnd_toEndOf="@id/background_trending"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@id/background_trending" />
+
+    <TextView
+        android:id="@+id/tv_single"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="12sp"
+        android:textColor="@color/white"
+        android:text="Last Christmas"
+        app:layout_constraintStart_toStartOf="@id/img_background_text"
+        app:layout_constraintTop_toTopOf="@id/img_background_text"
+        app:layout_constraintBottom_toTopOf="@+id/tv_music"
+        android:layout_marginStart="6dp"
+        app:layout_constraintVertical_chainStyle="packed"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/tv_music"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="10sp"
+        android:textColor="@color/white"
+        android:text="Devon Lane"
+        app:layout_constraintStart_toStartOf="@id/img_background_text"
+        app:layout_constraintTop_toBottomOf="@id/tv_single"
+        app:layout_constraintBottom_toBottomOf="@id/img_background_text"
+        android:layout_marginStart="6dp"
+        app:layout_constraintVertical_chainStyle="packed"/>
+    <View
+        android:id="@+id/view"
+        android:layout_width="136dp"
+        android:layout_height="37dp"
+        app:layout_constraintBottom_toTopOf="@+id/img_background_text"
+        app:layout_constraintStart_toStartOf="@id/background_trending"/>
+
+    <ImageView
+        android:layout_width="27dp"
+        android:layout_height="27dp"
+        android:src="@drawable/ic_play"
+        app:layout_constraintEnd_toEndOf="@id/img_background_text"
+        app:layout_constraintBottom_toBottomOf="@id/img_background_text"
+        app:layout_constraintTop_toTopOf="@id/view"
+        android:layout_marginEnd="11dp"/>
+
+    <TextView
+        android:id="@+id/some_id"
+        android:layout_width="59dp"
+        android:layout_height="80dp"
+        android:layout_alignParentStart="true"
+        android:fontFamily="@font/inter_black"
+        android:layout_alignParentTop="true"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="#1"
+        android:textColor="@color/white"
+        android:textSize="50sp"
+        android:lineSpacingExtra="19sp"
+        android:translationY="-9.5sp"
+        android:gravity="top"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Music Downloader</string>
+
+    <string-array name="category">
+        <item>Top News</item>
+        <item>Business</item>
+        <item>Politics</item>
+        <item>Sports</item>
+        <item>Technology</item>
+        <item>Movies</item>
+    </string-array>
+=
+</resources>

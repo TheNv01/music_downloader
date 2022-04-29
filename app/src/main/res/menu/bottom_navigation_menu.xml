@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/page_home"
+        android:enabled="true"
+        android:icon="@drawable/tab_home"
+        android:title="" />
+    <item
+        android:id="@+id/page_download"
+        android:enabled="true"
+        android:icon="@drawable/tab_download"
+        android:title=""/>
+
+    <item
+        android:id="@+id/page_play_list"
+        android:enabled="true"
+        android:icon="@drawable/tab_paly_list"
+        android:title=""/>
+
+    <item
+        android:id="@+id/page_setting"
+        android:enabled="true"
+        android:icon="@drawable/tab_setting"
+        android:title=""/>
+</menu>

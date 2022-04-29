@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/kalis/AndroidStudioProjects/MusicDownloader/app/src/main/res/drawable/tab_download.xml" value="0.1935" />
+        <entry key="..\:/Users/kalis/AndroidStudioProjects/MusicDownloader/app/src/main/res/drawable/tab_paly_list.xml" value="0.1935" />
+        <entry key="..\:/Users/kalis/AndroidStudioProjects/MusicDownloader/app/src/main/res/drawable/tab_setting.xml" value="0.1935" />
+        <entry key="..\:/Users/kalis/AndroidStudioProjects/MusicDownloader/app/src/main/res/drawable/test.xml" value="0.2145" />
+        <entry key="..\:/Users/kalis/AndroidStudioProjects/MusicDownloader/app/src/main/res/drawable/vector_trending.xml" value="0.2145" />
+        <entry key="..\:/Users/kalis/AndroidStudioProjects/MusicDownloader/app/src/main/res/layout-v28/item_top_rating.xml" value="0.3625" />
+        <entry key="..\:/Users/kalis/AndroidStudioProjects/MusicDownloader/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/Users/kalis/AndroidStudioProjects/MusicDownloader/app/src/main/res/layout/download_fragment.xml" value="0.18541666666666667" />
+        <entry key="..\:/Users/kalis/AndroidStudioProjects/MusicDownloader/app/src/main/res/layout/home_fragment.xml" value="0.25" />
+        <entry key="..\:/Users/kalis/AndroidStudioProjects/MusicDownloader/app/src/main/res/layout/item_genres.xml" value="0.5" />
+        <entry key="..\:/Users/kalis/AndroidStudioProjects/MusicDownloader/app/src/main/res/layout/item_rating.xml" value="0.67" />
+        <entry key="..\:/Users/kalis/AndroidStudioProjects/MusicDownloader/app/src/main/res/layout/item_rating_top.xml" value="0.3625" />
+        <entry key="..\:/Users/kalis/AndroidStudioProjects/MusicDownloader/app/src/main/res/layout/item_top_downloaded.xml" value="0.18541666666666667" />
+        <entry key="..\:/Users/kalis/AndroidStudioProjects/MusicDownloader/app/src/main/res/layout/item_top_listened.xml" value="0.33" />
+        <entry key="..\:/Users/kalis/AndroidStudioProjects/MusicDownloader/app/src/main/res/layout/item_top_rating.xml" value="0.9" />
+        <entry key="..\:/Users/kalis/AndroidStudioProjects/MusicDownloader/app/src/main/res/layout/item_trending.xml" value="0.5" />
+        <entry key="..\:/Users/kalis/AndroidStudioProjects/MusicDownloader/app/src/main/res/layout/play_list_fragment.xml" value="0.18541666666666667" />
+        <entry key="..\:/Users/kalis/AndroidStudioProjects/MusicDownloader/app/src/main/res/layout/setting_fragment.xml" value="0.18541666666666667" />
+        <entry key="..\:/Users/kalis/AndroidStudioProjects/MusicDownloader/app/src/main/res/layout/spiner.xml" value="0.3625" />
+        <entry key="..\:/Users/kalis/AndroidStudioProjects/MusicDownloader/app/src/main/res/layout/splash_fragment.xml" value="0.25" />
+        <entry key="..\:/Users/kalis/AndroidStudioProjects/MusicDownloader/app/src/main/res/menu/bottom_navigation_menu.xml" value="0.3625" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
