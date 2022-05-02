@@ -1,12 +1,11 @@
 package com.example.musicdownloader.view
 
 import android.os.Bundle
-import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
-import com.example.musicdownloader.OnActionCallBack
 import com.example.musicdownloader.R
+import com.example.musicdownloader.interfaces.OnActionCallBack
 import com.example.musicdownloader.databinding.ActivityMainBinding
 import com.example.musicdownloader.view.fragment.*
 
@@ -83,6 +82,10 @@ class MainActivity : AppCompatActivity(), OnActionCallBack {
             SplashFragment.KEY_SHOW_HOME -> {
                 val homeFragment = HomeFragment(this)
                 showFragment(homeFragment, false, 0, 0)
+            }
+            HomeFragment.KEY_SHOW_PLAY_MUSIC ->{
+                val playMusicFragment = PlayMusicFragment(this)
+                showFragment(playMusicFragment, false, 0, 0)
             }
 
         }

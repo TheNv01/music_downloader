@@ -1,11 +1,9 @@
 package com.example.musicdownloader.view.fragment
 
 import android.view.View
-import com.example.musicdownloader.OnActionCallBack
 import com.example.musicdownloader.R
-import com.example.musicdownloader.databinding.DownloadFragmentBinding
+import com.example.musicdownloader.interfaces.OnActionCallBack
 import com.example.musicdownloader.databinding.PlayListFragmentBinding
-import com.example.musicdownloader.viewmodel.DownloadViewModel
 import com.example.musicdownloader.viewmodel.PlayListViewModel
 
 class PlayListFragment(private val callBack: OnActionCallBack): BaseFragment<PlayListFragmentBinding, PlayListViewModel>(callBack) {
