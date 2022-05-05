@@ -9,4 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="color_null"> </color>
     <color name="transparent">#DF252424</color>
+
+    <color name="semiTransparentBlack">#6E595151</color>
 </resources>

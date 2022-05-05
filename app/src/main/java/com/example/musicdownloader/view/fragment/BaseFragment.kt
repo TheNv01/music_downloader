@@ -16,7 +16,7 @@ abstract class BaseFragment<K: ViewDataBinding, V: ViewModel>(callBack: OnAction
 
     private lateinit var mRootView: View
     protected lateinit var mViewModel: V
-    protected lateinit var binding: K
+    lateinit var binding: K
 
     @Nullable
     override fun onCreateView(
