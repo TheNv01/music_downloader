@@ -6,14 +6,92 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
+        <ImageView
+            android:id="@+id/img_background"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@drawable/background_setting"/>
+
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="setting"
+            android:src="@drawable/earphone"
+            app:layout_constraintBottom_toBottomOf="@id/img_background"
+            app:layout_constraintEnd_toEndOf="@id/img_background"
+            app:layout_constraintStart_toStartOf="@id/img_background"
+            app:layout_constraintTop_toTopOf="@id/img_background" />
+
+        <TextView
+            android:id="@+id/tv_upgrade"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Upgrade To"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="@id/img_background"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintBottom_toTopOf="@id/tv_premium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"/>
+
+        <com.cbr.gradienttextview.GradientTextView
+            android:id="@+id/tv_premium"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:gt_color_list="@array/gradient"
+            app:gt_gradient_direction="right"
+            android:text="P R E M I U M"
+            android:textColor="@color/endColor"
+            android:textSize="48sp"
+            android:fontFamily="@font/inter_black"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/tv_upgrade"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/tv_enjoy"
+            app:layout_constraintVertical_chainStyle="packed"/>
+
+        <TextView
+            android:id="@+id/tv_enjoy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Enjoy the Best Music Experience"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            app:layout_constraintTop_toBottomOf="@id/tv_premium"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/img_background"
+            app:layout_constraintVertical_chainStyle="packed"/>
+
+        <TextView
+            android:id="@+id/btn_upgrade_now"
+            android:layout_width="159dp"
+            android:layout_height="43dp"
+            android:text="upgrade now"
+            android:layout_marginTop="40dp"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_enjoy"
+            android:background="@drawable/gradient_yellow" />
+
+        <LinearLayout
+            android:id="@+id/layout_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@+id/btn_upgrade_now"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/background_bottom_setting"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

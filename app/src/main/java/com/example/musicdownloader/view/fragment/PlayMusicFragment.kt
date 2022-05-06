@@ -10,7 +10,6 @@ import com.example.musicdownloader.interfaces.OnActionCallBack
 import com.example.musicdownloader.databinding.PlayMusicFragmentBinding
 import com.example.musicdownloader.view.MainActivity
 import com.example.musicdownloader.viewmodel.PlayMusicViewModel
-import com.marcinmoskala.arcseekbar.ArcSeekBar
 import kotlin.math.abs
 
 class PlayMusicFragment(private val callBack: OnActionCallBack): BaseFragment<PlayMusicFragmentBinding, PlayMusicViewModel>(callBack) {
