@@ -10,5 +10,7 @@
     <color name="color_null"> </color>
     <color name="transparent">#DF252424</color>
 
+    <color name="super_transparent">#00000000</color>
+
     <color name="semiTransparentBlack">#6E595151</color>
 </resources>

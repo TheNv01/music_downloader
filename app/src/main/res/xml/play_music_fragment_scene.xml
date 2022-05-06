@@ -4,7 +4,7 @@
 
     <ConstraintSet android:id="@+id/end">
         <Constraint
-            android:id="@+id/img_test"
+            android:id="@+id/img_background_rectangle"
             android:layout_width="match_parent"
             android:layout_height="490dp"
             app:layout_constraintTop_toTopOf="parent"
@@ -31,21 +31,22 @@
             android:alpha="1"
             app:layout_constraintTop_toTopOf="@id/ic_back" />
         <Constraint
-            android:id="@+id/view_blur"
+            android:id="@+id/img_cover_background"
             android:layout_width="match_parent"
             android:layout_height="490dp"
             app:layout_constraintTop_toTopOf="parent"
             android:translationZ="1dp"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"/>
+
         <Constraint
             android:id="@+id/img_circle"
             android:layout_width="229dp"
             android:layout_height="229dp"
             android:translationZ="3dp"
-            app:layout_constraintBottom_toBottomOf="@id/view_blur"
-            app:layout_constraintTop_toTopOf="@id/view_blur"
-            app:layout_constraintStart_toStartOf="@id/view_blur"
-            app:layout_constraintEnd_toEndOf="@id/view_blur"/>
+            app:layout_constraintBottom_toBottomOf="@id/img_cover_background"
+            app:layout_constraintTop_toTopOf="@id/img_cover_background"
+            app:layout_constraintStart_toStartOf="@id/img_cover_background"
+            app:layout_constraintEnd_toEndOf="@id/img_cover_background"/>
 
 
         <Constraint
@@ -74,7 +75,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:translationZ="2dp"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="6dp"
             app:layout_constraintBottom_toBottomOf="@id/layout_control"
             app:layout_constraintTop_toTopOf="@id/layout_control"
             app:layout_constraintStart_toStartOf="@id/layout_control"/>
@@ -82,7 +83,7 @@
 
         <Constraint
             android:id="@+id/ic_close"
-            app:layout_constraintEnd_toEndOf="@id/view_blur"
+            app:layout_constraintEnd_toEndOf="@id/img_cover_background"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:alpha="0"
@@ -99,14 +100,28 @@
             app:layout_constraintBottom_toBottomOf="@id/img_circle"
             android:rotation="180"
             app:layout_constraintStart_toStartOf="@+id/img_circle"
-            android:layout_marginTop="28dp"/>
+            android:layout_marginTop="28dp">
+
+            <CustomAttribute
+                app:attributeName="alphaThumb"
+                app:customIntegerValue="255"/>
+
+            <CustomAttribute
+                app:attributeName="progressBackgroundWidth"
+                app:customDimension="4dp"/>
+
+            <CustomAttribute
+                app:attributeName="progressWidth"
+                app:customDimension="4dp"/>
+
+        </Constraint>
 
         <Constraint
             android:id="@+id/layout_control"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_width="match_parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/view_blur"
+            app:layout_constraintTop_toBottomOf="@id/img_cover_background"
             android:alpha="1"
             android:translationZ="1dp"
             app:layout_constraintStart_toStartOf="parent" />
@@ -117,17 +132,44 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:alpha="1"
+            android:translationZ="2dp"
             app:layout_constraintTop_toTopOf="@+id/tv_single" />
+
+
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/start">
+        <Constraint
+            android:id="@+id/seek_bar"
+            app:layout_constraintEnd_toEndOf="@id/img_cover_background"
+            android:layout_width="match_parent"
+            android:layout_height="18dp"
+            android:rotationY="180"
+            android:layout_marginBottom="-10dp"
+            app:layout_constraintBottom_toTopOf="@id/img_cover_background"
+            android:rotation="180"
+            app:layout_constraintStart_toStartOf="@+id/img_cover_background" >
 
+            <CustomAttribute
+                app:attributeName="alphaThumb"
+                app:customIntegerValue="0"/>
+
+            <CustomAttribute
+                app:attributeName="progressBackgroundWidth"
+                app:customDimension="2dp"/>
+
+            <CustomAttribute
+                app:attributeName="progressWidth"
+                app:customDimension="2dp"/>
+
+        </Constraint>
     </ConstraintSet>
 
     <Transition
         app:constraintSetEnd="@id/end"
         app:constraintSetStart="@+id/start"
-        app:motionInterpolator="easeInOut">
+        app:motionInterpolator="easeInOut"
+        app:duration="400">
 
         <KeyFrameSet >
 
@@ -166,7 +208,7 @@
             <KeyAttribute
                 app:motionTarget="@+id/ic_close"
                 app:framePosition="5"
-                android:alpha="1"/>
+                android:alpha="0"/>
 
             <KeyAttribute
                 app:motionTarget="@+id/layout_control"
@@ -183,45 +225,22 @@
                 app:framePosition="95"
                 android:alpha="0"/>
 
-
             <KeyAttribute
                 app:motionTarget="@+id/seek_bar"
                 app:framePosition="5"
                 android:alpha="0">
-                <CustomAttribute
-                    app:attributeName="progressBackgroundWidth"
-                    app:customDimension="2dp"/>
-            </KeyAttribute>
 
-            <KeyAttribute
-                app:motionTarget="@+id/seek_bar"
-                app:framePosition="5"
-                android:alpha="0">
-                <CustomAttribute
-                    app:attributeName="progressWidth"
-                    app:customDimension="2dp"/>
             </KeyAttribute>
 
             <KeyAttribute
                 app:motionTarget="@+id/seek_bar"
                 app:framePosition="95"
                 android:alpha="0">
-                <CustomAttribute
-                    app:attributeName="progressBackgroundWidth"
-                    app:customDimension="4dp"/>
-            </KeyAttribute>
 
-            <KeyAttribute
-                app:motionTarget="@+id/seek_bar"
-                app:framePosition="95"
-                android:alpha="0">
-                <CustomAttribute
-                    app:attributeName="progressWidth"
-                    app:customDimension="4dp"/>
             </KeyAttribute>
 
         </KeyFrameSet>
-        <OnSwipe app:touchAnchorId="@+id/img_test"
+        <OnSwipe app:touchAnchorId="@+id/img_cover_background"
             app:dragDirection="dragUp"
             app:touchAnchorSide="top"/>
     </Transition>

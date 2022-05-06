@@ -1,20 +1,18 @@
 package com.example.musicdownloader.view
 
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.example.musicdownloader.R
-import com.example.musicdownloader.interfaces.OnActionCallBack
 import com.example.musicdownloader.databinding.ActivityMainBinding
+import com.example.musicdownloader.interfaces.OnActionCallBack
 import com.example.musicdownloader.view.fragment.*
-import com.marcinmoskala.arcseekbar.ArcSeekBar
 
 class MainActivity : AppCompatActivity(), OnActionCallBack {
 
     lateinit var binding: ActivityMainBinding
-    var playMusicFragment: PlayMusicFragment? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,22 +29,22 @@ class MainActivity : AppCompatActivity(), OnActionCallBack {
             when(it.itemId){
                 R.id.page_home ->{
                     val homeFragment = HomeFragment(this)
-                    showFragment(homeFragment, false, 0, 0)
+                    showFragment(R.id.container_navigation, homeFragment, false, 0, 0)
                     true
                 }
                 R.id.page_download ->{
                     val downloadFragment = DownloadFragment(this)
-                    showFragment(downloadFragment, false, 0, 0)
+                    showFragment(R.id.container_navigation, downloadFragment, false, 0, 0)
                     true
                 }
                 R.id.page_play_list ->{
                     val playlistFragment = PlayListFragment(this)
-                    showFragment(playlistFragment, false, 0, 0)
+                    showFragment(R.id.container_navigation, playlistFragment, false, 0, 0)
                     true
                 }
                 R.id.page_setting ->{
                     val settingFragment = SettingFragment(this)
-                    showFragment(settingFragment, false, 0, 0)
+                    showFragment(R.id.container_navigation, settingFragment, false, 0, 0)
                     true
                 }
                 else -> false
@@ -57,12 +55,13 @@ class MainActivity : AppCompatActivity(), OnActionCallBack {
 
     private fun initView() {
         val homeFragment = HomeFragment(this)
-        showFragment(homeFragment, false, 0, 0)
+        showFragment(R.id.container_navigation, homeFragment,false, 0, 0)
 //        val playMusicFragment = PlayMusicFragment(this)
 //        showFragment(playMusicFragment, false, 0, 0)
     }
 
     private fun showFragment(
+        container: Int,
         fragment: Fragment,
         addToBackStack: Boolean,
         anim_start: Int,
@@ -72,7 +71,7 @@ class MainActivity : AppCompatActivity(), OnActionCallBack {
             if (anim_end != 0 && anim_start != 0) {
                 transaction.setCustomAnimations(anim_start, anim_end)
             }
-            transaction.replace(R.id.container_navigation, fragment)
+            transaction.replace(container, fragment)
             if (addToBackStack) {
                 transaction.addToBackStack("add")
             }
@@ -97,11 +96,11 @@ class MainActivity : AppCompatActivity(), OnActionCallBack {
     override fun callBack(key: String?, data: Any?) {
         when (key) {
             HomeFragment.KEY_SHOW_PLAY_MUSIC ->{
-                if(playMusicFragment == null){
-                    playMusicFragment = PlayMusicFragment(this)
-                    val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
-                    transaction.replace(R.id.container_layout_playing, playMusicFragment!!)
-                    transaction.commit()
+                (supportFragmentManager.findFragmentById(R.id.container_layout_playing)).also {
+                    if (it == null) {
+                        val playMusicFragment =  PlayMusicFragment(this)
+                        showFragment(R.id.container_layout_playing, playMusicFragment, true, 0 , 0)
+                    }
                 }
             }
         }

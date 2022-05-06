@@ -1,24 +1,28 @@
 package com.example.musicdownloader
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Rect
 import android.util.AttributeSet
-import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import androidx.constraintlayout.motion.widget.MotionLayout
+import kotlin.math.abs
 
 class SingleViewTouchableMotionLayout(context: Context, attributeSet: AttributeSet? = null) : MotionLayout(context, attributeSet) {
 
+    private var startX: Float? = null
+    private var startY: Float? = null
+
     private val viewToDetectTouch by lazy {
-        findViewById<View>(R.id.view_blur) //TODO move to Attributes
+        findViewById<View>(R.id.img_cover_background) //TODO move to Attributes
     }
     private val viewRect = Rect()
     private var touchStarted = false
     private val transitionListenerList = mutableListOf<TransitionListener?>()
 
     init {
-        addTransitionListenerr(object : TransitionListener {
+        addTransitionListener(object : TransitionListener {
             override fun onTransitionChange(p0: MotionLayout?, p1: Int, p2: Int, p3: Float) {
             }
 
@@ -53,20 +57,14 @@ class SingleViewTouchableMotionLayout(context: Context, attributeSet: AttributeS
     }
 
     override fun setTransitionListener(listener: TransitionListener?) {
-        addTransitionListenerr(listener)
+        addTransitionListener(listener)
     }
 
-    fun addTransitionListenerr(listener: TransitionListener?) {
+    override fun addTransitionListener(listener: TransitionListener?) {
         transitionListenerList += listener
     }
 
-    private val gestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
-        override fun onSingleTapConfirmed(e: MotionEvent?): Boolean {
-            transitionToEnd()
-            return false
-        }
-    })
-
+    @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent): Boolean {
         when (event.actionMasked) {
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
@@ -79,5 +77,52 @@ class SingleViewTouchableMotionLayout(context: Context, attributeSet: AttributeS
             touchStarted = viewRect.contains(event.x.toInt(), event.y.toInt())
         }
         return touchStarted && super.onTouchEvent(event)
+    }
+
+    private fun touchEventInsideTargetView(v: View, ev: MotionEvent): Boolean {
+        if (ev.x > v.left && ev.x < v.right) {
+            if (ev.y > v.top && ev.y < v.bottom) {
+                return true
+            }
+        }
+        return false
+    }
+
+    override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
+        if (touchEventInsideTargetView(findViewById(R.id.img_cover_background), ev)) {
+            when (ev.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    startX = ev.x
+                    startY = ev.y
+                }
+
+                MotionEvent.ACTION_UP   -> {
+                    val endX = ev.x
+                    val endY = ev.y
+                    if (isAClick(startX!!, endX, startY!!, endY)) {
+                        if (doClickTransition()) {
+                            return true
+                        }
+                    }
+                }
+            }
+        }
+
+        return super.dispatchTouchEvent(ev)
+    }
+
+    private fun doClickTransition(): Boolean {
+        var isClickHandled = false
+        if (this.progress < 0.05F) {
+            this.transitionToEnd()
+            isClickHandled = true
+        }
+        return isClickHandled
+    }
+
+    private fun isAClick(startX: Float, endX: Float, startY: Float, endY: Float): Boolean {
+        val differenceX = abs(startX - endX)
+        val differenceY = abs(startY - endY)
+        return !/* =5 */(differenceX > 200 || differenceY > 200)
     }
 }

@@ -8,7 +8,7 @@
         android:id="@+id/layout_top_ratting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="-10dp">
+        android:layout_marginEnd="-8dp">
 
         <ImageView
             android:id="@+id/background_rating"
@@ -75,20 +75,18 @@
             app:layout_constraintTop_toTopOf="@id/view"
             android:layout_marginEnd="11dp"/>
 
-        <TextView
+        <com.maggie.stroketextviewlibrary.StrokeTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="#1"
-            android:textColor="@color/black"
-            android:textSize="50sp"
             android:fontFamily="@font/inter_black"
-            android:layout_marginTop="-10dp"
+            android:textSize="50sp"
+            android:textColor="@color/black"
+            app:stroke="7.0"
+            app:strokeColor="@color/white"
+            android:layout_marginTop="-11dp"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:shadowColor="@color/white"
-            android:shadowDx="0"
-            android:shadowDy="0"
-            android:shadowRadius="10"/>
+            app:layout_constraintStart_toStartOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

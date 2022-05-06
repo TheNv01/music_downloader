@@ -34,7 +34,7 @@
             android:layout_marginEnd="16dp"/>
 
         <ImageView
-            android:id="@+id/img_test"
+            android:id="@+id/img_background_rectangle"
             android:layout_width="150dp"
             android:layout_height="71dp"
             android:scaleType="fitXY"
@@ -45,45 +45,45 @@
             android:alpha="0"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <com.github.furkankaplan.fkblurview.FKBlurView
-            android:id="@+id/view_blur"
+        <ImageView
+            android:id="@+id/img_cover_background"
             android:layout_width="match_parent"
             android:layout_height="71dp"
-            android:background="@color/transparent"
             android:layout_marginBottom="80dp"
+            android:background="@drawable/cover_background_collapsed"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent" />
 
         <ImageView
             android:id="@+id/img_circle"
             android:layout_width="61dp"
             android:layout_height="61dp"
             android:src="@drawable/background_play_music"
-            app:layout_constraintStart_toStartOf="@id/view_blur"
-            app:layout_constraintTop_toTopOf="@id/view_blur"
-            app:layout_constraintBottom_toBottomOf="@id/view_blur"
+            app:layout_constraintStart_toStartOf="@id/img_cover_background"
+            app:layout_constraintTop_toTopOf="@id/img_cover_background"
+            app:layout_constraintBottom_toBottomOf="@id/img_cover_background"
             android:layout_marginStart="16dp"/>
 
         <TextView
             android:id="@+id/tv_single"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Single"
-            app:layout_constraintTop_toTopOf="@id/view_blur"
-            app:layout_constraintStart_toEndOf="@id/img_circle"
-            app:layout_constraintBottom_toTopOf="@id/tv_music"
-            app:layout_constraintVertical_chainStyle="packed"
             android:layout_marginStart="24dp"
+            android:text="Single"
             android:textColor="@color/white"
+            android:textSize="14sp"
             android:textStyle="bold"
-            android:textSize="14sp"/>
+            app:layout_constraintBottom_toTopOf="@id/tv_music"
+            app:layout_constraintStart_toEndOf="@id/img_circle"
+            app:layout_constraintTop_toTopOf="@id/img_cover_background"
+            app:layout_constraintVertical_chainStyle="packed" />
 
         <TextView
             android:id="@+id/tv_music"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Music"
-            app:layout_constraintBottom_toBottomOf="@id/view_blur"
+            app:layout_constraintBottom_toBottomOf="@id/img_cover_background"
             app:layout_constraintStart_toEndOf="@id/img_circle"
             app:layout_constraintTop_toBottomOf="@id/tv_single"
             app:layout_constraintVertical_chainStyle="packed"
@@ -109,7 +109,7 @@
             android:layout_marginEnd="28dp"
             app:layout_constraintTop_toTopOf="@id/tv_single"
             app:layout_constraintBottom_toBottomOf="@id/tv_music"
-            app:layout_constraintEnd_toEndOf="@id/view_blur"/>
+            app:layout_constraintEnd_toEndOf="@id/img_cover_background"/>
 
         <ImageView
             android:id="@+id/ic_favorite"
@@ -121,16 +121,15 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_single" />
 
-        <com.marcinmoskala.arcseekbar.ArcSeekBar
+        <com.example.musicdownloader.cusomseekbar.ArcSeekBar
             android:id="@+id/seek_bar"
             android:layout_width="match_parent"
-            android:layout_height="18dp"
+            android:layout_height="14dp"
             android:rotation="180"
             android:rotationY="180"
-            app:thumb="@drawable/ic_thumb_seek_bar"
-            app:layout_constraintBottom_toTopOf="@id/view_blur"
-            app:layout_constraintEnd_toEndOf="@id/view_blur"
-            app:layout_constraintStart_toStartOf="@+id/view_blur"
+            app:layout_constraintBottom_toTopOf="@id/img_cover_background"
+            app:layout_constraintEnd_toEndOf="@id/img_cover_background"
+            app:layout_constraintStart_toStartOf="@+id/img_cover_background"
             app:progressBackgroundColor="@color/white"
             app:progressColor="#FF728C" />
 
@@ -141,7 +140,7 @@
             android:alpha="0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/view_blur"
+            app:layout_constraintTop_toBottomOf="@id/img_cover_background"
             app:layout_constraintBottom_toBottomOf="parent"
             android:background="@color/black">
 
