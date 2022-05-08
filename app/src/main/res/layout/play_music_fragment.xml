@@ -11,14 +11,32 @@
         android:background="@android:color/transparent"
         app:layoutDescription="@xml/play_music_fragment_scene">
 
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="71dp"
+            android:layout_marginBottom="80dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <View
+            android:id="@+id/view_clickable"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/ic_play"
+            app:layout_constraintTop_toTopOf="@id/img_cover_background"
+            app:layout_constraintBottom_toBottomOf="@id/img_cover_background"/>
+
         <ImageView
             android:id="@+id/ic_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="30dp"
-            android:src="@drawable/ic_back"
+            android:layout_marginTop="40dp"
             android:alpha="0"
+            android:src="@drawable/ic_back"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -45,12 +63,14 @@
             android:alpha="0"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <ImageView
+        <androidx.constraintlayout.utils.widget.ImageFilterView
             android:id="@+id/img_cover_background"
             android:layout_width="match_parent"
             android:layout_height="71dp"
             android:layout_marginBottom="80dp"
-            android:background="@drawable/cover_background_collapsed"
+            android:src="@drawable/cover_background_expand"
+            android:scaleType="fitXY"
+            app:altSrc="@drawable/cover_background_collapsed"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -69,10 +89,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="24dp"
-            android:text="Single"
+            android:text="Last Christmas"
             android:textColor="@color/white"
             android:textSize="14sp"
             android:textStyle="bold"
+            android:layout_marginBottom="6dp"
             app:layout_constraintBottom_toTopOf="@id/tv_music"
             app:layout_constraintStart_toEndOf="@id/img_circle"
             app:layout_constraintTop_toTopOf="@id/img_cover_background"
@@ -82,12 +103,13 @@
             android:id="@+id/tv_music"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Music"
+            android:text="Devon Lane"
             app:layout_constraintBottom_toBottomOf="@id/img_cover_background"
             app:layout_constraintStart_toEndOf="@id/img_circle"
             app:layout_constraintTop_toBottomOf="@id/tv_single"
             app:layout_constraintVertical_chainStyle="packed"
             android:layout_marginStart="24dp"
+            android:layout_marginTop="5dp"
             android:textColor="@color/white"
             android:textSize="12sp"/>
 
@@ -116,7 +138,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:alpha="0"
+            android:visibility="gone"
             android:src="@drawable/ic_favorite"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_single" />
@@ -150,6 +172,7 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_random"
                 android:layout_marginStart="16dp"
+                android:layout_marginTop="-150dp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/img_previous"
                 app:layout_constraintStart_toStartOf="parent"
@@ -229,6 +252,17 @@
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ImageView
+            android:id="@+id/img_cover_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:alpha="0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/seek_bar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:background="@drawable/gradient_black"/>
 
     </com.example.musicdownloader.SingleViewTouchableMotionLayout>
 

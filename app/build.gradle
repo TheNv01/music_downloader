@@ -58,4 +58,7 @@ dependencies {
 
     implementation 'com.github.dimitrisCBR:GradientTextView:1.2'
 
+    implementation "androidx.cardview:cardview:1.0.0"
+
+
 }

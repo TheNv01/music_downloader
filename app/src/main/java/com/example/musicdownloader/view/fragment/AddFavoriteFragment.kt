@@ -6,27 +6,28 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.musicdownloader.R
-import com.example.musicdownloader.databinding.SettingFragmentBinding
+import com.example.musicdownloader.adapter.GenericAdapter
+import com.example.musicdownloader.databinding.AddFavoriteFragmentBinding
 import com.example.musicdownloader.interfaces.OnActionCallBack
+import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
+import com.example.musicdownloader.model.Item
 import com.example.musicdownloader.model.Option
-import com.example.musicdownloader.viewmodel.SettingViewModel
+import com.example.musicdownloader.viewmodel.AddFavoriteViewModel
 
-
-class SettingFragment(private val callBack: OnActionCallBack): BaseFragment<SettingFragmentBinding, SettingViewModel>(callBack) {
-    override fun initBinding(mRootView: View): SettingFragmentBinding {
-        return SettingFragmentBinding.bind(mRootView)
+class AddFavoriteFragment (private val callBack: OnActionCallBack): BaseFragment<AddFavoriteFragmentBinding, AddFavoriteViewModel>(callBack) {
+    override fun initBinding(mRootView: View): AddFavoriteFragmentBinding {
+        return AddFavoriteFragmentBinding.bind(mRootView)
     }
 
-    override fun getViewModelClass(): Class<SettingViewModel> {
-        return SettingViewModel::class.java
+    override fun getViewModelClass(): Class<AddFavoriteViewModel> {
+        return AddFavoriteViewModel::class.java
     }
 
     override fun getLayoutId(): Int {
-        return R.layout.setting_fragment
+        return R.layout.add_favorite_fragment
     }
 
     override fun initViews() {
-        setUpLayoutTopic()
     }
 
     override fun setUpListener() {
@@ -34,12 +35,12 @@ class SettingFragment(private val callBack: OnActionCallBack): BaseFragment<Sett
     }
 
     override fun setUpObserver() {
-
+        setUpLayoutTopic()
     }
 
     private fun initTopicView(option: Option): View {
         val view: View = LayoutInflater.from(context)
-            .inflate(R.layout.item_option_setting, null, false)
+            .inflate(R.layout.item_option_add_favorite, null, false)
         val icon: ImageView = view.findViewById(R.id.ic_option)
         val tvName = view.findViewById<TextView>(R.id.tv_name)
         icon.setImageResource(option.icon)
@@ -48,7 +49,7 @@ class SettingFragment(private val callBack: OnActionCallBack): BaseFragment<Sett
     }
 
     private fun setUpLayoutTopic() {
-        for (option in mViewModel.optionSettings) {
+        for (option in mViewModel.optionFavorites) {
             val v: View = initTopicView(option)
             v.setOnClickListener {
                 Log.d("tag", "hello")

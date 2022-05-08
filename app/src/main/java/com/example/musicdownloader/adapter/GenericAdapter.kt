@@ -9,7 +9,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
-import com.example.musicdownloader.recyclerbindinginterface.RecyclerBindingInterface
+import com.example.musicdownloader.interfaces.recyclerbindinginterface.RecyclerBindingInterface
 
 class GenericAdapter<T: Any, V: ViewDataBinding>(
     @LayoutRes val layoutID: Int,

@@ -1,6 +1,6 @@
 package com.example.musicdownloader.model
 
-data class OptionSetting(
+data class Option(
     val name: String,
     val icon: Int
 )

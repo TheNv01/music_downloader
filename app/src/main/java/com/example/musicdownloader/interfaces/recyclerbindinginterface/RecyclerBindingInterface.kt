@@ -1,4 +1,4 @@
-package com.example.musicdownloader.recyclerbindinginterface
+package com.example.musicdownloader.interfaces.recyclerbindinginterface
 
 import androidx.databinding.ViewDataBinding
 import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener

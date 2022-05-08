@@ -1,6 +1,7 @@
 package com.example.musicdownloader.view
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -58,6 +59,10 @@ class MainActivity : AppCompatActivity(), OnActionCallBack {
         showFragment(R.id.container_navigation, homeFragment,false, 0, 0)
 //        val playMusicFragment = PlayMusicFragment(this)
 //        showFragment(playMusicFragment, false, 0, 0)
+
+//        val addFavoriteFragment = AddFavoriteFragment(this)
+//        showFragment(R.id.container_layout_playing, addFavoriteFragment, false, 0, 0)
+
     }
 
     private fun showFragment(
@@ -85,23 +90,34 @@ class MainActivity : AppCompatActivity(), OnActionCallBack {
                 super.onBackPressed()
                 return
             }
-            it as PlayMusicFragment
-            if (it.binding.layoutPlayMusic.currentState == R.id.end)
-                it.binding.layoutPlayMusic.transitionToStart()
-            else
-                super.onBackPressed()
+            if(it is PlayMusicFragment){
+                if (it.binding.layoutPlayMusic.currentState == R.id.end)
+                    it.binding.layoutPlayMusic.transitionToStart()
+                else
+                    super.onBackPressed()
+            }
+            else{
+                supportFragmentManager.popBackStack()
+            }
+
         }
     }
 
     override fun callBack(key: String?, data: Any?) {
         when (key) {
             HomeFragment.KEY_SHOW_PLAY_MUSIC ->{
+
                 (supportFragmentManager.findFragmentById(R.id.container_layout_playing)).also {
                     if (it == null) {
                         val playMusicFragment =  PlayMusicFragment(this)
                         showFragment(R.id.container_layout_playing, playMusicFragment, true, 0 , 0)
                     }
                 }
+
+            }
+            PlayMusicFragment.KEY_SHOW_ADD_FAVORITE ->{
+                val addFavoriteFragment = AddFavoriteFragment(this)
+                showFragment(R.id.container_layout_playing, addFavoriteFragment, true, 0 , 0)
             }
         }
     }

@@ -13,6 +13,11 @@ import com.example.musicdownloader.viewmodel.PlayMusicViewModel
 import kotlin.math.abs
 
 class PlayMusicFragment(private val callBack: OnActionCallBack): BaseFragment<PlayMusicFragmentBinding, PlayMusicViewModel>(callBack) {
+
+    companion object{
+        const val KEY_SHOW_ADD_FAVORITE = "KEY_SHOW_ADD_FAVORITE"
+    }
+
     override fun initBinding(mRootView: View): PlayMusicFragmentBinding {
         return PlayMusicFragmentBinding.bind(mRootView)
     }
@@ -26,13 +31,24 @@ class PlayMusicFragment(private val callBack: OnActionCallBack): BaseFragment<Pl
     }
 
     override fun initViews() {
-
     }
 
     override fun setUpListener() {
+
+        setupMotionLayout()
+        binding.icFavorite.setOnClickListener {
+            callBack.callBack(KEY_SHOW_ADD_FAVORITE, null)
+        }
+        binding.icClose.setOnClickListener{
+            Log.d("asdfas", "adfasdf")
+        }
     }
 
     override fun setUpObserver() {
+
+    }
+
+    private fun setupMotionLayout(){
         binding.layoutPlayMusic.setTransitionListener(object : MotionLayout.TransitionListener {
             override fun onTransitionChange(motionLayout: MotionLayout?, startId: Int, endId: Int, progress: Float) {
 

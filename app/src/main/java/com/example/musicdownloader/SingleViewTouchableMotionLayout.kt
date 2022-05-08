@@ -15,7 +15,7 @@ class SingleViewTouchableMotionLayout(context: Context, attributeSet: AttributeS
     private var startY: Float? = null
 
     private val viewToDetectTouch by lazy {
-        findViewById<View>(R.id.img_cover_background) //TODO move to Attributes
+        findViewById<View>(R.id.view) //TODO move to Attributes
     }
     private val viewRect = Rect()
     private var touchStarted = false
@@ -89,7 +89,7 @@ class SingleViewTouchableMotionLayout(context: Context, attributeSet: AttributeS
     }
 
     override fun dispatchTouchEvent(ev: MotionEvent): Boolean {
-        if (touchEventInsideTargetView(findViewById(R.id.img_cover_background), ev)) {
+        if (touchEventInsideTargetView(findViewById(R.id.view_clickable), ev)) {
             when (ev.action) {
                 MotionEvent.ACTION_DOWN -> {
                     startX = ev.x
