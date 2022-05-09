@@ -99,9 +99,13 @@ class SingleViewTouchableMotionLayout(context: Context, attributeSet: AttributeS
                 MotionEvent.ACTION_UP   -> {
                     val endX = ev.x
                     val endY = ev.y
-                    if (isAClick(startX!!, endX, startY!!, endY)) {
-                        if (doClickTransition()) {
-                            return true
+                    startX?.let { it ->
+                        startY?.let { it1 ->
+                            if (isAClick(it, endX, it1, endY)) {
+                                if (doClickTransition()) {
+                                    return true
+                                }
+                            }
                         }
                     }
                 }

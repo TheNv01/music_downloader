@@ -1,17 +1,18 @@
 package com.example.musicdownloader.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
 import com.example.musicdownloader.databinding.ItemTrendingBinding
-import com.example.musicdownloader.model.Item
+import com.example.musicdownloader.model.Music
 
 class TrendingAdapter(
-    private val items: ArrayList<Item>,
+    private val musics: ArrayList<Music>,
     private val viewPager: ViewPager2,
-    private val itemListener: ItemClickListener<Item>):
+    private val itemListener: ItemClickListener<Music>):
     RecyclerView.Adapter<TrendingAdapter.TrendingViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrendingViewHolder {
@@ -23,32 +24,32 @@ class TrendingAdapter(
     }
 
     override fun onBindViewHolder(holder: TrendingViewHolder, position: Int) {
-        holder.bindData(items[position], itemListener)
+        holder.bindData(musics[position], itemListener)
 
-        if(position == items.size - 2){
+        if(position == musics.size - 2){
             viewPager.post(runnable)
         }
     }
 
     override fun getItemCount(): Int {
-        return items.size
+        return musics.size
     }
 
     class TrendingViewHolder(private val binding: ItemTrendingBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bindData(item: Item, itemListener: ItemClickListener<Item>){
-            binding.backgroundTrending.setImageResource(item.image)
-            binding.tvMusic.text = item.name
-            binding.tvSingle.text = item.single
+        fun bindData(music: Music, itemListener: ItemClickListener<Music>){
+            binding.music = music
+            Log.d("imgae", music.image.toString())
             binding.layoutTrending.setOnClickListener {
-                itemListener.onClickListener(item)
+                itemListener.onClickListener(music)
             }
+            binding.executePendingBindings()
         }
 
     }
 
     private val runnable = Runnable {
-        items.addAll(items)
+        musics.addAll(musics)
         notifyDataSetChanged()
     }
 

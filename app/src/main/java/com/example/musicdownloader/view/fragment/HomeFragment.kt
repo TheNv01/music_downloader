@@ -17,6 +17,7 @@ import com.example.musicdownloader.adapter.TrendingAdapter
 import com.example.musicdownloader.databinding.HomeFragmentBinding
 import com.example.musicdownloader.model.Item
 import com.example.musicdownloader.interfaces.recyclerbindinginterface.GenresBindingInterface
+import com.example.musicdownloader.model.Music
 import com.example.musicdownloader.recyclerbindinginterface.TopDownloadBindingInterface
 import com.example.musicdownloader.recyclerbindinginterface.TopListenedBindingInterface
 import com.example.musicdownloader.recyclerbindinginterface.TopRatingBindingInterface
@@ -51,6 +52,7 @@ class HomeFragment(private val callBack: OnActionCallBack): BaseFragment<HomeFra
     override fun setUpObserver() {
         binding.viewmodel = mViewModel
         setupTrendingViewPager()
+
         setupRecyclerview()
     }
 
@@ -110,9 +112,9 @@ class HomeFragment(private val callBack: OnActionCallBack): BaseFragment<HomeFra
     }
     private fun setupTrendingViewPager(){
         val viewPager = binding.viewPagerTrending
-        mViewModel.trends.observe(this){
-            viewPager.adapter = TrendingAdapter(it as ArrayList<Item>, viewPager, object : ItemClickListener<Item> {
-                override fun onClickListener(model: Item) {
+        mViewModel.trends.observe(this){ it ->
+            viewPager.adapter = TrendingAdapter(it as ArrayList<Music>, viewPager, object : ItemClickListener<Music> {
+                override fun onClickListener(model: Music) {
                     Log.d("asdfasdf", "hahaha")
                 }
 
@@ -127,5 +129,6 @@ class HomeFragment(private val callBack: OnActionCallBack): BaseFragment<HomeFra
         compositePageTransformer.addTransformer(MarginPageTransformer(40))
         compositePageTransformer.addTransformer(UltraDepthScaleTransformer())
         viewPager.setPageTransformer(compositePageTransformer)
+
     }
 }

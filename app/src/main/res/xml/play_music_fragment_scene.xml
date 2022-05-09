@@ -103,7 +103,6 @@
             app:layout_constraintEnd_toEndOf="@id/img_cover_background"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:translationZ="2dp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/tv_music"
             app:layout_constraintTop_toTopOf="@id/tv_single" />
@@ -234,7 +233,7 @@
         app:constraintSetEnd="@id/end"
         app:constraintSetStart="@+id/start"
         app:motionInterpolator="easeInOut"
-        app:duration="400">
+        app:duration="300">
 
         <KeyFrameSet >
 

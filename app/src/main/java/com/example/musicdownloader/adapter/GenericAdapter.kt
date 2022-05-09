@@ -47,6 +47,10 @@ class GenericAdapter<T: Any, V: ViewDataBinding>(
 
     }
 
+    override fun getItemCount(): Int {
+        return 5
+    }
+
     class GenericViewHolder(private var binding: ViewDataBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun <T : Any, V : ViewDataBinding> bind(

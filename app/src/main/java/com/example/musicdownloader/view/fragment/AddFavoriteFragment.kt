@@ -12,6 +12,7 @@ import com.example.musicdownloader.interfaces.OnActionCallBack
 import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
 import com.example.musicdownloader.model.Item
 import com.example.musicdownloader.model.Option
+import com.example.musicdownloader.view.MainActivity
 import com.example.musicdownloader.viewmodel.AddFavoriteViewModel
 
 class AddFavoriteFragment (private val callBack: OnActionCallBack): BaseFragment<AddFavoriteFragmentBinding, AddFavoriteViewModel>(callBack) {
@@ -28,14 +29,16 @@ class AddFavoriteFragment (private val callBack: OnActionCallBack): BaseFragment
     }
 
     override fun initViews() {
+        setUpLayoutTopic()
     }
 
     override fun setUpListener() {
-
+        binding.icBack.setOnClickListener {
+            (activity as MainActivity).onBackPressed()
+        }
     }
 
     override fun setUpObserver() {
-        setUpLayoutTopic()
     }
 
     private fun initTopicView(option: Option): View {

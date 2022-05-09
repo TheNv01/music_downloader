@@ -1,7 +1,6 @@
 package com.example.musicdownloader.view
 
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -30,22 +29,42 @@ class MainActivity : AppCompatActivity(), OnActionCallBack {
             when(it.itemId){
                 R.id.page_home ->{
                     val homeFragment = HomeFragment(this)
-                    showFragment(R.id.container_navigation, homeFragment, false, 0, 0)
+                    showFragment(R.id.container_navigation, homeFragment,
+                        isAdd = false,
+                        addToBackStack = false,
+                        anim_start = 0,
+                        anim_end = 0
+                    )
                     true
                 }
                 R.id.page_download ->{
                     val downloadFragment = DownloadFragment(this)
-                    showFragment(R.id.container_navigation, downloadFragment, false, 0, 0)
+                    showFragment(R.id.container_navigation, downloadFragment,
+                        isAdd = false,
+                        addToBackStack = false,
+                        anim_start = 0,
+                        anim_end = 0
+                    )
                     true
                 }
                 R.id.page_play_list ->{
                     val playlistFragment = PlayListFragment(this)
-                    showFragment(R.id.container_navigation, playlistFragment, false, 0, 0)
+                    showFragment(R.id.container_navigation, playlistFragment,
+                        isAdd = false,
+                        addToBackStack = false,
+                        anim_start = 0,
+                        anim_end = 0
+                    )
                     true
                 }
                 R.id.page_setting ->{
                     val settingFragment = SettingFragment(this)
-                    showFragment(R.id.container_navigation, settingFragment, false, 0, 0)
+                    showFragment(R.id.container_navigation, settingFragment,
+                        isAdd = false,
+                        addToBackStack = false,
+                        anim_start = 0,
+                        anim_end = 0
+                    )
                     true
                 }
                 else -> false
@@ -56,7 +75,12 @@ class MainActivity : AppCompatActivity(), OnActionCallBack {
 
     private fun initView() {
         val homeFragment = HomeFragment(this)
-        showFragment(R.id.container_navigation, homeFragment,false, 0, 0)
+        showFragment(R.id.container_navigation, homeFragment,
+            isAdd = false,
+            addToBackStack = false,
+            anim_start = 0,
+            anim_end = 0
+        )
 //        val playMusicFragment = PlayMusicFragment(this)
 //        showFragment(playMusicFragment, false, 0, 0)
 
@@ -68,6 +92,7 @@ class MainActivity : AppCompatActivity(), OnActionCallBack {
     private fun showFragment(
         container: Int,
         fragment: Fragment,
+        isAdd: Boolean,
         addToBackStack: Boolean,
         anim_start: Int,
         anim_end: Int) {
@@ -76,7 +101,13 @@ class MainActivity : AppCompatActivity(), OnActionCallBack {
             if (anim_end != 0 && anim_start != 0) {
                 transaction.setCustomAnimations(anim_start, anim_end)
             }
-            transaction.replace(container, fragment)
+            if(isAdd){
+                transaction.add(container, fragment)
+            }
+            else{
+                transaction.replace(container, fragment)
+            }
+
             if (addToBackStack) {
                 transaction.addToBackStack("add")
             }
@@ -110,14 +141,25 @@ class MainActivity : AppCompatActivity(), OnActionCallBack {
                 (supportFragmentManager.findFragmentById(R.id.container_layout_playing)).also {
                     if (it == null) {
                         val playMusicFragment =  PlayMusicFragment(this)
-                        showFragment(R.id.container_layout_playing, playMusicFragment, true, 0 , 0)
+                        showFragment(R.id.container_layout_playing, playMusicFragment,
+                            isAdd = false,
+                            addToBackStack = true,
+                            anim_start = 0,
+                            anim_end = 0
+                        )
                     }
                 }
 
             }
             PlayMusicFragment.KEY_SHOW_ADD_FAVORITE ->{
                 val addFavoriteFragment = AddFavoriteFragment(this)
-                showFragment(R.id.container_layout_playing, addFavoriteFragment, true, 0 , 0)
+                showFragment(R.id.container_layout_playing, addFavoriteFragment,
+                    isAdd = true,
+                    addToBackStack = true,
+                    anim_start = 0,
+                    anim_end = 0
+                )
+
             }
         }
     }

@@ -40,7 +40,10 @@ class PlayMusicFragment(private val callBack: OnActionCallBack): BaseFragment<Pl
             callBack.callBack(KEY_SHOW_ADD_FAVORITE, null)
         }
         binding.icClose.setOnClickListener{
-            Log.d("asdfas", "adfasdf")
+            (activity as MainActivity).onBackPressed()
+        }
+        binding.icBack.setOnClickListener {
+            (activity as MainActivity).onBackPressed()
         }
     }
 
