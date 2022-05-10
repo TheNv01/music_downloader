@@ -18,15 +18,23 @@ import com.example.musicdownloader.databinding.HomeFragmentBinding
 import com.example.musicdownloader.model.Item
 import com.example.musicdownloader.interfaces.recyclerbindinginterface.GenresBindingInterface
 import com.example.musicdownloader.model.Music
-import com.example.musicdownloader.recyclerbindinginterface.TopDownloadBindingInterface
-import com.example.musicdownloader.recyclerbindinginterface.TopListenedBindingInterface
-import com.example.musicdownloader.recyclerbindinginterface.TopRatingBindingInterface
+import com.example.musicdownloader.interfaces.recyclerbindinginterface.TopDownloadBindingInterface
+import com.example.musicdownloader.interfaces.recyclerbindinginterface.TopListenedBindingInterface
+import com.example.musicdownloader.interfaces.recyclerbindinginterface.TopRatingBindingInterface
+import com.example.musicdownloader.model.Genres
+import com.example.musicdownloader.viewmodel.ApiStatus
 import com.example.musicdownloader.viewmodel.HomeViewModel
 
 class HomeFragment(private val callBack: OnActionCallBack): BaseFragment<HomeFragmentBinding, HomeViewModel>(callBack) {
 
     companion object{
         const val KEY_SHOW_PLAY_MUSIC = "KEY_SHOW_PLAY_MUSIC"
+    }
+
+    private val musicItemClickListener = object : ItemClickListener<Music> {
+        override fun onClickListener(model: Music) {
+            callBack.callBack(KEY_SHOW_PLAY_MUSIC, model)
+        }
     }
 
     override fun initBinding(mRootView: View): HomeFragmentBinding {
@@ -50,9 +58,9 @@ class HomeFragment(private val callBack: OnActionCallBack): BaseFragment<HomeFra
     }
 
     override fun setUpObserver() {
+        binding.lifecycleOwner = this
         binding.viewmodel = mViewModel
         setupTrendingViewPager()
-
         setupRecyclerview()
     }
 
@@ -60,34 +68,20 @@ class HomeFragment(private val callBack: OnActionCallBack): BaseFragment<HomeFra
         binding.recyclerViewTopRating.adapter = GenericAdapter(
             R.layout.item_top_rating,
             TopRatingBindingInterface,
-            object : ItemClickListener<Item> {
-                override fun onClickListener(model: Item) {
-                    callBack.callBack(KEY_SHOW_PLAY_MUSIC, model)
-                }
-            })
+            musicItemClickListener)
         binding.recyclerViewTopListened.adapter = GenericAdapter(
             R.layout.item_top_listened,
             TopListenedBindingInterface,
-            object : ItemClickListener<Item> {
-                override fun onClickListener(model: Item) {
-                    Log.d("asdfasdf", "hahaha")
-                }
-
-            })
+            musicItemClickListener)
         binding.recyclerViewTopDownload.adapter = GenericAdapter(
             R.layout.item_top_download,
             TopDownloadBindingInterface,
-            object : ItemClickListener<Item> {
-                override fun onClickListener(model: Item) {
-                    Log.d("asdfasdf", "hahaha")
-                }
-
-            })
+            musicItemClickListener)
         binding.recyclerViewGenres.adapter = GenericAdapter(
             R.layout.item_genres,
             GenresBindingInterface,
-            object : ItemClickListener<Item> {
-                override fun onClickListener(model: Item) {
+            object : ItemClickListener<Genres> {
+                override fun onClickListener(model: Genres) {
                     Log.d("asdfasdf", "hahaha")
                 }
 
@@ -113,12 +107,7 @@ class HomeFragment(private val callBack: OnActionCallBack): BaseFragment<HomeFra
     private fun setupTrendingViewPager(){
         val viewPager = binding.viewPagerTrending
         mViewModel.trends.observe(this){ it ->
-            viewPager.adapter = TrendingAdapter(it as ArrayList<Music>, viewPager, object : ItemClickListener<Music> {
-                override fun onClickListener(model: Music) {
-                    Log.d("asdfasdf", "hahaha")
-                }
-
-            })
+            viewPager.adapter = TrendingAdapter(it as ArrayList<Music>, viewPager, musicItemClickListener)
         }
         viewPager.clipToPadding = false
         viewPager.clipChildren = false

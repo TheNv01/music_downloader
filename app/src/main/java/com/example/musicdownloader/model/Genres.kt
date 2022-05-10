@@ -2,8 +2,8 @@ package com.example.musicdownloader.model
 
 data class Genres(
     val id: String?,
-    val createAt: Int?,
+    val createdAt: Long?,
     val name: String?,
     val keySearch: String?,
-    val image: String?
+    var image: String?
 )

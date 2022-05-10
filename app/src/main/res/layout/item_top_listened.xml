@@ -3,6 +3,14 @@
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="music"
+            type="com.example.musicdownloader.model.Music" />
+
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_top_listened"
         android:layout_width="match_parent"
@@ -13,47 +21,55 @@
             android:id="@+id/tv_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="1."
             android:textColor="@color/white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
-        <ImageView
-            android:id="@+id/img_top_listened"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_view"
             android:layout_width="56dp"
             android:layout_height="56dp"
-            android:src="@drawable/test_top_listened"
+            app:cardCornerRadius="6dp"
             android:layout_marginStart="12dp"
             app:layout_constraintStart_toEndOf="@+id/tv_id"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/img_top_listened"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                imageUrl="@{music.image}"
+                android:scaleType="fitCenter" />
+
+        </androidx.cardview.widget.CardView>
 
         <TextView
             android:id="@+id/tv_music"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Last Christmas"
+            android:text="@{music.name}"
             android:textSize="14sp"
             android:textStyle="bold"
             android:textColor="@color/white"
             android:layout_marginStart="11dp"
-            app:layout_constraintStart_toEndOf="@id/img_top_listened"
+            app:layout_constraintStart_toEndOf="@id/card_view"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/tv_single"
+            app:layout_constraintBottom_toTopOf="@+id/tv_artist"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintVertical_chainStyle="packed"/>
 
         <TextView
-            android:id="@+id/tv_single"
+            android:id="@+id/tv_artist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Devon Lane"
+            android:text="@{music.artistName}"
             android:textSize="12sp"
             android:layout_marginStart="11dp"
             android:textColor="@color/white"
             android:layout_marginTop="6dp"
-            app:layout_constraintStart_toEndOf="@id/img_top_listened"
+            app:layout_constraintStart_toEndOf="@id/card_view"
             app:layout_constraintTop_toBottomOf="@+id/tv_music"
             app:layout_constraintVertical_chainStyle="packed"
             app:layout_constraintBottom_toBottomOf="parent"/>

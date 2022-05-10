@@ -44,7 +44,7 @@
 
             <TextView
                 android:id="@+id/tv_music"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
                 android:textColor="@color/white"
@@ -52,18 +52,22 @@
                 app:layout_constraintStart_toStartOf="@id/img_background_text"
                 app:layout_constraintTop_toTopOf="@id/img_background_text"
                 app:layout_constraintBottom_toTopOf="@+id/tv_artist"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:layout_marginStart="11dp"
                 app:layout_constraintVertical_chainStyle="packed"
                 android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/tv_artist"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:textSize="12sp"
                 android:textColor="@color/white"
                 android:text="@{music.artistName}"
                 android:layout_marginTop="3dp"
+                android:maxLines="1"
+                android:ellipsize="end"
                 app:layout_constraintStart_toStartOf="@id/img_background_text"
                 app:layout_constraintTop_toBottomOf="@id/tv_music"
                 app:layout_constraintBottom_toBottomOf="@id/img_background_text"

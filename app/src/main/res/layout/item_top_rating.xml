@@ -4,6 +4,13 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+        <variable
+            name="music"
+            type="com.example.musicdownloader.model.Music" />
+
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_top_ratting"
         android:layout_width="wrap_content"
@@ -15,7 +22,7 @@
             android:layout_width="155dp"
             android:layout_height="229dp"
             android:layout_marginTop="22dp"
-            android:src="@drawable/trending_test"
+            imageUrl="@{music.image}"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginStart="20dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -34,28 +41,28 @@
             app:layout_constraintStart_toStartOf="@id/background_rating" />
 
         <TextView
-            android:id="@+id/tv_single"
+            android:id="@+id/tv_music"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="12sp"
             android:textColor="@color/white"
-            android:text="Last Christmas"
+            android:text="@{music.name}"
             app:layout_constraintStart_toStartOf="@id/img_background_text"
             app:layout_constraintTop_toTopOf="@id/img_background_text"
-            app:layout_constraintBottom_toTopOf="@+id/tv_music"
+            app:layout_constraintBottom_toTopOf="@+id/tv_artist"
             android:layout_marginStart="6dp"
             app:layout_constraintVertical_chainStyle="packed"
             android:textStyle="bold"/>
 
         <TextView
-            android:id="@+id/tv_music"
+            android:id="@+id/tv_artist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="10sp"
             android:textColor="@color/white"
-            android:text="Devon Lane"
+            android:text="@{music.artistName}"
             app:layout_constraintStart_toStartOf="@id/img_background_text"
-            app:layout_constraintTop_toBottomOf="@id/tv_single"
+            app:layout_constraintTop_toBottomOf="@id/tv_music"
             app:layout_constraintBottom_toBottomOf="@id/img_background_text"
             android:layout_marginStart="6dp"
             app:layout_constraintVertical_chainStyle="packed"/>

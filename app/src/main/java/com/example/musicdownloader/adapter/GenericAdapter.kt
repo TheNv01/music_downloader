@@ -43,21 +43,18 @@ class GenericAdapter<T: Any, V: ViewDataBinding>(
     }
 
     override fun onBindViewHolder(holder: GenericViewHolder, position: Int) {
-        holder.bind(getItem(position), bindingInterface, itemListener)
+        holder.bind(getItem(position), position, bindingInterface, itemListener)
 
-    }
-
-    override fun getItemCount(): Int {
-        return 5
     }
 
     class GenericViewHolder(private var binding: ViewDataBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun <T : Any, V : ViewDataBinding> bind(
             item: T,
+            position: Int,
             bindingInterface: RecyclerBindingInterface<V, T>,
             itemListener: ItemClickListener<T>
-        ) = bindingInterface.binData(binding as V, item, itemListener)
+        ) = bindingInterface.binData(binding as V, item, position, itemListener)
     }
 }
 

@@ -3,17 +3,26 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+        <variable
+            name="genres"
+            type="com.example.musicdownloader.model.Genres" />
+
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_genres"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="19dp">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/img_genres"
             android:layout_width="85dp"
             android:layout_height="85dp"
-            android:src="@drawable/test_genres"
+            app:civ_border_width="2dp"
+            app:civ_border_color="@color/white"
+            imageUrl="@{genres.image}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
@@ -21,7 +30,7 @@
             android:id="@+id/tv_pop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Pop"
+            android:text="@{genres.name}"
             android:textStyle="bold"
             android:textSize="18sp"
             android:textColor="@color/white"
