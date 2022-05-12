@@ -20,7 +20,7 @@
             android:id="@+id/img_genres"
             android:layout_width="85dp"
             android:layout_height="85dp"
-            app:civ_border_width="2dp"
+            app:civ_border_width="1dp"
             app:civ_border_color="@color/white"
             imageUrl="@{genres.image}"
             app:layout_constraintStart_toStartOf="parent"

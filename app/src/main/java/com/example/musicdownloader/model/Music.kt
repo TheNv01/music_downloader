@@ -1,5 +1,7 @@
 package com.example.musicdownloader.model
 
+import java.io.Serializable
+
 data class Music(
     val id: String,
     val name: String?,
@@ -21,4 +23,4 @@ data class Music(
     val image: String?,
     val audioDownloadAllowed: Boolean?,
     val source: String?
-)
+): Serializable

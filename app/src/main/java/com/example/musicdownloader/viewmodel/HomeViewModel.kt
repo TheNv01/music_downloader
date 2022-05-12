@@ -4,15 +4,13 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.musicdownloader.R
 import com.example.musicdownloader.model.Genres
-import com.example.musicdownloader.model.Item
 import com.example.musicdownloader.model.Music
 import com.example.musicdownloader.networking.Services
 import kotlinx.coroutines.launch
 import kotlin.Exception
 
-enum class ApiStatus { LOADING, ERROR, DONE }
+enum class ApiStatus { LOADING, DONE }
 
 class HomeViewModel: BaseViewModel() {
 
@@ -35,14 +33,14 @@ class HomeViewModel: BaseViewModel() {
     val genres: LiveData<List<Genres>> = _genres
 
     init {
-        insertTrendingData()
-        insertTopRatingData()
-        insertGenresData()
-        insertTopDownloadData()
-        insertTopListenedData()
+        getTrendingData()
+        getTopRatingData()
+        getGenresData()
+        getTopDownloadData()
+        getTopListenedData()
     }
 
-    private fun insertTrendingData(){
+    private fun getTrendingData(){
         _status.value = ApiStatus.LOADING
         viewModelScope.launch {
             try{
@@ -51,22 +49,24 @@ class HomeViewModel: BaseViewModel() {
                     _status.value = ApiStatus.DONE
                 }
             } catch (e: Exception){
-                _status.value = ApiStatus.ERROR
                 _trends.value = listOf()
             }
         }
     }
 
-    private fun insertTopRatingData(){
-//        val data = ArrayList<Item>()
-//
-//        for (i in 1..5) {
-//            data.add(Item("Last Christmas", "Devon Lane", R.drawable.ic_background_rating))
-//        }
-//        _topRatings.value = data
+    private fun getTopRatingData(){
+        viewModelScope.launch {
+            try{
+                Services.retrofitService.getTopRating().let {
+                    _topRatings.value = it.data.subList(0, 5)
+                }
+            } catch (e: Exception){
+                _topRatings.value = listOf()
+            }
+        }
     }
 
-    private fun insertTopDownloadData(){
+    private fun getTopDownloadData(){
         viewModelScope.launch {
             try{
                 Services.retrofitService.getTopDownload().let {
@@ -78,7 +78,7 @@ class HomeViewModel: BaseViewModel() {
         }
     }
 
-    private fun insertTopListenedData(){
+    private fun getTopListenedData(){
         viewModelScope.launch {
             try{
                 Services.retrofitService.getTopListened().let {
@@ -90,15 +90,14 @@ class HomeViewModel: BaseViewModel() {
         }
     }
 
-    private fun insertGenresData(){
+    private fun getGenresData(){
         viewModelScope.launch {
             try{
                 Services.retrofitService.getGenres().let {
-                    Log.d("genres", it.data.size.toString())
-                    _genres.value = it.data
+                    _genres.value = it.data.subList(0, 5)
+                    Log.d("tag", it.data[0].image.toString())
                 }
             } catch (e: Exception){
-                Log.d("errorrrrrrr", e.message.toString())
                 _genres.value = listOf()
             }
         }

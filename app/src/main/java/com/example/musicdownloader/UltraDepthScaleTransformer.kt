@@ -2,7 +2,6 @@ package com.example.musicdownloader
 
 import android.view.View
 import androidx.viewpager2.widget.ViewPager2
-import com.example.musicdownloader.UltraDepthScaleTransformer
 import kotlin.math.abs
 
 class UltraDepthScaleTransformer : ViewPager2.PageTransformer {

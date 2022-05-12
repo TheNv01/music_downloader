@@ -1,12 +1,15 @@
 package com.example.musicdownloader.view
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import com.example.musicdownloader.MusicService
 import com.example.musicdownloader.R
 import com.example.musicdownloader.databinding.ActivityMainBinding
 import com.example.musicdownloader.interfaces.OnActionCallBack
+import com.example.musicdownloader.model.Music
 import com.example.musicdownloader.view.fragment.*
 
 class MainActivity : AppCompatActivity(), OnActionCallBack {
@@ -81,12 +84,6 @@ class MainActivity : AppCompatActivity(), OnActionCallBack {
             anim_start = 0,
             anim_end = 0
         )
-//        val playMusicFragment = PlayMusicFragment(this)
-//        showFragment(playMusicFragment, false, 0, 0)
-
-//        val addFavoriteFragment = AddFavoriteFragment(this)
-//        showFragment(R.id.container_layout_playing, addFavoriteFragment, false, 0, 0)
-
     }
 
     private fun showFragment(
@@ -137,19 +134,14 @@ class MainActivity : AppCompatActivity(), OnActionCallBack {
     override fun callBack(key: String?, data: Any?) {
         when (key) {
             HomeFragment.KEY_SHOW_PLAY_MUSIC ->{
-
-                (supportFragmentManager.findFragmentById(R.id.container_layout_playing)).also {
-                    if (it == null) {
-                        val playMusicFragment =  PlayMusicFragment(this)
-                        showFragment(R.id.container_layout_playing, playMusicFragment,
-                            isAdd = false,
-                            addToBackStack = true,
-                            anim_start = 0,
-                            anim_end = 0
-                        )
-                    }
-                }
-
+                val playMusicFragment =  PlayMusicFragment(this)
+                playMusicFragment.music = data as Music
+                showFragment(R.id.container_layout_playing, playMusicFragment,
+                    isAdd = false,
+                    addToBackStack = true,
+                    anim_start = 0,
+                    anim_end = 0
+                )
             }
             PlayMusicFragment.KEY_SHOW_ADD_FAVORITE ->{
                 val addFavoriteFragment = AddFavoriteFragment(this)
@@ -159,6 +151,27 @@ class MainActivity : AppCompatActivity(), OnActionCallBack {
                     anim_start = 0,
                     anim_end = 0
                 )
+
+            }
+
+            HomeFragment.KEY_SHOW_SEE_ALL ->{
+                val seeAllFragment = SeeAllFragment(this)
+
+                seeAllFragment.text = data as String
+                showFragment(R.id.container_navigation, seeAllFragment,
+                    isAdd = false,
+                    addToBackStack = true,
+                    anim_start = 0,
+                    anim_end = 0
+                )
+            }
+
+            PlayMusicFragment.KEY_SHOW_SERVICE ->{
+                if (data != null ) {
+                    val intent = Intent(this, MusicService::class.java)
+                    intent.putExtra("action", data as Int)
+                    startService(intent)
+                }
 
             }
         }

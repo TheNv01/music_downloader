@@ -119,7 +119,6 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="5dp"
                 android:orientation="horizontal"
-                app:listData="@{viewmodel.topRatings}"
                 app:layout_constraintTop_toBottomOf="@id/tv_top_rating"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
@@ -159,8 +158,7 @@
                 app:layout_constraintTop_toBottomOf="@id/tv_top_listened"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:listData="@{viewmodel.topListeneds}"/>
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
             <TextView
                 android:id="@+id/tv_top_download"
@@ -198,9 +196,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_top_download"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:listData="@{viewmodel.topDownloads}"
-                />
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
             <TextView
                 android:id="@+id/tv_genres"
@@ -238,8 +234,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_genres"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:listData="@{viewmodel.genres}"/>
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

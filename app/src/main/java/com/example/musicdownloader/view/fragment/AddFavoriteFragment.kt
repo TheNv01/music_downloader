@@ -6,11 +6,8 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.example.musicdownloader.R
-import com.example.musicdownloader.adapter.GenericAdapter
 import com.example.musicdownloader.databinding.AddFavoriteFragmentBinding
 import com.example.musicdownloader.interfaces.OnActionCallBack
-import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
-import com.example.musicdownloader.model.Item
 import com.example.musicdownloader.model.Option
 import com.example.musicdownloader.view.MainActivity
 import com.example.musicdownloader.viewmodel.AddFavoriteViewModel

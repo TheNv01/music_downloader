@@ -25,7 +25,7 @@
             android:layout_height="0dp"
             android:layout_marginEnd="10dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/ic_play"
+            app:layout_constraintEnd_toStartOf="@id/ic_play_or_pause"
             app:layout_constraintTop_toTopOf="@id/img_cover_background"
             app:layout_constraintBottom_toBottomOf="@id/img_cover_background"/>
 
@@ -114,10 +114,10 @@
             android:textSize="12sp"/>
 
         <ImageView
-            android:id="@+id/ic_play"
+            android:id="@+id/ic_play_or_pause"
             android:layout_width="23dp"
             android:layout_height="28dp"
-            android:src="@drawable/ic_play_not_background"
+            android:src="@drawable/ic_pause_not_background"
             android:layout_marginEnd="28dp"
             app:layout_constraintTop_toTopOf="@id/tv_single"
             app:layout_constraintEnd_toStartOf="@id/ic_close"
@@ -143,6 +143,18 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_single" />
 
+        <TextView
+            android:id="@+id/tv_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:textColor="@color/white"
+            android:text="0:00"
+            android:alpha="0"
+            app:layout_constraintStart_toStartOf="@+id/seek_bar"
+            app:layout_constraintTop_toTopOf="@id/seek_bar"
+            app:layout_constraintBottom_toBottomOf="@id/seek_bar"/>
+
         <com.example.musicdownloader.cusomseekbar.ArcSeekBar
             android:id="@+id/seek_bar"
             android:layout_width="match_parent"
@@ -154,6 +166,18 @@
             app:layout_constraintStart_toStartOf="@+id/img_cover_background"
             app:progressBackgroundColor="@color/white"
             app:progressColor="#FF728C" />
+
+        <TextView
+            android:id="@+id/tv_progress_max"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:alpha="0"
+            android:text="3:33"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="@+id/seek_bar"
+            app:layout_constraintTop_toTopOf="@id/seek_bar"
+            app:layout_constraintBottom_toBottomOf="@id/seek_bar"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layout_control"
@@ -187,14 +211,14 @@
                 app:layout_constraintTop_toTopOf="@+id/img_random"
                 app:layout_constraintBottom_toBottomOf="@id/img_random"
                 app:layout_constraintStart_toEndOf="@id/img_random"
-                app:layout_constraintEnd_toStartOf="@id/img_play_or_pause"
+                app:layout_constraintEnd_toStartOf="@id/img_background_play_or_pause"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"/>
 
             <ImageView
-                android:id="@+id/img_play_or_pause"
+                android:id="@+id/img_background_play_or_pause"
                 android:layout_width="69dp"
                 android:layout_height="69dp"
-                android:src="@drawable/ic_background_play"
+                android:src="@drawable/ic_background_play_or_pause"
                 app:layout_constraintTop_toTopOf="@+id/img_previous"
                 app:layout_constraintBottom_toBottomOf="@id/img_previous"
                 app:layout_constraintStart_toEndOf="@id/img_previous"
@@ -206,9 +230,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_next"
-                app:layout_constraintBottom_toBottomOf="@id/img_play_or_pause"
-                app:layout_constraintTop_toTopOf="@+id/img_play_or_pause"
-                app:layout_constraintStart_toEndOf="@id/img_play_or_pause"
+                app:layout_constraintBottom_toBottomOf="@id/img_background_play_or_pause"
+                app:layout_constraintTop_toTopOf="@+id/img_background_play_or_pause"
+                app:layout_constraintStart_toEndOf="@id/img_background_play_or_pause"
                 app:layout_constraintEnd_toStartOf="@+id/img_repeat"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"/>
 
@@ -233,7 +257,7 @@
                 android:text="Lyrics"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@id/img_play_or_pause"
+                app:layout_constraintTop_toBottomOf="@id/img_background_play_or_pause"
                 app:layout_constraintBottom_toTopOf="@+id/img_expand"
                 app:layout_constraintVertical_chainStyle="packed"
                 android:textColor="@color/white"/>
