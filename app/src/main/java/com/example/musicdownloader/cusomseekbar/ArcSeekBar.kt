@@ -35,7 +35,7 @@ class ArcSeekBar@JvmOverloads constructor(
     var progress: Int = a.useOrDefault(0) { getInteger(R.styleable.ArcSeekBar_progress, it) }
         set(progress) {
             field = bound(0, progress, maxProgress)
-            onProgressChangedListener?.invoke(progress)
+            onProgressChangedListener?.invoke(progress, isPressed)
             drawData?.let { drawData = it.copy(progress = progress) }
             invalidate()
         }
@@ -153,12 +153,12 @@ class ArcSeekBar@JvmOverloads constructor(
         if (mEnabled) {
             when (event.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    onStartTrackingTouch?.invoke(progress)
+                    onStartTrackingTouch?.invoke(progress, isPressed)
                     updateOnTouch(event)
                 }
                 MotionEvent.ACTION_MOVE -> updateOnTouch(event)
                 MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                    onStopTrackingTouch?.invoke(progress)
+                    onStopTrackingTouch?.invoke(progress, isPressed)
                     isPressed = false
                 }
             }

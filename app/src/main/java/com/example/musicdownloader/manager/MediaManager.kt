@@ -4,14 +4,16 @@ import android.media.AudioAttributes
 import android.media.MediaPlayer
 import java.io.IOException
 
-
 object MediaManager {
     private var mediaPlayer: MediaPlayer? = null
     private var isPause = true
-    fun getMediaPlayer(): MediaPlayer? {
+    fun createMediaPlayer() {
         if (mediaPlayer == null) {
             mediaPlayer = MediaPlayer()
         }
+    }
+
+    fun getMediaPlayer() : MediaPlayer?{
         return mediaPlayer
     }
 
@@ -19,17 +21,17 @@ object MediaManager {
         return isPause
     }
 
-    fun playMusic(mediaPlayer: MediaPlayer, url: String) {
+    fun playMusic( url: String) {
         isPause = false
-        mediaPlayer.setAudioAttributes(
+        mediaPlayer?.setAudioAttributes(
             AudioAttributes.Builder()
                 .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
                 .build()
         )
         try {
-            mediaPlayer.setDataSource(url)
-            mediaPlayer.setOnPreparedListener { obj: MediaPlayer -> obj.start() }
-            mediaPlayer.prepareAsync()
+            mediaPlayer?.setDataSource(url)
+            mediaPlayer?.setOnPreparedListener { obj: MediaPlayer -> obj.start() }
+            mediaPlayer?.prepareAsync()
 
         } catch (e: IOException) {
             e.printStackTrace()

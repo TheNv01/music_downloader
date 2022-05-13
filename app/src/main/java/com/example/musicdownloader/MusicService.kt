@@ -2,6 +2,7 @@ package com.example.musicdownloader
 
 import android.app.PendingIntent
 import android.app.Service
+import android.app.TaskStackBuilder
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
@@ -16,6 +17,8 @@ import com.example.musicdownloader.manager.MediaManager
 import com.example.musicdownloader.manager.MusicManager
 import com.example.musicdownloader.model.MessageEvent
 import com.example.musicdownloader.model.Music
+import com.example.musicdownloader.view.MainActivity
+import com.example.musicdownloader.view.fragment.PlayMusicFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -41,7 +44,6 @@ class MusicService : Service() {
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
 
         val action: Int = intent.getIntExtra("action", 0)
-        Log.e("out", action.toString() + "")
         if (action != 0) {
             when (action) {
                 ACTION_START ->
@@ -53,9 +55,7 @@ class MusicService : Service() {
                     MediaManager.pauseMedia()
                 }
                 ACTION_CLOSE -> {
-                    Log.d("ataf", "afdas")
                     stopSelf()
-                    MediaManager.resetMedia()
                 }
 
             }
@@ -67,10 +67,12 @@ class MusicService : Service() {
 
     private fun startMusic(music: Music) {
         MediaManager.resetMedia()
-        MediaManager.getMediaPlayer()?.let { MediaManager.playMusic(it, music.audio!!) }
+        MediaManager.playMusic(music.audio!!)
     }
 
     private fun pushNotification(music: Music) {
+
+
 
         GlobalScope.launch(Dispatchers.IO) {
             val builder = NotificationCompat.Builder(this@MusicService, App.CHANNEL_ID)
@@ -89,8 +91,14 @@ class MusicService : Service() {
                 .addAction(R.drawable.ic_close_notification, "Close", getIntent(ACTION_CLOSE))
                 .setStyle(androidx.media.app.NotificationCompat.MediaStyle()
                     .setShowActionsInCompactView(0, 1, 2, 3))
+
             startForeground(1, builder.build())
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        MediaManager.resetMedia()
     }
 
     private suspend fun getBitmapFromURL(url: String): Bitmap? {

@@ -1,11 +1,15 @@
 package com.example.musicdownloader.view.fragment
 
 import android.content.Context
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import android.view.View
 import android.view.animation.LinearInterpolator
 import androidx.constraintlayout.motion.widget.MotionLayout
 import com.example.musicdownloader.MusicService
 import com.example.musicdownloader.R
+import com.example.musicdownloader.cusomseekbar.ProgressListener
 import com.example.musicdownloader.databinding.PlayMusicFragmentBinding
 import com.example.musicdownloader.interfaces.OnActionCallBack
 import com.example.musicdownloader.manager.MediaManager
@@ -22,6 +26,7 @@ import kotlin.math.abs
 
 class PlayMusicFragment(private val callBack: OnActionCallBack): BaseFragment<PlayMusicFragmentBinding, PlayMusicViewModel>(callBack) {
 
+    lateinit var runnable: Runnable
     lateinit var music: Music
     companion object{
         const val KEY_SHOW_ADD_FAVORITE = "KEY_SHOW_ADD_FAVORITE"
@@ -61,14 +66,15 @@ class PlayMusicFragment(private val callBack: OnActionCallBack): BaseFragment<Pl
             }
             MusicService.ACTION_CLOSE ->{
                 (activity as MainActivity).supportFragmentManager.popBackStack()
+                Handler(Looper.getMainLooper()).removeCallbacks(runnable)
             }
         }
     }
 
     override fun initViews() {
-        rotateImageView()
         MusicManager.setCurrentMusic(music)
         playSong(music)
+        MediaManager.createMediaPlayer()
     }
 
     override fun setUpListener() {
@@ -79,6 +85,7 @@ class PlayMusicFragment(private val callBack: OnActionCallBack): BaseFragment<Pl
         }
         binding.icClose.setOnClickListener{
             (activity as MainActivity).onBackPressed()
+            gotoService(MusicService.ACTION_CLOSE)
         }
         binding.icBack.setOnClickListener {
             (activity as MainActivity).onBackPressed()
@@ -89,12 +96,15 @@ class PlayMusicFragment(private val callBack: OnActionCallBack): BaseFragment<Pl
     }
 
     override fun setUpObserver() {
+
     }
 
     private fun playSong(music: Music) {
         binding.tvMusic.text = music.artistName
         binding.tvSingle.text = music.name
+        binding.tvProgressMax.text = formattedTime(music.duration!!)
         gotoService(MusicService.ACTION_START)
+        initSeekBar(music)
     }
 
     private fun gotoService(action: Int){
@@ -105,9 +115,11 @@ class PlayMusicFragment(private val callBack: OnActionCallBack): BaseFragment<Pl
         if (MediaManager.isPause()) {
             binding.icPlayOrPause.setImageResource(R.drawable.ic_play_not_background)
             gotoService(MusicService.ACTION_RESUME)
+            rotateImageView()
         } else {
             binding.icPlayOrPause.setImageResource(R.drawable.ic_pause_not_background)
             gotoService(MusicService.ACTION_PAUSE)
+            binding.imgCircle.animate().cancel()
         }
     }
 
@@ -149,6 +161,42 @@ class PlayMusicFragment(private val callBack: OnActionCallBack): BaseFragment<Pl
             }
         })
         binding.layoutPlayMusic.transitionToEnd()
+    }
+
+    private fun initSeekBar(music: Music) {
+        binding.seekBar.maxProgress = music.duration!!
+        runnable = object : Runnable {
+            override fun run() {
+                MediaManager.getMediaPlayer()?.let {
+                    val currentPosition: Int = it.currentPosition/1000
+                    binding.seekBar.progress = currentPosition
+                    binding.tvProgress.text = formattedTime(currentPosition)
+
+                }
+                Handler(Looper.getMainLooper()).postDelayed(this, 1000)
+            }
+
+        }
+        activity?.runOnUiThread(runnable)
+
+        binding.seekBar.onProgressChangedListener = object : ProgressListener {
+            override fun invoke(progress: Int, fromUser: Boolean) {
+                if(fromUser){
+                    MediaManager.getMediaPlayer()?.seekTo(progress*1000)
+                    binding.tvProgress.text = formattedTime(progress)
+                }
+            }
+        }
+    }
+
+    private fun formattedTime(currentPosition: Int): String{
+        val minutes = currentPosition/60
+        val seconds = currentPosition%60
+        return if(seconds < 10){
+            "$minutes:0$seconds"
+        } else{
+            "$minutes:$seconds"
+        }
     }
 
 }

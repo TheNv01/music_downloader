@@ -1,5 +1,5 @@
 package com.example.musicdownloader.cusomseekbar
 
 interface ProgressListener {
-    operator fun invoke(progress: Int)
+    operator fun invoke(progress: Int, fromUser: Boolean)
 }
