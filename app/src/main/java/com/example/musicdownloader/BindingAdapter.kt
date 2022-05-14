@@ -25,6 +25,11 @@ fun bindImage(imgView: ImageView, imgUrl: String) {
     }
 }
 
+@BindingAdapter("fromResource")
+fun setBackground(imgView: ImageView, resource: Int) {
+    imgView.setImageResource(resource)
+}
+
 @BindingAdapter("apiStatus")
 fun bindStatus(progressBar: ProgressBar, status: ApiStatus?) {
     if(status == ApiStatus.DONE){

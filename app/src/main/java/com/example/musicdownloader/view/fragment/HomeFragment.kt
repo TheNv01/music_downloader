@@ -2,20 +2,22 @@ package com.example.musicdownloader.view.fragment
 
 import android.util.Log
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Toast
+import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.example.musicdownloader.R
 import com.example.musicdownloader.UltraDepthScaleTransformer
 import com.example.musicdownloader.adapter.*
+import com.example.musicdownloader.databinding.HomeFragmentBinding
 import com.example.musicdownloader.interfaces.OnActionCallBack
 import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
-import com.example.musicdownloader.databinding.HomeFragmentBinding
-import com.example.musicdownloader.model.Music
+import com.example.musicdownloader.manager.MusicManager
 import com.example.musicdownloader.model.Genres
+import com.example.musicdownloader.model.Music
+import com.example.musicdownloader.model.Region
+import com.example.musicdownloader.view.ChangeRegionDialog
+import com.example.musicdownloader.view.MainActivity
 import com.example.musicdownloader.viewmodel.HomeViewModel
 
 class HomeFragment(private val callBack: OnActionCallBack): BaseFragment<HomeFragmentBinding, HomeViewModel>(callBack) {
@@ -32,6 +34,7 @@ class HomeFragment(private val callBack: OnActionCallBack): BaseFragment<HomeFra
     private val musicItemClickListener = object : ItemClickListener<Music> {
         override fun onClickListener(model: Music) {
             callBack.callBack(KEY_SHOW_PLAY_MUSIC, model)
+            mViewModel.topDownloads.value?.let { MusicManager.setListMusic(it) }
         }
     }
 
@@ -48,7 +51,7 @@ class HomeFragment(private val callBack: OnActionCallBack): BaseFragment<HomeFra
     }
 
     override fun initViews() {
-        setupSpinner()
+
     }
 
     override fun setUpListener() {
@@ -63,6 +66,14 @@ class HomeFragment(private val callBack: OnActionCallBack): BaseFragment<HomeFra
         }
         binding.tvSeeAllGenres.setOnClickListener {
             callBack.callBack(KEY_SHOW_SEE_ALL, GENRES)
+        }
+
+        binding.tvRegion.setOnClickListener {
+            changeRegionDialog()
+        }
+        setFragmentResultListener("requestKey") { _, bundle ->
+            val region = bundle.get("region") as Region
+            Log.d("asdfas", region.regionName)
         }
     }
 
@@ -106,22 +117,11 @@ class HomeFragment(private val callBack: OnActionCallBack): BaseFragment<HomeFra
         }
     }
 
-    private fun setupSpinner(){
-        val categories = resources.getStringArray(R.array.category)
-        val adapter = context?.let {
-            ArrayAdapter(it, R.layout.spinner_region, categories).apply {
-                setDropDownViewResource(androidx.constraintlayout.widget.R.layout.support_simple_spinner_dropdown_item)
-            }
-        }
-        binding.spinnerLanguage.adapter = adapter
-        binding.spinnerLanguage.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                Toast.makeText(context, categories[p2], Toast.LENGTH_SHORT).show()
-            }
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-            }
-        }
+    private fun changeRegionDialog() {
+        val changeRegionDialog = ChangeRegionDialog()
+        changeRegionDialog.show((activity as MainActivity).supportFragmentManager, "region_dialog")
     }
+
     private fun setupTrendingViewPager(){
         val viewPager = binding.viewPagerTrending
         mViewModel.trends.observe(this){
@@ -138,4 +138,5 @@ class HomeFragment(private val callBack: OnActionCallBack): BaseFragment<HomeFra
         viewPager.setPageTransformer(compositePageTransformer)
 
     }
+
 }

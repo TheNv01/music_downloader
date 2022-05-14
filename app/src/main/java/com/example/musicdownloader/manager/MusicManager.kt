@@ -2,29 +2,37 @@ package com.example.musicdownloader.manager
 
 import com.example.musicdownloader.model.Music
 
-object MusicManager {
-    private var musicList: MutableList<Music> = ArrayList()
-    private var currentMusic: Music? = null
+enum class RepeatStatus {RepeatOneMusic, NoRepeat, RepeatListMusic }
 
-    fun setListMusic(musics: ArrayList<Music>){
+object MusicManager {
+    private var musicList: List<Music> = ArrayList()
+    private var currentMusic: Music? = null
+    private var repeatStatus = RepeatStatus.NoRepeat
+
+    fun setListMusic(musics: List<Music>){
         musicList = musics
     }
 
-    fun setCurrentMusic(music: Music){
+    fun setCurrentMusic(music: Music?){
         currentMusic = music
     }
 
-    fun getCurrentMusic(): Music{
-        return currentMusic!!
+    fun getCurrentMusic(): Music?{
+        return currentMusic
     }
 
 
-    private fun getIndexOfSong(music: Music?): Int {
-        return musicList.indexOf(music)
+    fun getIndexOfCurrentMusic(): Int {
+        return musicList.indexOf(currentMusic)
     }
 
-    fun nextSong() {
-        val pos = getIndexOfSong(currentMusic)
+    fun getSizeMusicList(): Int{
+        return musicList.size
+    }
+
+
+    fun nextMusic() {
+        val pos = getIndexOfCurrentMusic()
         currentMusic = if (pos == musicList.size - 1) {
             musicList[0]
         } else {
@@ -32,12 +40,26 @@ object MusicManager {
         }
     }
 
-    fun previousSong() {
-        val pos = getIndexOfSong(currentMusic)
+    fun previousMusic() {
+        val pos = getIndexOfCurrentMusic()
         currentMusic = if (pos == 0) {
             musicList[musicList.size - 1]
         } else {
             musicList[pos - 1]
+        }
+    }
+
+    fun setRepeatStatus(repeatStatus: RepeatStatus){
+        this.repeatStatus = repeatStatus
+    }
+    fun getRepeatStatus(): RepeatStatus = repeatStatus
+
+    fun randomMusic(){
+        val pos = (musicList.indices).random()
+        if(pos != getIndexOfCurrentMusic()){
+            currentMusic = musicList[pos]
+        }else{
+            randomMusic()
         }
     }
 }

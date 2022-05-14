@@ -75,4 +75,6 @@ dependencies {
     implementation("androidx.media:media:1.6.0")
 
     implementation 'org.greenrobot:eventbus:3.3.1'
+
+    implementation 'androidx.fragment:fragment-ktx:1.4.1'
 }

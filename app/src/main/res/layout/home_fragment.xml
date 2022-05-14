@@ -27,18 +27,31 @@
                 android:layout_marginStart="18dp"
                 android:layout_marginTop="24dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/tv_region"
+                app:layout_constraintHorizontal_chainStyle="packed"/>
 
-            <Spinner
-                android:id="@+id/spinner_language"
+            <TextView
+                android:id="@+id/tv_region"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:background="@color/color_null"
-                android:spinnerMode="dropdown"
-                app:layout_constraintStart_toEndOf="@+id/img_language"
-                app:layout_constraintTop_toTopOf="@+id/img_language"
-                app:layout_constraintBottom_toBottomOf="@+id/img_language"/>
+                android:text="eng"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:layout_marginStart="6dp"
+                app:layout_constraintStart_toEndOf="@id/img_language"
+                app:layout_constraintTop_toTopOf="@id/img_language"
+                app:layout_constraintBottom_toBottomOf="@id/img_language"
+                app:layout_constraintHorizontal_chainStyle="packed"/>
+            <ImageView
+                android:id="@+id/ic_arrow"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/ic_arrow_drop_down"
+                app:layout_constraintStart_toEndOf="@id/tv_region"
+                app:layout_constraintTop_toTopOf="@id/tv_region"
+                app:layout_constraintBottom_toBottomOf="@id/tv_region"
+                app:layout_constraintHorizontal_chainStyle="packed"/>
 
 
             <ImageView

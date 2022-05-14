@@ -3,7 +3,6 @@ package com.example.musicdownloader.view.fragment
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.View
 import android.view.animation.LinearInterpolator
 import androidx.constraintlayout.motion.widget.MotionLayout
@@ -14,6 +13,7 @@ import com.example.musicdownloader.databinding.PlayMusicFragmentBinding
 import com.example.musicdownloader.interfaces.OnActionCallBack
 import com.example.musicdownloader.manager.MediaManager
 import com.example.musicdownloader.manager.MusicManager
+import com.example.musicdownloader.manager.RepeatStatus
 import com.example.musicdownloader.model.MessageEvent
 import com.example.musicdownloader.model.Music
 import com.example.musicdownloader.view.MainActivity
@@ -23,10 +23,8 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import kotlin.math.abs
 
-
 class PlayMusicFragment(private val callBack: OnActionCallBack): BaseFragment<PlayMusicFragmentBinding, PlayMusicViewModel>(callBack) {
 
-    lateinit var runnable: Runnable
     lateinit var music: Music
     companion object{
         const val KEY_SHOW_ADD_FAVORITE = "KEY_SHOW_ADD_FAVORITE"
@@ -60,21 +58,31 @@ class PlayMusicFragment(private val callBack: OnActionCallBack): BaseFragment<Pl
         when (messageEvent.message) {
             MusicService.ACTION_PAUSE -> {
                 binding.icPlayOrPause.setImageResource(R.drawable.ic_play_not_background)
+                binding.imgCircle.animate().cancel()
             }
             MusicService.ACTION_RESUME -> {
+                binding.icPlayOrPause.setImageResource(R.drawable.ic_pause_not_background)
+                rotateImageView()
+            }
+            MusicService.ACTION_NEXT,
+            MusicService.ACTION_PREVIOUS ->{
+                MusicManager.getCurrentMusic()?.let { playSong(it) }
+                rotateImageView()
                 binding.icPlayOrPause.setImageResource(R.drawable.ic_pause_not_background)
             }
             MusicService.ACTION_CLOSE ->{
                 (activity as MainActivity).supportFragmentManager.popBackStack()
-                Handler(Looper.getMainLooper()).removeCallbacks(runnable)
             }
         }
     }
 
     override fun initViews() {
+        MediaManager.setProgress(0)
+        if(music != MusicManager.getCurrentMusic()){
+            playSong(music)
+        }
         MusicManager.setCurrentMusic(music)
-        playSong(music)
-        MediaManager.createMediaPlayer()
+
     }
 
     override fun setUpListener() {
@@ -93,13 +101,23 @@ class PlayMusicFragment(private val callBack: OnActionCallBack): BaseFragment<Pl
         binding.icPlayOrPause.setOnClickListener {
             handlePauseResumeMusic()
         }
+        binding.imgNext.setOnClickListener {
+            gotoService(MusicService.ACTION_NEXT)
+        }
+
+        binding.imgPrevious.setOnClickListener {
+            gotoService(MusicService.ACTION_PREVIOUS)
+        }
+        binding.imgRepeat.setOnClickListener {
+            handleRepeatMusic()
+        }
     }
 
     override fun setUpObserver() {
-
     }
 
     private fun playSong(music: Music) {
+        rotateImageView()
         binding.tvMusic.text = music.artistName
         binding.tvSingle.text = music.name
         binding.tvProgressMax.text = formattedTime(music.duration!!)
@@ -109,6 +127,23 @@ class PlayMusicFragment(private val callBack: OnActionCallBack): BaseFragment<Pl
 
     private fun gotoService(action: Int){
         callBack.callBack(KEY_SHOW_SERVICE, action)
+    }
+
+    private fun handleRepeatMusic() {
+        when(MusicManager.getRepeatStatus()){
+            RepeatStatus.NoRepeat ->{
+                binding.imgRepeat.setImageResource(R.drawable.ic_repeat_list)
+                MusicManager.setRepeatStatus(RepeatStatus.RepeatListMusic)
+            }
+            RepeatStatus.RepeatListMusic ->{
+                binding.imgRepeat.setImageResource(R.drawable.ic_repeat_one_music)
+                MusicManager.setRepeatStatus(RepeatStatus.RepeatOneMusic)
+            }
+            RepeatStatus.RepeatOneMusic ->{
+                binding.imgRepeat.setImageResource(R.drawable.ic_no_repeat)
+                MusicManager.setRepeatStatus(RepeatStatus.NoRepeat)
+            }
+        }
     }
 
     private fun handlePauseResumeMusic() {
@@ -165,24 +200,19 @@ class PlayMusicFragment(private val callBack: OnActionCallBack): BaseFragment<Pl
 
     private fun initSeekBar(music: Music) {
         binding.seekBar.maxProgress = music.duration!!
-        runnable = object : Runnable {
+        (activity as MainActivity).runOnUiThread(object : Runnable {
             override fun run() {
-                MediaManager.getMediaPlayer()?.let {
-                    val currentPosition: Int = it.currentPosition/1000
-                    binding.seekBar.progress = currentPosition
-                    binding.tvProgress.text = formattedTime(currentPosition)
-
-                }
+                val currentPosition: Int = MediaManager.getProgress()/1000
+                binding.seekBar.progress = currentPosition
+                binding.tvProgress.text = formattedTime(currentPosition)
                 Handler(Looper.getMainLooper()).postDelayed(this, 1000)
             }
-
-        }
-        activity?.runOnUiThread(runnable)
+        })
 
         binding.seekBar.onProgressChangedListener = object : ProgressListener {
             override fun invoke(progress: Int, fromUser: Boolean) {
                 if(fromUser){
-                    MediaManager.getMediaPlayer()?.seekTo(progress*1000)
+                    MediaManager.setProgress(progress*1000)
                     binding.tvProgress.text = formattedTime(progress)
                 }
             }

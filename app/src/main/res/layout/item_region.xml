@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="region"
+            type="com.example.musicdownloader.model.Region" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_change_region"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp">
+
+        <ImageView
+            android:id="@+id/ic_ensign"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            fromResource="@{region.regionIcon}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/tv_name_region"
+            app:layout_constraintHorizontal_chainStyle="packed"/>
+
+        <TextView
+            android:id="@+id/tv_name_region"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{region.regionName}"
+            android:textSize="12sp"
+            android:textColor="@color/white"
+            android:layout_marginStart="27dp"
+            app:layout_constraintStart_toEndOf="@id/ic_ensign"
+            app:layout_constraintTop_toTopOf="@id/ic_ensign"
+            app:layout_constraintBottom_toBottomOf="@id/ic_ensign"
+            app:layout_constraintHorizontal_chainStyle="packed"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
+

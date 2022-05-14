@@ -14,4 +14,9 @@
         <!-- Customize your theme here. -->
 
     </style>
+
+    <style name="full_screen_dialog" parent="Theme.AppCompat.Light.DialogWhenLarge">
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowAnimationStyle">@style/Animation.Design.BottomSheetDialog</item>
+    </style>
 </resources>

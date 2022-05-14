@@ -2,7 +2,6 @@ package com.example.musicdownloader
 
 import android.app.PendingIntent
 import android.app.Service
-import android.app.TaskStackBuilder
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
@@ -15,10 +14,9 @@ import coil.request.ImageRequest
 import coil.request.SuccessResult
 import com.example.musicdownloader.manager.MediaManager
 import com.example.musicdownloader.manager.MusicManager
+import com.example.musicdownloader.manager.RepeatStatus
 import com.example.musicdownloader.model.MessageEvent
 import com.example.musicdownloader.model.Music
-import com.example.musicdownloader.view.MainActivity
-import com.example.musicdownloader.view.fragment.PlayMusicFragment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -27,14 +25,12 @@ import org.greenrobot.eventbus.EventBus
 class MusicService : Service() {
 
     companion object {
-
         const val ACTION_START = 1
         const val ACTION_PAUSE = 2
         const val ACTION_RESUME = 3
         const val ACTION_NEXT = 4
         const val ACTION_PREVIOUS = 5
         const val ACTION_CLOSE = 6
-
     }
 
     override fun onBind(intent: Intent): IBinder? {
@@ -47,32 +43,59 @@ class MusicService : Service() {
         if (action != 0) {
             when (action) {
                 ACTION_START ->
-                    startMusic(MusicManager.getCurrentMusic())
+                    MusicManager.getCurrentMusic()?.let { startMusic(it) }
                 ACTION_RESUME -> {
                     MediaManager.resumeMedia()
                 }
                 ACTION_PAUSE -> {
                     MediaManager.pauseMedia()
                 }
+                ACTION_PREVIOUS ->{
+                    MusicManager.previousMusic()
+                }
+                ACTION_NEXT ->{
+                    MusicManager.nextMusic()
+                }
                 ACTION_CLOSE -> {
                     stopSelf()
+                    MusicManager.setCurrentMusic(null)
                 }
 
             }
             EventBus.getDefault().post(MessageEvent(action))
-            pushNotification(MusicManager.getCurrentMusic())
+            MusicManager.getCurrentMusic()?.let { pushNotification(it) }
         }
         return START_NOT_STICKY
     }
 
     private fun startMusic(music: Music) {
         MediaManager.resetMedia()
-        MediaManager.playMusic(music.audio!!)
+        MediaManager.playMusic(music.audio!!){
+            when(MusicManager.getRepeatStatus()){
+                RepeatStatus.NoRepeat ->{
+                    if(MusicManager.getIndexOfCurrentMusic() == MusicManager.getSizeMusicList() -1){
+                        EventBus.getDefault().post(MessageEvent(ACTION_PAUSE))
+                        MediaManager.pauseMedia()
+                    }
+                    else{
+                        EventBus.getDefault().post(MessageEvent(ACTION_NEXT))
+                    }
+
+                }
+                RepeatStatus.RepeatListMusic ->{
+                    MusicManager.nextMusic()
+                    EventBus.getDefault().post(MessageEvent(ACTION_NEXT))
+                }
+                RepeatStatus.RepeatOneMusic ->{
+                    EventBus.getDefault().post(MessageEvent(ACTION_NEXT))
+                }
+            }
+
+            MusicManager.getCurrentMusic()?.let { it1 -> pushNotification(it1) }
+        }
     }
 
     private fun pushNotification(music: Music) {
-
-
 
         GlobalScope.launch(Dispatchers.IO) {
             val builder = NotificationCompat.Builder(this@MusicService, App.CHANNEL_ID)
