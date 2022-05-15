@@ -4,20 +4,16 @@ import com.example.musicdownloader.model.General
 import com.example.musicdownloader.model.Genres
 import com.example.musicdownloader.model.Music
 import retrofit2.http.GET
+import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface Api {
 
-    @GET("popular?offset=0&country=vn")
-    suspend fun getPopulars(): General<Music>
-
-    @GET("listened?offset=0&country=vn")
-    suspend fun getTopListened(): General<Music>
-
-    @GET("download?offset=0&country=vn")
-    suspend fun getTopDownload(): General<Music>
-
-    @GET("ranking?country=vn")
-    suspend fun getTopRating(): General<Music>
+    @GET("{option}?")
+    suspend fun getMusics(
+        @Path("option") option: String,
+        @Query("offset") offset: Int,
+        @Query("country") country: String = "vn"): General<Music>
 
     @GET("genre")
     suspend fun getGenres(): General<Genres>

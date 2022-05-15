@@ -11,6 +11,10 @@ class TopRatingAdapter(
     itemClickListener: ItemClickListener<Music>
 ): BaseAdapter<Music, ItemTopRatingBinding>(layoutID, musics, itemClickListener) {
 
+    override fun getItemCount(): Int {
+        return 5
+    }
+
     override fun setViewHolder(binding: ViewDataBinding): BaseViewHolder<Music, ItemTopRatingBinding> {
         return TopRatingViewHolder(binding as ItemTopRatingBinding)
     }
@@ -18,6 +22,7 @@ class TopRatingAdapter(
     inner class TopRatingViewHolder(private val binding: ItemTopRatingBinding) : BaseViewHolder<Music, ItemTopRatingBinding>(binding) {
         override fun bindData(data: Music) {
             binding.music = data
+            binding.tvOrder.text = "#"+(adapterPosition + 1).toString()
         }
 
         override fun clickListener(data: Music, itemClickListener: ItemClickListener<Music>) {

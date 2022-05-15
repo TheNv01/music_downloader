@@ -12,7 +12,8 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:fillViewport="true"
+        android:scrollbars="none">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -23,7 +24,7 @@
                 android:id="@+id/img_language"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:src="@drawable/ic_language"
+                android:src="@drawable/vietnam"
                 android:layout_marginStart="18dp"
                 android:layout_marginTop="24dp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -35,7 +36,7 @@
                 android:id="@+id/tv_region"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="eng"
+                android:text="Việt Nam"
                 android:textColor="@color/white"
                 android:textSize="14sp"
                 android:layout_marginStart="6dp"
@@ -68,7 +69,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                apiStatus="@{viewmodel.status}"
+                apiStatus="@{viewmodel.statusTrending}"
                 app:layout_constraintStart_toStartOf="@id/view_pager_trending"
                 app:layout_constraintEnd_toEndOf="@id/view_pager_trending"
                 app:layout_constraintTop_toTopOf="@id/view_pager_trending"
@@ -81,6 +82,7 @@
                 android:paddingStart="90dp"
                 android:paddingEnd="90dp"
                 android:layout_marginTop="32dp"
+                apiStatusView="@{viewmodel.statusTrending}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/img_language"/>
@@ -103,21 +105,21 @@
                 android:id="@+id/tv_see_all_rating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="38dp"
                 android:layout_marginEnd="16dp"
                 android:text="See All"
                 android:textColor="#FF728C"
                 android:textSize="12sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/view_pager_trending" />
+                app:layout_constraintTop_toTopOf="@id/tv_top_rating"
+                app:layout_constraintBottom_toBottomOf="@id/tv_top_rating"/>
 
             <ProgressBar
                 android:id="@+id/progress_top_ratting"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                apiStatus="@{viewmodel.status}"
+                apiStatus="@{viewmodel.statusRating}"
                 app:layout_constraintStart_toStartOf="@id/recycler_view_top_rating"
                 app:layout_constraintEnd_toEndOf="@id/recycler_view_top_rating"
                 app:layout_constraintTop_toTopOf="@id/recycler_view_top_rating"
@@ -133,7 +135,8 @@
                 android:layout_marginTop="5dp"
                 android:orientation="horizontal"
                 app:layout_constraintTop_toBottomOf="@id/tv_top_rating"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                apiStatusView="@{viewmodel.statusRating}"/>
 
             <TextView
                 android:id="@+id/tv_top_listened"
@@ -152,22 +155,34 @@
                 android:id="@+id/tv_see_all_listened"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="27dp"
                 android:layout_marginEnd="16dp"
                 android:text="See All"
                 android:textColor="#FF728C"
                 android:textSize="12sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/recycler_view_top_rating" />
+                app:layout_constraintTop_toTopOf="@id/tv_top_listened"
+                app:layout_constraintBottom_toBottomOf="@id/tv_top_listened"/>
+
+            <ProgressBar
+                android:id="@+id/progress_top_listened"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                apiStatus="@{viewmodel.statusListened}"
+                app:layout_constraintStart_toStartOf="@id/recycler_view_top_listened"
+                app:layout_constraintEnd_toEndOf="@id/recycler_view_top_listened"
+                app:layout_constraintTop_toTopOf="@id/recycler_view_top_listened"
+                app:layout_constraintBottom_toBottomOf="@id/recycler_view_top_listened"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view_top_listened"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="380dp"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="10dp"
                 android:orientation="vertical"
+                apiStatusView="@{viewmodel.statusListened}"
                 app:layout_constraintTop_toBottomOf="@id/tv_top_listened"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -190,22 +205,34 @@
                 android:id="@+id/tv_see_all_download"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="27dp"
                 android:layout_marginEnd="16dp"
                 android:text="See All"
                 android:textColor="#FF728C"
                 android:textSize="12sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/recycler_view_top_listened" />
+                app:layout_constraintTop_toTopOf="@id/tv_top_download"
+                app:layout_constraintBottom_toBottomOf="@id/tv_top_download"/>
+
+            <ProgressBar
+                android:id="@+id/progress_top_download"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                apiStatus="@{viewmodel.statusDownload}"
+                app:layout_constraintStart_toStartOf="@id/recycler_view_top_download"
+                app:layout_constraintEnd_toEndOf="@id/recycler_view_top_download"
+                app:layout_constraintTop_toTopOf="@id/recycler_view_top_download"
+                app:layout_constraintBottom_toBottomOf="@id/recycler_view_top_download"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view_top_download"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="170dp"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal"
+                apiStatusView="@{viewmodel.statusDownload}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_top_download"
@@ -235,15 +262,29 @@
                 android:textSize="12sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/recycler_view_top_download" />
+                app:layout_constraintTop_toTopOf="@id/tv_genres"
+                app:layout_constraintBottom_toBottomOf="@id/tv_genres"/>
+
+            <ProgressBar
+                android:id="@+id/progress_genres"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                apiStatus="@{viewmodel.statusGenres}"
+                app:layout_constraintStart_toStartOf="@id/recycler_view_genres"
+                app:layout_constraintEnd_toEndOf="@id/recycler_view_genres"
+                app:layout_constraintTop_toTopOf="@id/recycler_view_genres"
+                app:layout_constraintBottom_toBottomOf="@id/recycler_view_genres"/>
+
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view_genres"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="85dp"
                 android:layout_marginStart="18dp"
                 android:layout_marginTop="21dp"
                 android:orientation="horizontal"
+                apiStatusView="@{viewmodel.statusGenres}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tv_genres"

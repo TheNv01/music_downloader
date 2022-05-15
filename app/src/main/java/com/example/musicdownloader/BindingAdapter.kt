@@ -5,6 +5,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
+import androidx.viewpager2.widget.ViewPager2
 import coil.load
 import com.example.musicdownloader.viewmodel.ApiStatus
 
@@ -37,5 +38,15 @@ fun bindStatus(progressBar: ProgressBar, status: ApiStatus?) {
     }
     else{
         progressBar.visibility = View.VISIBLE
+    }
+}
+
+@BindingAdapter("apiStatusView")
+fun bindStatusView(view: View, status: ApiStatus?) {
+    if(status == ApiStatus.DONE){
+        view.visibility = View.VISIBLE
+    }
+    else{
+        view.visibility = View.INVISIBLE
     }
 }

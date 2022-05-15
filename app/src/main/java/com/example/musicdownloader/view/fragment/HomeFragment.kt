@@ -6,7 +6,9 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
+
 import com.example.musicdownloader.R
+import com.example.musicdownloader.SharedPreferencesManager
 import com.example.musicdownloader.UltraDepthScaleTransformer
 import com.example.musicdownloader.adapter.*
 import com.example.musicdownloader.databinding.HomeFragmentBinding
@@ -51,7 +53,12 @@ class HomeFragment(private val callBack: OnActionCallBack): BaseFragment<HomeFra
     }
 
     override fun initViews() {
+        context?.let { SharedPreferencesManager.with(it) }
 
+        SharedPreferencesManager.get<Region>("country")?.let {
+            binding.imgLanguage.setImageResource(it.regionIcon)
+            binding.tvRegion.text = it.regionName
+        }
     }
 
     override fun setUpListener() {
@@ -72,12 +79,41 @@ class HomeFragment(private val callBack: OnActionCallBack): BaseFragment<HomeFra
             changeRegionDialog()
         }
         setFragmentResultListener("requestKey") { _, bundle ->
-            val region = bundle.get("region") as Region
-            Log.d("asdfas", region.regionName)
+             bundle.get("region").also {
+                 if(it is Region){
+                     SharedPreferencesManager.put(it, "country")
+                     mViewModel.factoryMusics("popular", it.regionCode)
+                     mViewModel.factoryMusics("ranking", it.regionCode)
+                     mViewModel.factoryMusics("listened", it.regionCode)
+                     mViewModel.factoryMusics("download", it.regionCode)
+                     binding.tvRegion.text = it.regionName
+                     binding.imgLanguage.setImageResource(it.regionIcon)
+                 }
+             }
         }
     }
 
+    private fun changeRegionDialog() {
+        val changeRegionDialog = ChangeRegionDialog()
+        changeRegionDialog.show((activity as MainActivity).supportFragmentManager, "region_dialog")
+    }
+
     override fun setUpObserver() {
+
+        SharedPreferencesManager.get<Region>("country").let {
+            if(it == null){
+                mViewModel.factoryMusics("popular", null)
+                mViewModel.factoryMusics("ranking", null)
+                mViewModel.factoryMusics("listened", null)
+                mViewModel.factoryMusics("download", null)
+            }
+            else{
+                mViewModel.factoryMusics("popular", it.regionCode)
+                mViewModel.factoryMusics("ranking", it.regionCode)
+                mViewModel.factoryMusics("listened", it.regionCode)
+                mViewModel.factoryMusics("download", it.regionCode)
+            }
+        }
         binding.lifecycleOwner = this
         binding.viewmodel = mViewModel
         setupTrendingViewPager()
@@ -117,11 +153,6 @@ class HomeFragment(private val callBack: OnActionCallBack): BaseFragment<HomeFra
         }
     }
 
-    private fun changeRegionDialog() {
-        val changeRegionDialog = ChangeRegionDialog()
-        changeRegionDialog.show((activity as MainActivity).supportFragmentManager, "region_dialog")
-    }
-
     private fun setupTrendingViewPager(){
         val viewPager = binding.viewPagerTrending
         mViewModel.trends.observe(this){
@@ -136,7 +167,5 @@ class HomeFragment(private val callBack: OnActionCallBack): BaseFragment<HomeFra
         compositePageTransformer.addTransformer(MarginPageTransformer(40))
         compositePageTransformer.addTransformer(UltraDepthScaleTransformer())
         viewPager.setPageTransformer(compositePageTransformer)
-
     }
-
 }

@@ -11,6 +11,10 @@ class TopDownloadAdapter(
     itemClickListener: ItemClickListener<Music>
 ): BaseAdapter<Music, ItemTopDownloadBinding>(layoutID, musics, itemClickListener) {
 
+    override fun getItemCount(): Int {
+        return 5
+    }
+
     override fun setViewHolder(binding: ViewDataBinding): BaseViewHolder<Music, ItemTopDownloadBinding> {
         return TopDownloadViewHolder(binding as ItemTopDownloadBinding)
     }
