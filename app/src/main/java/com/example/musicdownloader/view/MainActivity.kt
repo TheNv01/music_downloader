@@ -2,6 +2,7 @@ package com.example.musicdownloader.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
@@ -15,6 +16,7 @@ import com.example.musicdownloader.view.fragment.*
 class MainActivity : AppCompatActivity(), OnActionCallBack {
 
     lateinit var binding: ActivityMainBinding
+    private var playMusicFragment: PlayMusicFragment ?= null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,6 +89,7 @@ class MainActivity : AppCompatActivity(), OnActionCallBack {
     }
 
     private fun showFragment(
+
         container: Int,
         fragment: Fragment,
         isAdd: Boolean,
@@ -119,29 +122,36 @@ class MainActivity : AppCompatActivity(), OnActionCallBack {
                 return
             }
             if(it is PlayMusicFragment){
+
                 if (it.binding.layoutPlayMusic.currentState == R.id.end)
                     it.binding.layoutPlayMusic.transitionToStart()
-                else
+                else{
                     super.onBackPressed()
+                    it.gotoService(MusicService.ACTION_CLOSE)
+                    playMusicFragment = null
+                }
             }
             else{
                 supportFragmentManager.popBackStack()
             }
-
         }
     }
 
     override fun callBack(key: String?, data: Any?) {
         when (key) {
             HomeFragment.KEY_SHOW_PLAY_MUSIC ->{
-                val playMusicFragment =  PlayMusicFragment(this)
-                playMusicFragment.music = data as Music
-                showFragment(R.id.container_layout_playing, playMusicFragment,
-                    isAdd = false,
-                    addToBackStack = true,
-                    anim_start = 0,
-                    anim_end = 0
-                )
+                val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
+                if(playMusicFragment == null){
+                    playMusicFragment = PlayMusicFragment(this)
+                    transaction.replace(R.id.container_layout_playing, playMusicFragment!!)
+                    transaction.addToBackStack("add")
+                }
+                else{
+                    playMusicFragment!!.updateSong()
+                    transaction.show(playMusicFragment!!)
+                }
+                transaction.commit()
+
             }
             PlayMusicFragment.KEY_SHOW_ADD_FAVORITE ->{
                 val addFavoriteFragment = AddFavoriteFragment(this)
@@ -151,12 +161,9 @@ class MainActivity : AppCompatActivity(), OnActionCallBack {
                     anim_start = 0,
                     anim_end = 0
                 )
-
             }
-
             HomeFragment.KEY_SHOW_SEE_ALL ->{
                 val seeAllFragment = SeeAllFragment(this)
-
                 seeAllFragment.text = data as String
                 showFragment(R.id.container_navigation, seeAllFragment,
                     isAdd = false,
@@ -165,14 +172,12 @@ class MainActivity : AppCompatActivity(), OnActionCallBack {
                     anim_end = 0
                 )
             }
-
             PlayMusicFragment.KEY_SHOW_SERVICE ->{
                 if (data != null ) {
                     val intent = Intent(this, MusicService::class.java)
                     intent.putExtra("action", data as Int)
                     startService(intent)
                 }
-
             }
         }
     }

@@ -22,6 +22,7 @@ class SeeAllFragment(private val callBack: OnActionCallBack): BaseFragment<SeeAl
 
     private val musicItemClickListener = object : ItemClickListener<Music> {
         override fun onClickListener(model: Music) {
+            MusicManager.setCurrentMusic(model)
             callBack.callBack(HomeFragment.KEY_SHOW_PLAY_MUSIC, model)
             mViewModel.musics.value?.let { MusicManager.setListMusic(it) }
         }

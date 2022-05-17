@@ -38,8 +38,9 @@ class HomeFragment(private val callBack: OnActionCallBack): BaseFragment<HomeFra
 
     private val musicItemClickListener = object : ItemClickListener<Music> {
         override fun onClickListener(model: Music) {
-            callBack.callBack(KEY_SHOW_PLAY_MUSIC, model)
+            MusicManager.setCurrentMusic(model)
             mViewModel.topDownloads.value?.let { MusicManager.setListMusic(it) }
+            callBack.callBack(KEY_SHOW_PLAY_MUSIC, null)
         }
     }
 

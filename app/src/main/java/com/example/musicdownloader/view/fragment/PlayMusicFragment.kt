@@ -26,7 +26,6 @@ import kotlin.math.abs
 
 class PlayMusicFragment(private val callBack: OnActionCallBack): BaseFragment<PlayMusicFragmentBinding, PlayMusicViewModel>(callBack) {
 
-    var music: Music ?= null
     companion object{
         const val KEY_SHOW_ADD_FAVORITE = "KEY_SHOW_ADD_FAVORITE"
         const val KEY_SHOW_SERVICE = "KEY_SHOW_SERVICE"
@@ -78,12 +77,8 @@ class PlayMusicFragment(private val callBack: OnActionCallBack): BaseFragment<Pl
     }
 
     override fun initViews() {
-        if(music == null){
-            music = MusicManager.getCurrentMusic()
-        }
         MediaManager.setProgress(0)
-        MusicManager.setCurrentMusic(music)
-        playSong(music!!)
+        playSong(MusicManager.getCurrentMusic()!!)
     }
 
     override fun setUpListener() {
@@ -94,7 +89,6 @@ class PlayMusicFragment(private val callBack: OnActionCallBack): BaseFragment<Pl
         }
         binding.icClose.setOnClickListener{
             (activity as MainActivity).onBackPressed()
-            gotoService(MusicService.ACTION_CLOSE)
         }
         binding.icBack.setOnClickListener {
             (activity as MainActivity).onBackPressed()
@@ -126,7 +120,7 @@ class PlayMusicFragment(private val callBack: OnActionCallBack): BaseFragment<Pl
         initSeekBar(music)
     }
 
-    private fun gotoService(action: Int){
+    fun gotoService(action: Int){
         callBack.callBack(KEY_SHOW_SERVICE, action)
     }
 
@@ -218,6 +212,12 @@ class PlayMusicFragment(private val callBack: OnActionCallBack): BaseFragment<Pl
                 }
             }
         }
+    }
+
+    fun updateSong() {
+        Log.d("current", MusicManager.getCurrentMusic().toString())
+        playSong(MusicManager.getCurrentMusic()!!)
+        binding.layoutPlayMusic.transitionToEnd()
     }
 
     private fun formattedTime(currentPosition: Int): String{
