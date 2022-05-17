@@ -8,12 +8,18 @@ import com.example.musicdownloader.model.Music
 
 class TopListenedAdapter(
     layoutID: Int,
-    musics: List<Music>,
+    private val musics: List<Music>,
+    private val isLimitItem: Boolean,
     itemClickListener: ItemClickListener<Music>
 ): BaseAdapter<Music, ItemTopListenedBinding>(layoutID, musics, itemClickListener) {
 
     override fun getItemCount(): Int {
-        return 5
+        return if(isLimitItem){
+            5
+        } else{
+            musics.size
+        }
+
     }
 
     override fun setViewHolder(binding: ViewDataBinding): BaseViewHolder<Music, ItemTopListenedBinding> {
@@ -23,7 +29,7 @@ class TopListenedAdapter(
     inner class TopListenedViewHolder(private val binding: ItemTopListenedBinding) : BaseViewHolder<Music, ItemTopListenedBinding>(binding) {
         override fun bindData(data: Music) {
             binding.music = data
-            binding.tvId.text = (adapterPosition + 1).toString() + "."
+            binding.tvId.text =  "${(adapterPosition + 1)}."
             when(adapterPosition){
                 0 ->{
                     binding.tvId.setTextColor(Color.parseColor("#F89500"))

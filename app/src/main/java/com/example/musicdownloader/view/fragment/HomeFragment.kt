@@ -1,7 +1,10 @@
 package com.example.musicdownloader.view.fragment
 
+import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
@@ -63,12 +66,15 @@ class HomeFragment(private val callBack: OnActionCallBack): BaseFragment<HomeFra
 
     override fun setUpListener() {
         binding.tvSeeAllDownload.setOnClickListener {
+            setFragmentResult("seeAllKey", bundleOf("option" to "download"))
             callBack.callBack(KEY_SHOW_SEE_ALL, TOP_DOWNLOAD)
         }
         binding.tvSeeAllRating.setOnClickListener {
+            setFragmentResult("seeAllKey", bundleOf("option" to "ranking"))
             callBack.callBack(KEY_SHOW_SEE_ALL, TOP_RATING)
         }
         binding.tvSeeAllListened.setOnClickListener {
+            setFragmentResult("seeAllKey", bundleOf("option  " to "listened"))
             callBack.callBack(KEY_SHOW_SEE_ALL, TOP_LISTENED)
         }
         binding.tvSeeAllGenres.setOnClickListener {
@@ -132,6 +138,7 @@ class HomeFragment(private val callBack: OnActionCallBack): BaseFragment<HomeFra
             binding.recyclerViewTopListened.adapter = TopListenedAdapter(
                 R.layout.item_top_listened,
                 it,
+                true,
                 musicItemClickListener)
         }
         mViewModel.topDownloads.observe(this){

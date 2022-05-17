@@ -25,6 +25,7 @@ class GenreSeeAllAdapter(
 
         override fun clickListener(data: Genres, itemClickListener: ItemClickListener<Genres>) {
             binding.tvTest.setOnClickListener {
+                itemClickListener.onClickListener(data)
                 row = adapterPosition
                 notifyDataSetChanged()
             }

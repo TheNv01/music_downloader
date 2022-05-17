@@ -3,6 +3,7 @@ package com.example.musicdownloader.view.fragment
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.View
 import android.view.animation.LinearInterpolator
 import androidx.constraintlayout.motion.widget.MotionLayout
@@ -25,7 +26,7 @@ import kotlin.math.abs
 
 class PlayMusicFragment(private val callBack: OnActionCallBack): BaseFragment<PlayMusicFragmentBinding, PlayMusicViewModel>(callBack) {
 
-    lateinit var music: Music
+    var music: Music ?= null
     companion object{
         const val KEY_SHOW_ADD_FAVORITE = "KEY_SHOW_ADD_FAVORITE"
         const val KEY_SHOW_SERVICE = "KEY_SHOW_SERVICE"
@@ -77,12 +78,12 @@ class PlayMusicFragment(private val callBack: OnActionCallBack): BaseFragment<Pl
     }
 
     override fun initViews() {
-        MediaManager.setProgress(0)
-        if(music != MusicManager.getCurrentMusic()){
-            playSong(music)
+        if(music == null){
+            music = MusicManager.getCurrentMusic()
         }
+        MediaManager.setProgress(0)
         MusicManager.setCurrentMusic(music)
-
+        playSong(music!!)
     }
 
     override fun setUpListener() {

@@ -5,7 +5,6 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
-import androidx.viewpager2.widget.ViewPager2
 import coil.load
 import com.example.musicdownloader.viewmodel.ApiStatus
 

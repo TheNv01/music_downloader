@@ -7,7 +7,6 @@ import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.os.Build
 import android.os.IBinder
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import coil.ImageLoader
 import coil.request.ImageRequest
@@ -17,9 +16,8 @@ import com.example.musicdownloader.manager.MusicManager
 import com.example.musicdownloader.manager.RepeatStatus
 import com.example.musicdownloader.model.MessageEvent
 import com.example.musicdownloader.model.Music
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import com.example.musicdownloader.networking.Services
+import kotlinx.coroutines.*
 import org.greenrobot.eventbus.EventBus
 
 class MusicService : Service() {
@@ -42,8 +40,9 @@ class MusicService : Service() {
         val action: Int = intent.getIntExtra("action", 0)
         if (action != 0) {
             when (action) {
-                ACTION_START ->
+                ACTION_START ->{
                     MusicManager.getCurrentMusic()?.let { startMusic(it) }
+                }
                 ACTION_RESUME -> {
                     MediaManager.resumeMedia()
                 }
@@ -60,7 +59,6 @@ class MusicService : Service() {
                     stopSelf()
                     MusicManager.setCurrentMusic(null)
                 }
-
             }
             EventBus.getDefault().post(MessageEvent(action))
             MusicManager.getCurrentMusic()?.let { pushNotification(it) }
@@ -70,34 +68,43 @@ class MusicService : Service() {
 
     private fun startMusic(music: Music) {
         MediaManager.resetMedia()
-        MediaManager.playMusic(music.audio!!){
-            when(MusicManager.getRepeatStatus()){
-                RepeatStatus.NoRepeat ->{
-                    if(MusicManager.getIndexOfCurrentMusic() == MusicManager.getSizeMusicList() -1){
-                        EventBus.getDefault().post(MessageEvent(ACTION_PAUSE))
-                        MediaManager.pauseMedia()
+        GlobalScope.launch {
+            MediaManager.playMusic(getLinkAudio(music)){
+                when(MusicManager.getRepeatStatus()){
+                    RepeatStatus.NoRepeat ->{
+                        if(MusicManager.getIndexOfCurrentMusic() == MusicManager.getSizeMusicList() -1){
+                            EventBus.getDefault().post(MessageEvent(ACTION_PAUSE))
+                            MediaManager.pauseMedia()
+                        }
+                        else{
+                            MusicManager.nextMusic()
+                            EventBus.getDefault().post(MessageEvent(ACTION_NEXT))
+                        }
                     }
-                    else{
+                    RepeatStatus.RepeatListMusic ->{
+                        MusicManager.nextMusic()
                         EventBus.getDefault().post(MessageEvent(ACTION_NEXT))
                     }
-
+                    RepeatStatus.RepeatOneMusic ->{
+                        EventBus.getDefault().post(MessageEvent(ACTION_NEXT))
+                    }
                 }
-                RepeatStatus.RepeatListMusic ->{
-                    MusicManager.nextMusic()
-                    EventBus.getDefault().post(MessageEvent(ACTION_NEXT))
-                }
-                RepeatStatus.RepeatOneMusic ->{
-                    EventBus.getDefault().post(MessageEvent(ACTION_NEXT))
-                }
+                MusicManager.getCurrentMusic()?.let { it1 -> pushNotification(it1) }
             }
+        }
+    }
 
-            MusicManager.getCurrentMusic()?.let { it1 -> pushNotification(it1) }
+    private suspend fun getLinkAudio(music: Music): String{
+        return if(music.source.equals("SC")){
+            Services.retrofitService.getLinkSourceSc(music.id).data
+        } else{
+            music.audio!!
         }
     }
 
     private fun pushNotification(music: Music) {
 
-        GlobalScope.launch(Dispatchers.IO) {
+        GlobalScope.launch {
             val builder = NotificationCompat.Builder(this@MusicService, App.CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setLargeIcon(getBitmapFromURL(music.image!!))

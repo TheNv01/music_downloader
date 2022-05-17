@@ -2,13 +2,11 @@ package com.example.musicdownloader.manager
 
 import android.media.AudioAttributes
 import android.media.MediaPlayer
-import android.util.Log
 import java.io.IOException
-
 
 object MediaManager {
     private var mediaPlayer: MediaPlayer? = null
-    private var isPause  = true
+    private var isPause  = false
 
     fun isPause(): Boolean{
         return isPause
@@ -24,11 +22,15 @@ object MediaManager {
         )
         try {
             mediaPlayer?.setDataSource(url)
-            mediaPlayer?.setOnPreparedListener { obj: MediaPlayer -> obj.start() }
+            mediaPlayer?.setOnPreparedListener(MediaPlayer::start                                  )
             mediaPlayer?.prepareAsync()
             mediaPlayer?.setOnCompletionListener(completionListener)
 
-        } catch (e: IOException) {
+        }catch (e: IllegalArgumentException){
+            e.printStackTrace()
+        } catch (e: IllegalStateException){
+            e.printStackTrace()
+        }catch (e: IOException) {
             e.printStackTrace()
         }
     }
@@ -45,8 +47,6 @@ object MediaManager {
         if (mediaPlayer != null) {
             isPause = true
             mediaPlayer!!.pause()
-
-            Log.d("asfasf", "paiseeeeeee")
         }
     }
 

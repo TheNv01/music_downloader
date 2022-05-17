@@ -22,7 +22,7 @@ class TopRatingAdapter(
     inner class TopRatingViewHolder(private val binding: ItemTopRatingBinding) : BaseViewHolder<Music, ItemTopRatingBinding>(binding) {
         override fun bindData(data: Music) {
             binding.music = data
-            binding.tvOrder.text = "#"+(adapterPosition + 1).toString()
+            binding.tvOrder.text = "#${(adapterPosition + 1)}"
         }
 
         override fun clickListener(data: Music, itemClickListener: ItemClickListener<Music>) {
