@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.musicdownloader.view.fragment.HomeFragment"
+        android:label="HomeFragment"
+        tools:layout="@layout/home_fragment">
+        <action
+            android:id="@+id/action_homeFragment_to_seeAllFragment"
+            app:destination="@id/seeAllFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_navigation2"
+            app:destination="@id/navigation2" />
+    </fragment>
+    <fragment
+        android:id="@+id/playListFragment"
+        android:name="com.example.musicdownloader.view.fragment.PlayListFragment"
+        android:label="PlayListFragment"
+        tools:layout="@layout/play_list_fragment"/>
+    <fragment
+        android:id="@+id/downloadFragment"
+        android:name="com.example.musicdownloader.view.fragment.DownloadFragment"
+        android:label="DownloadFragment"
+        tools:layout="@layout/download_fragment"/>
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="com.example.musicdownloader.view.fragment.SettingFragment"
+        android:label="SettingFragment"
+        tools:layout="@layout/setting_fragment"/>
+    <fragment
+        android:id="@+id/seeAllFragment"
+        android:name="com.example.musicdownloader.view.fragment.SeeAllFragment"
+        android:label="SeeAllFragment" >
+        <action
+            android:id="@+id/action_seeAllFragment_to_navigation2"
+            app:destination="@id/navigation2" />
+    </fragment>
+    <navigation android:id="@+id/navigation2"
+        app:startDestination="@id/playMusicFragment">
+        <fragment
+            android:id="@+id/playMusicFragment"
+            android:name="com.example.musicdownloader.view.fragment.PlayMusicFragment"
+            android:label="PlayMusicFragment">
+            <action
+                android:id="@+id/action_playMusicFragment_to_addFavoriteFragment"
+                app:destination="@id/addFavoriteFragment" />
+        </fragment>
+        <fragment
+            android:id="@+id/addFavoriteFragment"
+            android:name="com.example.musicdownloader.view.fragment.AddFavoriteFragment"
+            android:label="AddFavoriteFragment" />
+    </navigation>
+</navigation>

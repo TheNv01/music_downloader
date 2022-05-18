@@ -14,16 +14,16 @@ import com.example.musicdownloader.manager.MusicManager
 import com.example.musicdownloader.model.Genres
 import com.example.musicdownloader.model.Music
 import com.example.musicdownloader.model.Region
+import com.example.musicdownloader.view.MainActivity
 import com.example.musicdownloader.viewmodel.SeeAllViewModel
 
-class SeeAllFragment(private val callBack: OnActionCallBack): BaseFragment<SeeAllFragmentBinding, SeeAllViewModel>(callBack) {
+class SeeAllFragment(): BaseFragment<SeeAllFragmentBinding, SeeAllViewModel>() {
 
     var text = ""
 
     private val musicItemClickListener = object : ItemClickListener<Music> {
         override fun onClickListener(model: Music) {
             MusicManager.setCurrentMusic(model)
-            callBack.callBack(HomeFragment.KEY_SHOW_PLAY_MUSIC, model)
             mViewModel.musics.value?.let { MusicManager.setListMusic(it) }
         }
     }
@@ -46,6 +46,11 @@ class SeeAllFragment(private val callBack: OnActionCallBack): BaseFragment<SeeAl
     }
 
     override fun setUpListener() {
+
+        binding.icBack.setOnClickListener {
+            (activity as MainActivity).onBackPressed()
+        }
+
         setFragmentResultListener("seeAllKey") { _, bundle ->
             bundle.getString("option").also {
                 if (it != null) {

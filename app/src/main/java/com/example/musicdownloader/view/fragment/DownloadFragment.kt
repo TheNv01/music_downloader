@@ -7,7 +7,7 @@ import com.example.musicdownloader.databinding.DownloadFragmentBinding
 import com.example.musicdownloader.viewmodel.DownloadViewModel
 
 
-class DownloadFragment(private val callBack: OnActionCallBack): BaseFragment<DownloadFragmentBinding, DownloadViewModel>(callBack) {
+class DownloadFragment(): BaseFragment<DownloadFragmentBinding, DownloadViewModel>() {
     override fun initBinding(mRootView: View): DownloadFragmentBinding {
         return DownloadFragmentBinding.bind(mRootView)
     }

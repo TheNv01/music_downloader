@@ -6,15 +6,7 @@
 
     </ConstraintSet>
     <ConstraintSet android:id="@+id/end">
-        <Constraint
-            android:id="@+id/container_navigation"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintBottom_toTopOf="@id/bottom_view"
-            android:layout_marginBottom="-20dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+
     </ConstraintSet>
 
     <Transition
@@ -41,7 +33,7 @@
 
             <KeyAttribute
                 app:framePosition="100"
-                app:motionTarget="@id/backgroundDim">
+                app:motionTarget="@+id/nav_play_music">
                 <CustomAttribute
                     app:attributeName="BackgroundColor"
                     app:customColorValue="@color/semiTransparentBlack" />
@@ -49,7 +41,7 @@
 
             <KeyAttribute
                 app:framePosition="0"
-                app:motionTarget="@id/backgroundDim">
+                app:motionTarget="@+id/nav_play_music">
                 <CustomAttribute
                     app:attributeName="BackgroundColor"
                     app:customColorValue="@android:color/transparent" />

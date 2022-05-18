@@ -22,7 +22,7 @@ object MediaManager {
         )
         try {
             mediaPlayer?.setDataSource(url)
-            mediaPlayer?.setOnPreparedListener(MediaPlayer::start                                  )
+            mediaPlayer?.setOnPreparedListener(MediaPlayer::start)
             mediaPlayer?.prepareAsync()
             mediaPlayer?.setOnCompletionListener(completionListener)
 

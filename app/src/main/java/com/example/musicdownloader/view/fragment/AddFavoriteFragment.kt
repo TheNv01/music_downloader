@@ -12,7 +12,7 @@ import com.example.musicdownloader.model.Option
 import com.example.musicdownloader.view.MainActivity
 import com.example.musicdownloader.viewmodel.AddFavoriteViewModel
 
-class AddFavoriteFragment (private val callBack: OnActionCallBack): BaseFragment<AddFavoriteFragmentBinding, AddFavoriteViewModel>(callBack) {
+class AddFavoriteFragment (): BaseFragment<AddFavoriteFragmentBinding, AddFavoriteViewModel>() {
     override fun initBinding(mRootView: View): AddFavoriteFragmentBinding {
         return AddFavoriteFragmentBinding.bind(mRootView)
     }

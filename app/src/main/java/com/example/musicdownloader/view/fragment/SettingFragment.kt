@@ -12,7 +12,7 @@ import com.example.musicdownloader.model.Option
 import com.example.musicdownloader.viewmodel.SettingViewModel
 
 
-class SettingFragment(private val callBack: OnActionCallBack): BaseFragment<SettingFragmentBinding, SettingViewModel>(callBack) {
+class SettingFragment(): BaseFragment<SettingFragmentBinding, SettingViewModel>() {
     override fun initBinding(mRootView: View): SettingFragmentBinding {
         return SettingFragmentBinding.bind(mRootView)
     }

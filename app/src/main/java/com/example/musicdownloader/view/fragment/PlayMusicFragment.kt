@@ -6,7 +6,10 @@ import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.view.animation.LinearInterpolator
+import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.motion.widget.MotionLayout
+import androidx.fragment.app.FragmentManager
+import androidx.navigation.findNavController
 import com.example.musicdownloader.MusicService
 import com.example.musicdownloader.R
 import com.example.musicdownloader.cusomseekbar.ProgressListener
@@ -24,7 +27,7 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import kotlin.math.abs
 
-class PlayMusicFragment(private val callBack: OnActionCallBack): BaseFragment<PlayMusicFragmentBinding, PlayMusicViewModel>(callBack) {
+class PlayMusicFragment(): BaseFragment<PlayMusicFragmentBinding, PlayMusicViewModel>() {
 
     companion object{
         const val KEY_SHOW_ADD_FAVORITE = "KEY_SHOW_ADD_FAVORITE"
@@ -71,7 +74,6 @@ class PlayMusicFragment(private val callBack: OnActionCallBack): BaseFragment<Pl
                 binding.icPlayOrPause.setImageResource(R.drawable.ic_pause_not_background)
             }
             MusicService.ACTION_CLOSE ->{
-                (activity as MainActivity).supportFragmentManager.popBackStack()
             }
         }
     }
@@ -85,10 +87,11 @@ class PlayMusicFragment(private val callBack: OnActionCallBack): BaseFragment<Pl
 
         setupMotionLayout()
         binding.icFavorite.setOnClickListener {
-            callBack.callBack(KEY_SHOW_ADD_FAVORITE, null)
+            (activity as MainActivity).findNavController(R.id.nav_play_music).navigate(R.id.addFavoriteFragment, null, null)
         }
         binding.icClose.setOnClickListener{
             (activity as MainActivity).onBackPressed()
+            gotoService(MusicService.ACTION_CLOSE)
         }
         binding.icBack.setOnClickListener {
             (activity as MainActivity).onBackPressed()
@@ -109,6 +112,14 @@ class PlayMusicFragment(private val callBack: OnActionCallBack): BaseFragment<Pl
     }
 
     override fun setUpObserver() {
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if(binding.layoutPlayMusic.currentState == R.id.end){
+                        binding.layoutPlayMusic.transitionToStart()
+                    }
+                }
+            })
     }
 
     private fun playSong(music: Music) {
@@ -117,11 +128,10 @@ class PlayMusicFragment(private val callBack: OnActionCallBack): BaseFragment<Pl
         binding.tvSingle.text = music.name
         binding.tvProgressMax.text = formattedTime(music.duration!!)
         gotoService(MusicService.ACTION_START)
-        initSeekBar(music)
+        initSeekBar(MusicManager.getCurrentMusic()!!)
     }
 
     fun gotoService(action: Int){
-        callBack.callBack(KEY_SHOW_SERVICE, action)
     }
 
     private fun handleRepeatMusic() {
@@ -215,7 +225,6 @@ class PlayMusicFragment(private val callBack: OnActionCallBack): BaseFragment<Pl
     }
 
     fun updateSong() {
-        Log.d("current", MusicManager.getCurrentMusic().toString())
         playSong(MusicManager.getCurrentMusic()!!)
         binding.layoutPlayMusic.transitionToEnd()
     }

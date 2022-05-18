@@ -1,6 +1,5 @@
 package com.example.musicdownloader.view.fragment
 
-import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.core.os.bundleOf
@@ -9,13 +8,12 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
-
+import androidx.navigation.findNavController
 import com.example.musicdownloader.R
 import com.example.musicdownloader.SharedPreferencesManager
 import com.example.musicdownloader.UltraDepthScaleTransformer
 import com.example.musicdownloader.adapter.*
 import com.example.musicdownloader.databinding.HomeFragmentBinding
-import com.example.musicdownloader.interfaces.OnActionCallBack
 import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
 import com.example.musicdownloader.manager.MusicManager
 import com.example.musicdownloader.model.Genres
@@ -25,7 +23,7 @@ import com.example.musicdownloader.view.ChangeRegionDialog
 import com.example.musicdownloader.view.MainActivity
 import com.example.musicdownloader.viewmodel.HomeViewModel
 
-class HomeFragment(private val callBack: OnActionCallBack): BaseFragment<HomeFragmentBinding, HomeViewModel>(callBack) {
+class HomeFragment(): BaseFragment<HomeFragmentBinding, HomeViewModel>() {
 
     companion object{
         const val KEY_SHOW_PLAY_MUSIC = "KEY_SHOW_PLAY_MUSIC"
@@ -40,7 +38,7 @@ class HomeFragment(private val callBack: OnActionCallBack): BaseFragment<HomeFra
         override fun onClickListener(model: Music) {
             MusicManager.setCurrentMusic(model)
             mViewModel.topDownloads.value?.let { MusicManager.setListMusic(it) }
-            callBack.callBack(KEY_SHOW_PLAY_MUSIC, null)
+            (activity as MainActivity).findNavController(R.id.nav_play_music).navigate(R.id.navigation2, null, null)
         }
     }
 
@@ -68,18 +66,17 @@ class HomeFragment(private val callBack: OnActionCallBack): BaseFragment<HomeFra
     override fun setUpListener() {
         binding.tvSeeAllDownload.setOnClickListener {
             setFragmentResult("seeAllKey", bundleOf("option" to "download"))
-            callBack.callBack(KEY_SHOW_SEE_ALL, TOP_DOWNLOAD)
+            (activity as MainActivity).findNavController(R.id.activity_main_nav_host_fragment).navigate(R.id.seeAllFragment, null, null)
         }
         binding.tvSeeAllRating.setOnClickListener {
             setFragmentResult("seeAllKey", bundleOf("option" to "ranking"))
-            callBack.callBack(KEY_SHOW_SEE_ALL, TOP_RATING)
+            (activity as MainActivity).findNavController(R.id.activity_main_nav_host_fragment).navigate(R.id.seeAllFragment, null, null)
         }
         binding.tvSeeAllListened.setOnClickListener {
             setFragmentResult("seeAllKey", bundleOf("option  " to "listened"))
-            callBack.callBack(KEY_SHOW_SEE_ALL, TOP_LISTENED)
+            (activity as MainActivity).findNavController(R.id.activity_main_nav_host_fragment).navigate(R.id.seeAllFragment, null, null)
         }
         binding.tvSeeAllGenres.setOnClickListener {
-            callBack.callBack(KEY_SHOW_SEE_ALL, GENRES)
         }
 
         binding.tvRegion.setOnClickListener {

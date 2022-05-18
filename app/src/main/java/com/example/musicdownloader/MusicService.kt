@@ -2,6 +2,7 @@ package com.example.musicdownloader
 
 import android.app.PendingIntent
 import android.app.Service
+import android.app.TaskStackBuilder
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
@@ -17,6 +18,7 @@ import com.example.musicdownloader.manager.RepeatStatus
 import com.example.musicdownloader.model.MessageEvent
 import com.example.musicdownloader.model.Music
 import com.example.musicdownloader.networking.Services
+import com.example.musicdownloader.view.MainActivity
 import kotlinx.coroutines.*
 import org.greenrobot.eventbus.EventBus
 
@@ -104,6 +106,17 @@ class MusicService : Service() {
 
     private fun pushNotification(music: Music) {
 
+        // Create an Intent for the activity you want to start
+        val resultIntent = Intent(this, MainActivity::class.java)
+        resultIntent.putExtra("from notification", 1)
+        val resultPendingIntent: PendingIntent? = TaskStackBuilder.create(this).run {
+            // Add the intent, which inflates the back stack
+            addNextIntentWithParentStack(resultIntent)
+            // Get the PendingIntent containing the entire back stack
+            getPendingIntent(1,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        }
+
         GlobalScope.launch {
             val builder = NotificationCompat.Builder(this@MusicService, App.CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
@@ -111,6 +124,7 @@ class MusicService : Service() {
                 .setSubText("Music Player")
                 .setContentTitle(music.name)
                 .setContentText(music.artistName)
+                .setContentIntent(resultPendingIntent)
                 .addAction(R.drawable.ic_previous_notification, "Previous", getIntent(ACTION_PREVIOUS))
                 .addAction(
                     if (MediaManager.isPause()) R.drawable.ic_play_notification else R.drawable.ic_pause_notification,

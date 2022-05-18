@@ -6,7 +6,7 @@ import com.example.musicdownloader.interfaces.OnActionCallBack
 import com.example.musicdownloader.databinding.PlayListFragmentBinding
 import com.example.musicdownloader.viewmodel.PlayListViewModel
 
-class PlayListFragment(private val callBack: OnActionCallBack): BaseFragment<PlayListFragmentBinding, PlayListViewModel>(callBack) {
+class PlayListFragment(): BaseFragment<PlayListFragmentBinding, PlayListViewModel>() {
     override fun initBinding(mRootView: View): PlayListFragmentBinding {
         return PlayListFragmentBinding.bind(mRootView)
     }

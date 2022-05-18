@@ -10,7 +10,7 @@ import com.example.musicdownloader.databinding.SplashFragmentBinding
 import com.example.musicdownloader.viewmodel.SplashViewModel
 
 
-class SplashFragment(private val callBack: OnActionCallBack): BaseFragment<SplashFragmentBinding, SplashViewModel>(callBack) {
+class SplashFragment(): BaseFragment<SplashFragmentBinding, SplashViewModel>() {
 
 
     companion object{
@@ -34,7 +34,6 @@ class SplashFragment(private val callBack: OnActionCallBack): BaseFragment<Splas
         Handler(Looper.getMainLooper()).postDelayed({  }, 5000)
     }
     private fun gotoHome() {
-        callBack.callBack(KEY_SHOW_HOME, null)
     }
     override fun setUpListener() {}
 
