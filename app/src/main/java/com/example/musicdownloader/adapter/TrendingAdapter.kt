@@ -4,6 +4,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.viewpager2.widget.ViewPager2
 import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
 import com.example.musicdownloader.databinding.ItemTrendingBinding
+import com.example.musicdownloader.manager.MusicManager
 import com.example.musicdownloader.model.Music
 
 class TrendingAdapter(
@@ -28,6 +29,7 @@ class TrendingAdapter(
         override fun clickListener(data: Music, itemClickListener: ItemClickListener<Music>) {
             binding.layoutTrending.setOnClickListener {
                 itemClickListener.onClickListener(data)
+                MusicManager.setListMusic(musics)
             }
             binding.executePendingBindings()
         }

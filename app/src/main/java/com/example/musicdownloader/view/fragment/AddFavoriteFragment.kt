@@ -5,6 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.FragmentManager
+import com.example.musicdownloader.MusicService
 import com.example.musicdownloader.R
 import com.example.musicdownloader.databinding.AddFavoriteFragmentBinding
 import com.example.musicdownloader.interfaces.OnActionCallBack
@@ -36,6 +39,12 @@ class AddFavoriteFragment (): BaseFragment<AddFavoriteFragmentBinding, AddFavori
     }
 
     override fun setUpObserver() {
+
+        (activity as MainActivity).onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                activity?.supportFragmentManager?.popBackStack("addFavorite", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            }
+        })
     }
 
     private fun initTopicView(option: Option): View {

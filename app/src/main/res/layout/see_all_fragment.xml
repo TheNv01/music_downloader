@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/white"
             android:textSize="22sp"
-            android:text="TOP LISTENED"
+            android:text="@string/title"
             android:textStyle="bold"
             android:layout_marginStart="13dp"
             app:layout_constraintStart_toEndOf="@+id/ic_back"

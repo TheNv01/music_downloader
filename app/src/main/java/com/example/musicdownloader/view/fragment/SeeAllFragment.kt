@@ -2,7 +2,8 @@ package com.example.musicdownloader.view.fragment
 
 import android.util.Log
 import android.view.View
-import androidx.fragment.app.setFragmentResultListener
+import androidx.navigation.fragment.navArgs
+import com.example.musicdownloader.MusicService
 import com.example.musicdownloader.R
 import com.example.musicdownloader.SharedPreferencesManager
 import com.example.musicdownloader.adapter.GenreSeeAllAdapter
@@ -17,14 +18,16 @@ import com.example.musicdownloader.model.Region
 import com.example.musicdownloader.view.MainActivity
 import com.example.musicdownloader.viewmodel.SeeAllViewModel
 
-class SeeAllFragment(): BaseFragment<SeeAllFragmentBinding, SeeAllViewModel>() {
+class SeeAllFragment(): BaseFragment<SeeAllFragmentBinding, SeeAllViewModel>(), OnActionCallBack {
 
-    var text = ""
+    lateinit var callBack: OnActionCallBack
+    private val args: SeeAllFragmentArgs by navArgs()
 
     private val musicItemClickListener = object : ItemClickListener<Music> {
         override fun onClickListener(model: Music) {
             MusicManager.setCurrentMusic(model)
             mViewModel.musics.value?.let { MusicManager.setListMusic(it) }
+            callBack.callBack(null, null)
         }
     }
 
@@ -41,24 +44,21 @@ class SeeAllFragment(): BaseFragment<SeeAllFragmentBinding, SeeAllViewModel>() {
     }
 
     override fun initViews() {
-        binding.tvTitle.text = text
+        callBack = this
+        var option = args.option?.uppercase()
+        if(option == "RANKING"){
+            option = "RATING"
+        }
+        binding.tvTitle.text = getString(R.string.title, option)
 
     }
 
     override fun setUpListener() {
-
         binding.icBack.setOnClickListener {
             (activity as MainActivity).onBackPressed()
         }
+        loadData(args.option.toString())
 
-        setFragmentResultListener("seeAllKey") { _, bundle ->
-            bundle.getString("option").also {
-                if (it != null) {
-                    Log.d("optionnn", it)
-                    loadData(it)
-                }
-            }
-        }
     }
 
     private fun loadData(option: String){
@@ -90,8 +90,23 @@ class SeeAllFragment(): BaseFragment<SeeAllFragmentBinding, SeeAllViewModel>() {
             binding.recyclerViewSeeAll.adapter = TopListenedAdapter(
                 R.layout.item_top_listened,
                 it,
-                false,
                 musicItemClickListener)
+        }
+    }
+
+    override fun callBack(key: String?, data: Any?) {
+        val tran = activity?.supportFragmentManager?.beginTransaction()
+        (activity as MainActivity).let {
+            if(it.playMusicFragment == null){
+                it.playMusicFragment = PlayMusicFragment()
+                tran?.replace(R.id.container_layout_playing, it.playMusicFragment!!)
+                tran?.addToBackStack("playFragment")
+            }
+            else{
+                it.playMusicFragment!!.updateSong()
+                tran?.show(it.playMusicFragment!!)
+            }
+            tran?.commit()
         }
     }
 }

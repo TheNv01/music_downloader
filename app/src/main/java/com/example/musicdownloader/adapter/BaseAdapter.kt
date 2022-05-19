@@ -7,6 +7,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
+import com.example.musicdownloader.manager.MusicManager
+import com.example.musicdownloader.model.Music
 
 abstract class BaseAdapter<T: Any, V: ViewDataBinding>(
     @LayoutRes protected val layoutID: Int,

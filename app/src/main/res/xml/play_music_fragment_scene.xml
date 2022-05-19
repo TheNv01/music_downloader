@@ -60,7 +60,7 @@
         <Constraint
             android:id="@+id/tv_single"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_width="wrap_content"
+            android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:translationZ="2dp"
             app:layout_constraintBottom_toTopOf="@id/tv_music"
@@ -232,7 +232,7 @@
         <Constraint
             android:id="@+id/tv_single"
             app:layout_constraintStart_toEndOf="@id/img_circle"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
             app:layout_constraintBottom_toTopOf="@id/tv_music"

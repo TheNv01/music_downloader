@@ -2,8 +2,6 @@ package com.example.musicdownloader.view.fragment
 
 import android.util.Log
 import android.view.View
-import androidx.core.os.bundleOf
-import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
@@ -14,6 +12,7 @@ import com.example.musicdownloader.SharedPreferencesManager
 import com.example.musicdownloader.UltraDepthScaleTransformer
 import com.example.musicdownloader.adapter.*
 import com.example.musicdownloader.databinding.HomeFragmentBinding
+import com.example.musicdownloader.interfaces.OnActionCallBack
 import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
 import com.example.musicdownloader.manager.MusicManager
 import com.example.musicdownloader.model.Genres
@@ -23,22 +22,18 @@ import com.example.musicdownloader.view.ChangeRegionDialog
 import com.example.musicdownloader.view.MainActivity
 import com.example.musicdownloader.viewmodel.HomeViewModel
 
-class HomeFragment(): BaseFragment<HomeFragmentBinding, HomeViewModel>() {
+class HomeFragment(): BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnActionCallBack {
+
+    lateinit var callBack: OnActionCallBack
 
     companion object{
         const val KEY_SHOW_PLAY_MUSIC = "KEY_SHOW_PLAY_MUSIC"
-        const val KEY_SHOW_SEE_ALL = "KEY_SHOW_SEE_ALL"
-        const val TOP_DOWNLOAD = "TOP DOWNLOAD"
-        const val TOP_RATING = "TOP RATING"
-        const val TOP_LISTENED = "TOP LISTENED"
-        const val GENRES = "GENRES"
     }
 
     private val musicItemClickListener = object : ItemClickListener<Music> {
         override fun onClickListener(model: Music) {
             MusicManager.setCurrentMusic(model)
-            mViewModel.topDownloads.value?.let { MusicManager.setListMusic(it) }
-            (activity as MainActivity).findNavController(R.id.nav_play_music).navigate(R.id.navigation2, null, null)
+            callBack.callBack(KEY_SHOW_PLAY_MUSIC, null)
         }
     }
 
@@ -55,6 +50,7 @@ class HomeFragment(): BaseFragment<HomeFragmentBinding, HomeViewModel>() {
     }
 
     override fun initViews() {
+        callBack = this
         context?.let { SharedPreferencesManager.with(it) }
 
         SharedPreferencesManager.get<Region>("country")?.let {
@@ -65,22 +61,21 @@ class HomeFragment(): BaseFragment<HomeFragmentBinding, HomeViewModel>() {
 
     override fun setUpListener() {
         binding.tvSeeAllDownload.setOnClickListener {
-            setFragmentResult("seeAllKey", bundleOf("option" to "download"))
-            (activity as MainActivity).findNavController(R.id.activity_main_nav_host_fragment).navigate(R.id.seeAllFragment, null, null)
+            val action = HomeFragmentDirections.actionHomeFragmentToSeeAllFragment("download")
+            requireActivity().findNavController(R.id.activity_main_nav_host_fragment).navigate(action)
         }
         binding.tvSeeAllRating.setOnClickListener {
-            setFragmentResult("seeAllKey", bundleOf("option" to "ranking"))
-            (activity as MainActivity).findNavController(R.id.activity_main_nav_host_fragment).navigate(R.id.seeAllFragment, null, null)
+            val action = HomeFragmentDirections.actionHomeFragmentToSeeAllFragment("ranking")
+            requireActivity().findNavController(R.id.activity_main_nav_host_fragment).navigate(action)
         }
         binding.tvSeeAllListened.setOnClickListener {
-            setFragmentResult("seeAllKey", bundleOf("option  " to "listened"))
-            (activity as MainActivity).findNavController(R.id.activity_main_nav_host_fragment).navigate(R.id.seeAllFragment, null, null)
+            val action = HomeFragmentDirections.actionHomeFragmentToSeeAllFragment("listened")
+            requireActivity().findNavController(R.id.activity_main_nav_host_fragment).navigate(action)
         }
         binding.tvSeeAllGenres.setOnClickListener {
         }
-
         binding.tvRegion.setOnClickListener {
-            changeRegionDialog()
+            (activity as MainActivity).findNavController(R.id.activity_main_nav_host_fragment).navigate(R.id.changeRegionDialog)
         }
         setFragmentResultListener("requestKey") { _, bundle ->
              bundle.get("region").also {
@@ -136,7 +131,7 @@ class HomeFragment(): BaseFragment<HomeFragmentBinding, HomeViewModel>() {
             binding.recyclerViewTopListened.adapter = TopListenedAdapter(
                 R.layout.item_top_listened,
                 it,
-                true,
+
                 musicItemClickListener)
         }
         mViewModel.topDownloads.observe(this){
@@ -173,4 +168,21 @@ class HomeFragment(): BaseFragment<HomeFragmentBinding, HomeViewModel>() {
         compositePageTransformer.addTransformer(UltraDepthScaleTransformer())
         viewPager.setPageTransformer(compositePageTransformer)
     }
+
+    override fun callBack(key: String?, data: Any?) {
+        val tran = activity?.supportFragmentManager?.beginTransaction()
+        (activity as MainActivity).let {
+            if(it.playMusicFragment == null){
+               it.playMusicFragment = PlayMusicFragment()
+                tran?.replace(R.id.container_layout_playing, it.playMusicFragment!!)
+                tran?.addToBackStack("playFragment")
+            }
+            else{
+                it.playMusicFragment!!.updateSong()
+                tran?.show(it.playMusicFragment!!)
+            }
+            tran?.commit()
+        }
+    }
+
 }

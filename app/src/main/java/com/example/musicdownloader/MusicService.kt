@@ -8,6 +8,7 @@ import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.os.Build
 import android.os.IBinder
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import coil.ImageLoader
 import coil.request.ImageRequest
@@ -55,11 +56,15 @@ class MusicService : Service() {
                     MusicManager.previousMusic()
                 }
                 ACTION_NEXT ->{
-                    MusicManager.nextMusic()
+                    if(MusicManager.isRandom()){
+                        MusicManager.randomMusic()
+                    }
+                    else{
+                        MusicManager.nextMusic()
+                    }
                 }
                 ACTION_CLOSE -> {
                     stopSelf()
-                    MusicManager.setCurrentMusic(null)
                 }
             }
             EventBus.getDefault().post(MessageEvent(action))

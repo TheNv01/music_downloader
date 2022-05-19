@@ -1,6 +1,7 @@
 package com.example.musicdownloader.view.fragment
 
 import android.content.Context
+import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
@@ -27,7 +28,9 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import kotlin.math.abs
 
-class PlayMusicFragment(): BaseFragment<PlayMusicFragmentBinding, PlayMusicViewModel>() {
+class PlayMusicFragment(): BaseFragment<PlayMusicFragmentBinding, PlayMusicViewModel>(), OnActionCallBack {
+
+    lateinit var callBack: OnActionCallBack
 
     companion object{
         const val KEY_SHOW_ADD_FAVORITE = "KEY_SHOW_ADD_FAVORITE"
@@ -74,11 +77,13 @@ class PlayMusicFragment(): BaseFragment<PlayMusicFragmentBinding, PlayMusicViewM
                 binding.icPlayOrPause.setImageResource(R.drawable.ic_pause_not_background)
             }
             MusicService.ACTION_CLOSE ->{
+
             }
         }
     }
 
     override fun initViews() {
+        callBack = this
         MediaManager.setProgress(0)
         playSong(MusicManager.getCurrentMusic()!!)
     }
@@ -87,14 +92,15 @@ class PlayMusicFragment(): BaseFragment<PlayMusicFragmentBinding, PlayMusicViewM
 
         setupMotionLayout()
         binding.icFavorite.setOnClickListener {
-            (activity as MainActivity).findNavController(R.id.nav_play_music).navigate(R.id.addFavoriteFragment, null, null)
+            callBack.callBack(KEY_SHOW_ADD_FAVORITE, null)
         }
         binding.icClose.setOnClickListener{
-            (activity as MainActivity).onBackPressed()
+            (activity as MainActivity).playMusicFragment = null
             gotoService(MusicService.ACTION_CLOSE)
+            activity?.supportFragmentManager!!.popBackStack()
         }
         binding.icBack.setOnClickListener {
-            (activity as MainActivity).onBackPressed()
+            binding.layoutPlayMusic.transitionToStart()
         }
         binding.icPlayOrPause.setOnClickListener {
             handlePauseResumeMusic()
@@ -102,24 +108,32 @@ class PlayMusicFragment(): BaseFragment<PlayMusicFragmentBinding, PlayMusicViewM
         binding.imgNext.setOnClickListener {
             gotoService(MusicService.ACTION_NEXT)
         }
-
         binding.imgPrevious.setOnClickListener {
             gotoService(MusicService.ACTION_PREVIOUS)
         }
         binding.imgRepeat.setOnClickListener {
             handleRepeatMusic()
         }
+        binding.imgRandom.setOnClickListener {
+            handleRandom()
+        }
     }
 
     override fun setUpObserver() {
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    if(binding.layoutPlayMusic.currentState == R.id.end){
-                        binding.layoutPlayMusic.transitionToStart()
-                    }
+        (activity as MainActivity).onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if(binding.layoutPlayMusic.currentState != R.id.start){
+                    binding.layoutPlayMusic.transitionToStart()
                 }
-            })
+                else{
+                    (activity as MainActivity).playMusicFragment = null
+                    if((activity as MainActivity).supportFragmentManager.findFragmentById(R.id.activity_main_nav_host_fragment)?.childFragmentManager?.backStackEntryCount == 0){
+                        gotoService(MusicService.ACTION_CLOSE)
+                    }
+                    activity?.supportFragmentManager!!.popBackStack()
+                }
+            }
+        })
     }
 
     private fun playSong(music: Music) {
@@ -131,7 +145,8 @@ class PlayMusicFragment(): BaseFragment<PlayMusicFragmentBinding, PlayMusicViewM
         initSeekBar(MusicManager.getCurrentMusic()!!)
     }
 
-    fun gotoService(action: Int){
+    private fun gotoService(action: Int){
+        callBack.callBack(KEY_SHOW_SERVICE, action)
     }
 
     private fun handleRepeatMusic() {
@@ -148,6 +163,17 @@ class PlayMusicFragment(): BaseFragment<PlayMusicFragmentBinding, PlayMusicViewM
                 binding.imgRepeat.setImageResource(R.drawable.ic_no_repeat)
                 MusicManager.setRepeatStatus(RepeatStatus.NoRepeat)
             }
+        }
+    }
+
+    private fun handleRandom(){
+        if(!MusicManager.isRandom()){
+            binding.imgRandom.setImageResource(R.drawable.ic_random_selected)
+            MusicManager.setRandom(true)
+        }
+        else{
+            binding.imgRandom.setImageResource(R.drawable.ic_random)
+            MusicManager.setRandom(false)
         }
     }
 
@@ -170,7 +196,7 @@ class PlayMusicFragment(): BaseFragment<PlayMusicFragmentBinding, PlayMusicViewM
                     .animate()
                     .rotationBy(360f)
                     .withEndAction(this)
-                    .setDuration(4000)
+                    .setDuration(5000)
                     .setInterpolator(LinearInterpolator()).start()
             }
         }
@@ -239,4 +265,22 @@ class PlayMusicFragment(): BaseFragment<PlayMusicFragmentBinding, PlayMusicViewM
         }
     }
 
+    override fun callBack(key: String?, data: Any?) {
+        when(key){
+            KEY_SHOW_SERVICE->{
+                if (data != null ) {
+                    val intent = Intent(context, MusicService::class.java)
+                    intent.putExtra("action", data as Int)
+                    (activity as MainActivity).startService(intent)
+                }
+            }
+            KEY_SHOW_ADD_FAVORITE ->{
+                val addFavoriteFragment = AddFavoriteFragment()
+                val tran = (activity as MainActivity).supportFragmentManager.beginTransaction()
+                tran.add(R.id.container_layout_playing, addFavoriteFragment)
+                tran.addToBackStack("addFavorite")
+                tran.commit()
+            }
+        }
+    }
 }

@@ -1,6 +1,5 @@
 package com.example.musicdownloader.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -75,13 +74,23 @@ class HomeViewModel: BaseViewModel() {
         try{
             if(country == null){
                 Services.retrofitService.getMusics(option, offset).let {
-                    musics.value = it.data
+                    if(option == "popular"){
+                        musics.value = it.data
+                    }
+                   else{
+                        musics.value = it.data.subList(0, 5)
+                    }
                     status.value = ApiStatus.DONE
                 }
             }
             else{
                 Services.retrofitService.getMusics(option, offset,country).let {
-                    musics.value = it.data
+                    if(option == "popular"){
+                        musics.value = it.data
+                    }
+                    else{
+                        musics.value = it.data.subList(0, 5)
+                    }
                     status.value = ApiStatus.DONE
                 }
             }

@@ -14,8 +14,8 @@
             android:id="@+id/action_homeFragment_to_seeAllFragment"
             app:destination="@id/seeAllFragment" />
         <action
-            android:id="@+id/action_homeFragment_to_navigation2"
-            app:destination="@id/navigation2" />
+            android:id="@+id/action_homeFragment_to_changeRegionDialog"
+            app:destination="@id/changeRegionDialog" />
     </fragment>
     <fragment
         android:id="@+id/playListFragment"
@@ -36,23 +36,14 @@
         android:id="@+id/seeAllFragment"
         android:name="com.example.musicdownloader.view.fragment.SeeAllFragment"
         android:label="SeeAllFragment" >
-        <action
-            android:id="@+id/action_seeAllFragment_to_navigation2"
-            app:destination="@id/navigation2" />
+        <argument
+            android:name="option"
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
-    <navigation android:id="@+id/navigation2"
-        app:startDestination="@id/playMusicFragment">
-        <fragment
-            android:id="@+id/playMusicFragment"
-            android:name="com.example.musicdownloader.view.fragment.PlayMusicFragment"
-            android:label="PlayMusicFragment">
-            <action
-                android:id="@+id/action_playMusicFragment_to_addFavoriteFragment"
-                app:destination="@id/addFavoriteFragment" />
-        </fragment>
-        <fragment
-            android:id="@+id/addFavoriteFragment"
-            android:name="com.example.musicdownloader.view.fragment.AddFavoriteFragment"
-            android:label="AddFavoriteFragment" />
-    </navigation>
+    <dialog
+        android:id="@+id/changeRegionDialog"
+        android:name="com.example.musicdownloader.view.ChangeRegionDialog"
+        android:label="ChangeRegionDialog" />
+
 </navigation>

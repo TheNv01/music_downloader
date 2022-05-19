@@ -4,23 +4,15 @@ import android.graphics.Color
 import androidx.databinding.ViewDataBinding
 import com.example.musicdownloader.databinding.ItemTopListenedBinding
 import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
+import com.example.musicdownloader.manager.MusicManager
 import com.example.musicdownloader.model.Music
 
 class TopListenedAdapter(
     layoutID: Int,
     private val musics: List<Music>,
-    private val isLimitItem: Boolean,
     itemClickListener: ItemClickListener<Music>
 ): BaseAdapter<Music, ItemTopListenedBinding>(layoutID, musics, itemClickListener) {
 
-    override fun getItemCount(): Int {
-        return if(isLimitItem){
-            5
-        } else{
-            musics.size
-        }
-
-    }
 
     override fun setViewHolder(binding: ViewDataBinding): BaseViewHolder<Music, ItemTopListenedBinding> {
         return TopListenedViewHolder(binding as ItemTopListenedBinding)
@@ -46,6 +38,7 @@ class TopListenedAdapter(
         override fun clickListener(data: Music, itemClickListener: ItemClickListener<Music>) {
                 binding.layoutTopListened.setOnClickListener {
                     itemClickListener.onClickListener(data)
+                    MusicManager.setListMusic(musics)
                 }
         }
     }

@@ -8,6 +8,12 @@ object MusicManager {
     private var musicList: List<Music> = ArrayList()
     private var currentMusic: Music? = null
     private var repeatStatus = RepeatStatus.NoRepeat
+    private var isRandom = false
+
+    fun setRandom(random: Boolean){
+        this.isRandom = random
+    }
+    fun isRandom() = isRandom
 
     fun setListMusic(musics: List<Music>){
         musicList = musics

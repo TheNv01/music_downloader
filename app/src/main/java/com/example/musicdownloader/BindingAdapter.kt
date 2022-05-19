@@ -9,20 +9,28 @@ import coil.load
 import com.example.musicdownloader.viewmodel.ApiStatus
 
 @BindingAdapter("imageUrl")
-fun bindImage(imgView: ImageView, imgUrl: String) {
-    val reallyImgUrl: String = if(imgUrl.length < 15){
-        "http://marstechstudio.com/img-msd/$imgUrl"
+fun bindImage(imgView: ImageView, imgUrl: String?) {
+
+
+    if(imgUrl == null){
+        imgView.setImageResource(R.drawable.ic_broken_image)
     }
     else{
-        imgUrl
-    }
-    reallyImgUrl.let {
-        val imgUri = reallyImgUrl.toUri().buildUpon().scheme("http").build()
-        imgView.load(imgUri){
-            placeholder(R.drawable.loading_animation)
-            error(R.drawable.ic_broken_image)
+        val reallyImgUrl: String = if(imgUrl.length < 15){
+            "http://marstechstudio.com/img-msd/$imgUrl"
+        }
+        else{
+            imgUrl
+        }
+        reallyImgUrl.let {
+            val imgUri = reallyImgUrl.toUri().buildUpon().scheme("http").build()
+            imgView.load(imgUri){
+                placeholder(R.drawable.loading_animation)
+                error(R.drawable.ic_broken_image)
+            }
         }
     }
+
 }
 
 @BindingAdapter("fromResource")
