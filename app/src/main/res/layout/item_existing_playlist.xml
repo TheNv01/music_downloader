@@ -54,7 +54,6 @@
             android:id="@+id/ic_add"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:background="@drawable/ic_plus_21"
             app:layout_constraintTop_toTopOf="@+id/img_background_create"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="@id/img_background_create" />

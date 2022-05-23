@@ -6,9 +6,10 @@ import com.example.musicdownloader.databinding.ItemExistingPlaylistBinding
 import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
 import com.example.musicdownloader.model.Option
 
-class AddToPlaylistAdapter(
+class ExistingPlaylistAdapter(
     layoutID: Int,
     options: List<Option>,
+    private val isAdd: Boolean,
     itemClickListener: ItemClickListener<Option>
 ): BaseAdapter<Option, ItemExistingPlaylistBinding>(layoutID, options, itemClickListener) {
 
@@ -21,17 +22,25 @@ class AddToPlaylistAdapter(
     inner class AddToPlaylistViewHolder(private val binding: ItemExistingPlaylistBinding) : BaseViewHolder<Option, ItemExistingPlaylistBinding>(binding) {
         override fun bindData(data: Option) {
             binding.opton = data
+            if(isAdd){
+                binding.icAdd.setImageResource(R.drawable.ic_plus_21)
+            }
+            else{
+                binding.icAdd.setImageResource(R.drawable.kebab_menu_listened)
+                binding.icAdd.alpha = 0.5f
+            }
         }
 
         override fun clickListener(data: Option, itemClickListener: ItemClickListener<Option>) {
             binding.icAdd.setOnClickListener {
-                if(isChoose){
-                    binding.icAdd.setImageResource(R.drawable.ic_plus_21)
-                    isChoose = false
-                }
-                else{
-                    binding.icAdd.setImageResource(R.drawable.ic_choosed)
-                    isChoose = true
+                if(isAdd){
+                    isChoose = if(isChoose){
+                        binding.icAdd.setImageResource(R.drawable.ic_plus_21)
+                        false
+                    } else{
+                        binding.icAdd.setImageResource(R.drawable.ic_choosed)
+                        true
+                    }
                 }
             }
         }

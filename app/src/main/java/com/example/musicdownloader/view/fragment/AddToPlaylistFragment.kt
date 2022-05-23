@@ -5,20 +5,20 @@ import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.FragmentManager
 import com.example.musicdownloader.R
-import com.example.musicdownloader.adapter.AddToPlaylistAdapter
+import com.example.musicdownloader.adapter.ExistingPlaylistAdapter
 import com.example.musicdownloader.databinding.AddToPlaylistFragmentBinding
 import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
 import com.example.musicdownloader.model.Option
 import com.example.musicdownloader.view.MainActivity
-import com.example.musicdownloader.viewmodel.AddToPlaylistViewModel
+import com.example.musicdownloader.viewmodel.PlayListViewModel
 
-class AddToPlaylistFragment: BaseFragment<AddToPlaylistFragmentBinding, AddToPlaylistViewModel>() {
+class AddToPlaylistFragment: BaseFragment<AddToPlaylistFragmentBinding, PlayListViewModel>() {
     override fun initBinding(mRootView: View): AddToPlaylistFragmentBinding {
         return AddToPlaylistFragmentBinding.bind(mRootView)
     }
 
-    override fun getViewModelClass(): Class<AddToPlaylistViewModel> {
-        return AddToPlaylistViewModel::class.java
+    override fun getViewModelClass(): Class<PlayListViewModel> {
+        return PlayListViewModel::class.java
     }
 
     override fun getLayoutId(): Int {
@@ -42,9 +42,10 @@ class AddToPlaylistFragment: BaseFragment<AddToPlaylistFragmentBinding, AddToPla
             }
         })
 
-        binding.recyclerViewExistingPlaylist.adapter = AddToPlaylistAdapter(
+        binding.recyclerViewExistingPlaylist.adapter = ExistingPlaylistAdapter(
                 R.layout.item_existing_playlist,
                 mViewModel.existingPlaylist,
+                true,
                 object : ItemClickListener<Option> {
                     override fun onClickListener(model: Option) {
                         Log.d("asdfasdf", "hahaha")
