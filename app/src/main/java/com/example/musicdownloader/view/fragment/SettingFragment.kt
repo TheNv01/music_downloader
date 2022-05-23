@@ -7,12 +7,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.example.musicdownloader.R
 import com.example.musicdownloader.databinding.SettingFragmentBinding
-import com.example.musicdownloader.interfaces.OnActionCallBack
 import com.example.musicdownloader.model.Option
 import com.example.musicdownloader.viewmodel.SettingViewModel
 
 
-class SettingFragment(): BaseFragment<SettingFragmentBinding, SettingViewModel>() {
+class SettingFragment: BaseFragment<SettingFragmentBinding, SettingViewModel>() {
     override fun initBinding(mRootView: View): SettingFragmentBinding {
         return SettingFragmentBinding.bind(mRootView)
     }

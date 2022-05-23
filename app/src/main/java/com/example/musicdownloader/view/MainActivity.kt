@@ -6,7 +6,6 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.musicdownloader.R
 import com.example.musicdownloader.databinding.ActivityMainBinding
-import com.example.musicdownloader.interfaces.OnActionCallBack
 import com.example.musicdownloader.view.fragment.*
 
 class MainActivity : AppCompatActivity() {
@@ -20,7 +19,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setupBottomNavigation()
-
     }
 
     private fun setupBottomNavigation(){

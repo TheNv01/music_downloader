@@ -30,6 +30,7 @@
         <entry key="..\:/Users/lione/AndroidStudioProjects/music_downloader_ms2/app/src/main/res/drawable/background_genre.xml" value="0.126" />
         <entry key="..\:/Users/lione/AndroidStudioProjects/music_downloader_ms2/app/src/main/res/drawable/background_genre_unselected.xml" value="0.126" />
         <entry key="..\:/Users/lione/AndroidStudioProjects/music_downloader_ms2/app/src/main/res/drawable/background_search.xml" value="0.174" />
+        <entry key="..\:/Users/lione/AndroidStudioProjects/music_downloader_ms2/app/src/main/res/drawable/bg_create_playlist.xml" value="0.1785" />
         <entry key="..\:/Users/lione/AndroidStudioProjects/music_downloader_ms2/app/src/main/res/drawable/corner_radius.xml" value="0.126" />
         <entry key="..\:/Users/lione/AndroidStudioProjects/music_downloader_ms2/app/src/main/res/drawable/gradient_back.xml" value="0.1165" />
         <entry key="..\:/Users/lione/AndroidStudioProjects/music_downloader_ms2/app/src/main/res/drawable/gradient_pink.xml" value="0.126" />
@@ -48,9 +49,11 @@
         <entry key="..\:/Users/lione/AndroidStudioProjects/music_downloader_ms2/app/src/main/res/drawable/vector_trending.xml" value="0.1" />
         <entry key="..\:/Users/lione/AndroidStudioProjects/music_downloader_ms2/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/Users/lione/AndroidStudioProjects/music_downloader_ms2/app/src/main/res/layout/add_favorite_fragment.xml" value="0.2" />
+        <entry key="..\:/Users/lione/AndroidStudioProjects/music_downloader_ms2/app/src/main/res/layout/add_to_playlist_fragment.xml" value="0.25" />
         <entry key="..\:/Users/lione/AndroidStudioProjects/music_downloader_ms2/app/src/main/res/layout/change_region_fragment.xml" value="0.25" />
         <entry key="..\:/Users/lione/AndroidStudioProjects/music_downloader_ms2/app/src/main/res/layout/download_fragment.xml" value="0.10989583333333333" />
         <entry key="..\:/Users/lione/AndroidStudioProjects/music_downloader_ms2/app/src/main/res/layout/home_fragment.xml" value="0.12" />
+        <entry key="..\:/Users/lione/AndroidStudioProjects/music_downloader_ms2/app/src/main/res/layout/item_existing_playlist.xml" value="0.25" />
         <entry key="..\:/Users/lione/AndroidStudioProjects/music_downloader_ms2/app/src/main/res/layout/item_genres.xml" value="0.25" />
         <entry key="..\:/Users/lione/AndroidStudioProjects/music_downloader_ms2/app/src/main/res/layout/item_genres_see_all.xml" value="0.264" />
         <entry key="..\:/Users/lione/AndroidStudioProjects/music_downloader_ms2/app/src/main/res/layout/item_option_add_favorite.xml" value="0.264" />

@@ -8,7 +8,6 @@ import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.os.Build
 import android.os.IBinder
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import coil.ImageLoader
 import coil.request.ImageRequest
@@ -110,7 +109,6 @@ class MusicService : Service() {
     }
 
     private fun pushNotification(music: Music) {
-
         // Create an Intent for the activity you want to start
         val resultIntent = Intent(this, MainActivity::class.java)
         resultIntent.putExtra("from notification", 1)
@@ -121,7 +119,6 @@ class MusicService : Service() {
             getPendingIntent(1,
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         }
-
         GlobalScope.launch {
             val builder = NotificationCompat.Builder(this@MusicService, App.CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_launcher_foreground)

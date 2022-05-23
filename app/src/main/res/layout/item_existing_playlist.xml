@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="opton"
+            type="com.example.musicdownloader.model.Option" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="23dp">
+
+        <ImageView
+            android:id="@+id/img_background_create"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/bg_create_playlist"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <ImageView
+            android:id="@+id/img_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fromResource="@{opton.icon}"
+            app:layout_constraintStart_toStartOf="@id/img_background_create"
+            app:layout_constraintTop_toTopOf="@+id/img_background_create"
+            app:layout_constraintEnd_toEndOf="@id/img_background_create"
+            app:layout_constraintBottom_toBottomOf="@id/img_background_create" />
+
+        <TextView
+            android:id="@+id/tv_create_playlist"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:text="@{opton.name}"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:ellipsize="end"
+            app:layout_constraintStart_toEndOf="@id/img_background_create"
+            app:layout_constraintTop_toTopOf="@id/img_background_create"
+            app:layout_constraintBottom_toBottomOf="@id/img_background_create"
+            android:layout_marginStart="16dp"
+            android:textSize="14sp"/>
+
+        <ImageView
+            android:id="@+id/ic_add"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/ic_plus_21"
+            app:layout_constraintTop_toTopOf="@+id/img_background_create"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/img_background_create" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
+

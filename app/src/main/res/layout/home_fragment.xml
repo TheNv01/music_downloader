@@ -255,7 +255,6 @@
                 android:id="@+id/tv_see_all_genres"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="27dp"
                 android:layout_marginEnd="16dp"
                 android:text="See All"
                 android:textColor="#FF728C"

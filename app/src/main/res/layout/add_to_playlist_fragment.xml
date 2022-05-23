@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black">
+
+        <ImageView
+            android:id="@+id/ic_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_back"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="40dp"/>
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="22sp"
+            android:text="ADD TO PLAYLIST"
+            android:textStyle="bold"
+            android:layout_marginStart="13dp"
+            app:layout_constraintStart_toEndOf="@+id/ic_back"
+            app:layout_constraintTop_toTopOf="@id/ic_back"
+            app:layout_constraintBottom_toBottomOf="@id/ic_back"/>
+
+        <TextView
+            android:id="@+id/tv_create"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Create new playlist"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/ic_back"
+            app:layout_constraintTop_toBottomOf="@id/tv_title"
+            android:layout_marginTop="18dp"
+            android:textSize="14sp"/>
+
+        <ImageView
+            android:id="@+id/img_background_create"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/bg_create_playlist"
+            app:layout_constraintStart_toStartOf="@id/tv_create"
+            app:layout_constraintTop_toBottomOf="@+id/tv_create"
+            android:layout_marginTop="15dp"/>
+
+        <ImageView
+            android:id="@+id/ic_plus_21"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_plus_21"
+            app:layout_constraintStart_toStartOf="@id/img_background_create"
+            app:layout_constraintTop_toTopOf="@+id/img_background_create"
+            app:layout_constraintEnd_toEndOf="@id/img_background_create"
+            app:layout_constraintBottom_toBottomOf="@id/img_background_create" />
+
+        <TextView
+            android:id="@+id/tv_create_playlist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Create playlist"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@id/img_background_create"
+            app:layout_constraintTop_toTopOf="@id/img_background_create"
+            app:layout_constraintBottom_toBottomOf="@id/img_background_create"
+            android:layout_marginStart="16dp"
+            android:textSize="14sp"/>
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:alpha="0.3"
+            app:layout_constraintTop_toBottomOf="@id/img_background_create"
+            android:layout_marginTop="17dp"
+            android:background="#818181"/>
+
+        <TextView
+            android:id="@+id/tv_existing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ADD TO EXISTING PLAYLIST"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/img_background_create"
+            app:layout_constraintTop_toBottomOf="@id/view"
+            android:layout_marginTop="25dp"
+            android:textSize="14sp"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view_existing_playlist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="@id/tv_existing"
+            app:layout_constraintTop_toBottomOf="@id/tv_existing"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="16dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:orientation="vertical"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
+

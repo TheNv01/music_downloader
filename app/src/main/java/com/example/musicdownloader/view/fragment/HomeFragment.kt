@@ -18,11 +18,10 @@ import com.example.musicdownloader.manager.MusicManager
 import com.example.musicdownloader.model.Genres
 import com.example.musicdownloader.model.Music
 import com.example.musicdownloader.model.Region
-import com.example.musicdownloader.view.ChangeRegionDialog
 import com.example.musicdownloader.view.MainActivity
 import com.example.musicdownloader.viewmodel.HomeViewModel
 
-class HomeFragment(): BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnActionCallBack {
+class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnActionCallBack {
 
     lateinit var callBack: OnActionCallBack
 
@@ -90,11 +89,6 @@ class HomeFragment(): BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnActi
                  }
              }
         }
-    }
-
-    private fun changeRegionDialog() {
-        val changeRegionDialog = ChangeRegionDialog()
-        changeRegionDialog.show((activity as MainActivity).supportFragmentManager, "region_dialog")
     }
 
     override fun setUpObserver() {

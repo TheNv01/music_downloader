@@ -11,7 +11,6 @@ import com.example.musicdownloader.viewmodel.ApiStatus
 @BindingAdapter("imageUrl")
 fun bindImage(imgView: ImageView, imgUrl: String?) {
 
-
     if(imgUrl == null){
         imgView.setImageResource(R.drawable.ic_broken_image)
     }
@@ -32,6 +31,7 @@ fun bindImage(imgView: ImageView, imgUrl: String?) {
     }
 
 }
+
 
 @BindingAdapter("fromResource")
 fun setBackground(imgView: ImageView, resource: Int) {

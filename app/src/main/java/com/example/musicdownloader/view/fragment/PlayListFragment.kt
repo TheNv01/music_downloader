@@ -2,11 +2,10 @@ package com.example.musicdownloader.view.fragment
 
 import android.view.View
 import com.example.musicdownloader.R
-import com.example.musicdownloader.interfaces.OnActionCallBack
 import com.example.musicdownloader.databinding.PlayListFragmentBinding
 import com.example.musicdownloader.viewmodel.PlayListViewModel
 
-class PlayListFragment(): BaseFragment<PlayListFragmentBinding, PlayListViewModel>() {
+class PlayListFragment: BaseFragment<PlayListFragmentBinding, PlayListViewModel>() {
     override fun initBinding(mRootView: View): PlayListFragmentBinding {
         return PlayListFragmentBinding.bind(mRootView)
     }

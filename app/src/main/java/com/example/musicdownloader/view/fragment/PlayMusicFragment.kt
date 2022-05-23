@@ -2,15 +2,14 @@ package com.example.musicdownloader.view.fragment
 
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.View
 import android.view.animation.LinearInterpolator
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.motion.widget.MotionLayout
-import androidx.fragment.app.FragmentManager
-import androidx.navigation.findNavController
+import androidx.fragment.app.setFragmentResult
 import com.example.musicdownloader.MusicService
 import com.example.musicdownloader.R
 import com.example.musicdownloader.cusomseekbar.ProgressListener
@@ -28,7 +27,7 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import kotlin.math.abs
 
-class PlayMusicFragment(): BaseFragment<PlayMusicFragmentBinding, PlayMusicViewModel>(), OnActionCallBack {
+class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewModel>(), OnActionCallBack {
 
     lateinit var callBack: OnActionCallBack
 
@@ -93,6 +92,9 @@ class PlayMusicFragment(): BaseFragment<PlayMusicFragmentBinding, PlayMusicViewM
         setupMotionLayout()
         binding.icFavorite.setOnClickListener {
             callBack.callBack(KEY_SHOW_ADD_FAVORITE, null)
+            val bundle = Bundle()
+            bundle.putSerializable("favoriteMusic", MusicManager.getCurrentMusic())
+            setFragmentResult("favoriteKey", bundle)
         }
         binding.icClose.setOnClickListener{
             (activity as MainActivity).playMusicFragment = null

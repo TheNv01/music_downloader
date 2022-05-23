@@ -3,7 +3,6 @@ package com.example.musicdownloader.view.fragment
 import android.util.Log
 import android.view.View
 import androidx.navigation.fragment.navArgs
-import com.example.musicdownloader.MusicService
 import com.example.musicdownloader.R
 import com.example.musicdownloader.SharedPreferencesManager
 import com.example.musicdownloader.adapter.GenreSeeAllAdapter
@@ -18,7 +17,7 @@ import com.example.musicdownloader.model.Region
 import com.example.musicdownloader.view.MainActivity
 import com.example.musicdownloader.viewmodel.SeeAllViewModel
 
-class SeeAllFragment(): BaseFragment<SeeAllFragmentBinding, SeeAllViewModel>(), OnActionCallBack {
+class SeeAllFragment: BaseFragment<SeeAllFragmentBinding, SeeAllViewModel>(), OnActionCallBack {
 
     lateinit var callBack: OnActionCallBack
     private val args: SeeAllFragmentArgs by navArgs()

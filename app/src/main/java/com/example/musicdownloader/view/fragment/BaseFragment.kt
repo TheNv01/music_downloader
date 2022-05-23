@@ -9,10 +9,8 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.musicdownloader.interfaces.OnActionCallBack
 
-
-abstract class BaseFragment<K: ViewDataBinding, V: ViewModel>(): Fragment() {
+abstract class BaseFragment<K: ViewDataBinding, V: ViewModel>: Fragment() {
 
     private lateinit var mRootView: View
     protected lateinit var mViewModel: V
