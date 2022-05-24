@@ -25,6 +25,9 @@
         <action
             android:id="@+id/action_playListFragment_to_createPlaylistDialog"
             app:destination="@id/createPlaylistDialog" />
+        <action
+            android:id="@+id/action_playListFragment_to_playlistInsideFragment"
+            app:destination="@id/playlistInsideFragment" />
     </fragment>
     <fragment
         android:id="@+id/downloadFragment"
@@ -53,5 +56,9 @@
         android:id="@+id/createPlaylistDialog"
         android:name="com.example.musicdownloader.view.dialog.CreatePlaylistDialog"
         android:label="CreatePlaylistDialog" />
+    <fragment
+        android:id="@+id/playlistInsideFragment"
+        android:name="com.example.musicdownloader.view.fragment.PlaylistInsideFragment"
+        android:label="PlaylistInsideFragment" />
 
 </navigation>

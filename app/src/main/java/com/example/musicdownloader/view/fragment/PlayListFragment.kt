@@ -35,7 +35,7 @@ class PlayListFragment: BaseFragment<PlayListFragmentBinding, PlayListViewModel>
             requireContext(),
             object : ItemClickListener<Option> {
                 override fun onClickListener(model: Option) {
-                    Log.d("asdfasdf", "hahaha")
+                    (activity as MainActivity).findNavController(R.id.activity_main_nav_host_fragment).navigate(R.id.playlistInsideFragment)
                 }
             })
     }

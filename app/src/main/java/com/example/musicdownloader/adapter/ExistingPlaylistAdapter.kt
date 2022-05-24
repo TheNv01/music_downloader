@@ -48,6 +48,11 @@ class ExistingPlaylistAdapter(
         }
 
         override fun clickListener(data: Option, itemClickListener: ItemClickListener<Option>) {
+
+            binding.layoutItemExistingPlaylist.setOnClickListener {
+                itemClickListener.onClickListener(data)
+            }
+
             binding.icAdd.setOnClickListener {
                 if(isAdd){
                     isChoose = if(isChoose){
