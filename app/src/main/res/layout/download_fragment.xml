@@ -4,16 +4,42 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@android:color/black">
 
-        <ImageView
-            android:id="@+id/im_down"
-            android:layout_width="300dp"
-            android:layout_height="300dp"
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="DOWNLOAD MANAGER"
+            android:textSize="20sp"
+            android:textColor="@color/white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="40dp"/>
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/black"
+            app:layout_constraintTop_toBottomOf="@id/tv_title"
+            android:layout_marginTop="10dp"
+            app:tabIndicatorColor="#FE9B7A"
+            app:tabPaddingBottom="-20dp"
+            app:tabTextAppearance="@style/MineCustomTabText"
+            app:tabTextColor="@color/white"
+            app:tabSelectedTextColor="#FE9B7A"/>
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@id/tab_layout"
+            android:layout_marginStart="27dp"
+            android:layout_marginEnd="27dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
