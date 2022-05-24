@@ -46,6 +46,7 @@ class AddToPlaylistFragment: BaseFragment<AddToPlaylistFragmentBinding, PlayList
                 R.layout.item_existing_playlist,
                 mViewModel.existingPlaylist,
                 true,
+                requireContext(),
                 object : ItemClickListener<Option> {
                     override fun onClickListener(model: Option) {
                         Log.d("asdfasdf", "hahaha")

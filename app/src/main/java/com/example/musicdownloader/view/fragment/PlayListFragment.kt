@@ -10,6 +10,9 @@ import com.example.musicdownloader.model.Option
 import com.example.musicdownloader.viewmodel.PlayListViewModel
 
 class PlayListFragment: BaseFragment<PlayListFragmentBinding, PlayListViewModel>() {
+
+    private lateinit var adapter: ExistingPlaylistAdapter
+
     override fun initBinding(mRootView: View): PlayListFragmentBinding {
         return PlayListFragmentBinding.bind(mRootView)
     }
@@ -23,22 +26,34 @@ class PlayListFragment: BaseFragment<PlayListFragmentBinding, PlayListViewModel>
     }
 
     override fun initViews() {
-
-    }
-
-    override fun setUpListener() {
-
-    }
-
-    override fun setUpObserver() {
-        binding.recyclerViewExistingPlaylist.adapter = ExistingPlaylistAdapter(
+        adapter = ExistingPlaylistAdapter(
             R.layout.item_existing_playlist,
             mViewModel.existingPlaylist,
             false,
+            requireContext(),
             object : ItemClickListener<Option> {
                 override fun onClickListener(model: Option) {
                     Log.d("asdfasdf", "hahaha")
                 }
             })
+    }
+
+    override fun setUpListener() {
+        binding.tvDelete.setOnClickListener {
+            if(binding.tvDelete.text.equals("Delete")){
+                binding.tvDelete.text = "Cancel"
+                adapter.isDelete = true
+                adapter.notifyDataSetChanged()
+            }
+            else{
+                binding.tvDelete.text = "Delete"
+                adapter.isDelete = false
+                adapter.notifyDataSetChanged()
+            }
+        }
+    }
+
+    override fun setUpObserver() {
+        binding.recyclerViewExistingPlaylist.adapter = adapter
     }
 }
