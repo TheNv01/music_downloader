@@ -21,7 +21,11 @@
         android:id="@+id/playListFragment"
         android:name="com.example.musicdownloader.view.fragment.PlayListFragment"
         android:label="PlayListFragment"
-        tools:layout="@layout/play_list_fragment"/>
+        tools:layout="@layout/play_list_fragment">
+        <action
+            android:id="@+id/action_playListFragment_to_createPlaylistDialog"
+            app:destination="@id/createPlaylistDialog" />
+    </fragment>
     <fragment
         android:id="@+id/downloadFragment"
         android:name="com.example.musicdownloader.view.fragment.DownloadFragment"
@@ -43,7 +47,11 @@
     </fragment>
     <dialog
         android:id="@+id/changeRegionDialog"
-        android:name="com.example.musicdownloader.view.ChangeRegionDialog"
+        android:name="com.example.musicdownloader.view.dialog.ChangeRegionDialog"
         android:label="ChangeRegionDialog" />
+    <dialog
+        android:id="@+id/createPlaylistDialog"
+        android:name="com.example.musicdownloader.view.dialog.CreatePlaylistDialog"
+        android:label="CreatePlaylistDialog" />
 
 </navigation>

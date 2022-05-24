@@ -10,6 +10,7 @@ import com.example.musicdownloader.databinding.AddToPlaylistFragmentBinding
 import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
 import com.example.musicdownloader.model.Option
 import com.example.musicdownloader.view.MainActivity
+import com.example.musicdownloader.view.dialog.CreatePlaylistDialog
 import com.example.musicdownloader.viewmodel.PlayListViewModel
 
 class AddToPlaylistFragment: BaseFragment<AddToPlaylistFragmentBinding, PlayListViewModel>() {
@@ -32,6 +33,9 @@ class AddToPlaylistFragment: BaseFragment<AddToPlaylistFragmentBinding, PlayList
         binding.icBack.setOnClickListener {
             (activity as MainActivity).onBackPressed()
         }
+        binding.imgBackgroundCreate.setOnClickListener {
+            showCreatePlaylistDialog()
+        }
     }
 
     override fun setUpObserver() {
@@ -52,5 +56,9 @@ class AddToPlaylistFragment: BaseFragment<AddToPlaylistFragmentBinding, PlayList
                         Log.d("asdfasdf", "hahaha")
                     }
                 })
-        }
+    }
+    private fun showCreatePlaylistDialog() {
+        val customDialogInfo = CreatePlaylistDialog()
+        customDialogInfo.show((activity as MainActivity).supportFragmentManager, "create_playlist_dialog")
+    }
 }

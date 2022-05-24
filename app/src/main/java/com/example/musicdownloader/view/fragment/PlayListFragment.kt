@@ -2,11 +2,13 @@ package com.example.musicdownloader.view.fragment
 
 import android.util.Log
 import android.view.View
+import androidx.navigation.findNavController
 import com.example.musicdownloader.R
 import com.example.musicdownloader.adapter.ExistingPlaylistAdapter
 import com.example.musicdownloader.databinding.PlayListFragmentBinding
 import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
 import com.example.musicdownloader.model.Option
+import com.example.musicdownloader.view.MainActivity
 import com.example.musicdownloader.viewmodel.PlayListViewModel
 
 class PlayListFragment: BaseFragment<PlayListFragmentBinding, PlayListViewModel>() {
@@ -50,6 +52,9 @@ class PlayListFragment: BaseFragment<PlayListFragmentBinding, PlayListViewModel>
                 adapter.isDelete = false
                 adapter.notifyDataSetChanged()
             }
+        }
+        binding.imgBackgroundCreate.setOnClickListener {
+            (activity as MainActivity).findNavController(R.id.activity_main_nav_host_fragment).navigate(R.id.createPlaylistDialog)
         }
     }
 

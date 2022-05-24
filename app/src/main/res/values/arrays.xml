@@ -4,4 +4,11 @@
         <item>@color/endColor</item>
         <item>@color/startColor</item>
     </array>
+
+    <array name="gradient_pink">
+        <item>@color/pink_start</item>
+        <item>@color/pink_end</item>
+    </array>
+
+
 </resources>

@@ -1,4 +1,4 @@
-package com.example.musicdownloader.view
+package com.example.musicdownloader.view.dialog
 
 import android.os.Bundle
 import android.view.LayoutInflater
