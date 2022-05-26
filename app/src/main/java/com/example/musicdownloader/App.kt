@@ -4,9 +4,14 @@ import android.app.Application
 import android.os.Build
 import android.app.NotificationManager
 import android.app.NotificationChannel
+import android.content.Context
+import androidx.room.Room
+import com.example.musicdownloader.database.MusicRoomDatabase
+
 
 class App : Application() {
-    companion object MyApplication{
+
+    companion object{
         const val CHANNEL_ID = "CHANNEL_MUSIC_APP"
     }
 
@@ -25,5 +30,6 @@ class App : Application() {
             manager?.createNotificationChannel(channel)
         }
     }
+
 
 }

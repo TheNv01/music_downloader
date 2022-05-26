@@ -7,8 +7,8 @@
     <data>
 
         <variable
-            name="opton"
-            type="com.example.musicdownloader.model.Option" />
+            name="playlist"
+            type="com.example.musicdownloader.model.Playlist" />
 
     </data>
 
@@ -30,7 +30,7 @@
             android:id="@+id/img_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            fromResource="@{opton.icon}"
+            android:background="@drawable/ic_music"
             app:layout_constraintStart_toStartOf="@id/img_background_create"
             app:layout_constraintTop_toTopOf="@+id/img_background_create"
             app:layout_constraintEnd_toEndOf="@id/img_background_create"
@@ -40,7 +40,7 @@
             android:id="@+id/tv_create_playlist"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:text="@{opton.name}"
+            android:text="@{playlist.name}"
             android:textColor="@color/white"
             android:textStyle="bold"
             android:maxLines="1"

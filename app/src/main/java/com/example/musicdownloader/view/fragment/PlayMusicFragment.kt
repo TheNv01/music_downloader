@@ -9,6 +9,7 @@ import android.view.View
 import android.view.animation.LinearInterpolator
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.motion.widget.MotionLayout
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResult
 import com.example.musicdownloader.MusicService
 import com.example.musicdownloader.R
@@ -99,7 +100,7 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
         binding.icClose.setOnClickListener{
             (activity as MainActivity).playMusicFragment = null
             gotoService(MusicService.ACTION_CLOSE)
-            activity?.supportFragmentManager!!.popBackStack()
+            activity?.supportFragmentManager!!.popBackStack("playFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE)
         }
         binding.icBack.setOnClickListener {
             binding.layoutPlayMusic.transitionToStart()

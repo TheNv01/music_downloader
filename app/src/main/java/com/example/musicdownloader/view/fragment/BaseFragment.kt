@@ -26,7 +26,8 @@ abstract class BaseFragment<K: ViewDataBinding, V: ViewModel>: Fragment() {
             binding = initBinding(it)
             mRootView = it
         }
-        mViewModel = ViewModelProvider(requireActivity())[getViewModelClass()]
+        mViewModel = ViewModelProvider(requireActivity(),
+            ViewModelProvider.AndroidViewModelFactory(activity?.application!!))[getViewModelClass()]
         initViews()
         return mRootView
     }

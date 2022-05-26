@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.Nullable
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.setFragmentResult
 import com.example.musicdownloader.R
 import com.example.musicdownloader.databinding.CreatePlaylistFragmentBinding
 
@@ -49,6 +50,12 @@ class CreatePlaylistDialog : DialogFragment(){
 
     private fun setupListener(){
         binding?.tvCancel?.setOnClickListener {
+            dialog?.dismiss()
+        }
+        binding?.tvCreate?.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putSerializable("playlist", binding?.edtPlaylist?.text.toString())
+            setFragmentResult("playlistKey", bundle)
             dialog?.dismiss()
         }
     }

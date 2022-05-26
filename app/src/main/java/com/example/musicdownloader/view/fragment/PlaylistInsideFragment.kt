@@ -1,7 +1,9 @@
 package com.example.musicdownloader.view.fragment
 
 
+import android.util.Log
 import android.view.View
+import androidx.navigation.fragment.navArgs
 import com.example.musicdownloader.R
 import com.example.musicdownloader.SharedPreferencesManager
 import com.example.musicdownloader.adapter.TopListenedAdapter
@@ -17,6 +19,7 @@ import com.example.musicdownloader.viewmodel.PlaylistInsideViewModel
 class PlaylistInsideFragment : BaseFragment<PlaylistInsideFragmentBinding, PlaylistInsideViewModel>(), OnActionCallBack {
 
     lateinit var callBack: OnActionCallBack
+    private val args: PlaylistInsideFragmentArgs by navArgs()
 
     private val musicItemClickListener = object : ItemClickListener<Music> {
         override fun onClickListener(model: Music) {
@@ -40,10 +43,11 @@ class PlaylistInsideFragment : BaseFragment<PlaylistInsideFragmentBinding, Playl
 
     override fun initViews() {
         callBack = this
+        loadData()
     }
 
     override fun setUpListener() {
-        loadData()
+
     }
 
     override fun setUpObserver() {
@@ -52,17 +56,13 @@ class PlaylistInsideFragment : BaseFragment<PlaylistInsideFragmentBinding, Playl
                 R.layout.item_top_listened,
                 it,
                 musicItemClickListener)
+            binding.tvNamePlaylist.text = args.playList.name
+            binding.tvQuantitySong.text = getString(R.string.number_music, it.size.toString())
         }
     }
 
     private fun loadData(){
-        SharedPreferencesManager.get<Region>("country").let { region ->
-            if (region == null) {
-                mViewModel.getMusics("listened", null)
-            } else {
-                mViewModel.getMusics("listened", region.regionCode)
-            }
-        }
+        mViewModel.getMusics(args.playList.name)
     }
 
     override fun callBack(key: String?, data: Any?) {
@@ -80,6 +80,4 @@ class PlaylistInsideFragment : BaseFragment<PlaylistInsideFragmentBinding, Playl
             tran?.commit()
         }
     }
-
-
 }

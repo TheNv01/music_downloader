@@ -59,6 +59,11 @@
     <fragment
         android:id="@+id/playlistInsideFragment"
         android:name="com.example.musicdownloader.view.fragment.PlaylistInsideFragment"
-        android:label="PlaylistInsideFragment" />
+        android:label="PlaylistInsideFragment" >
+
+        <argument
+            android:name="playList"
+            app:argType="com.example.musicdownloader.model.Playlist" />
+    </fragment>
 
 </navigation>

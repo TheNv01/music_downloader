@@ -2,4 +2,5 @@
     <string name="app_name">Music Downloader</string>
     <string name="vn">Việt Nam</string>
     <string name="title">TOP %1$s</string>
+    <string name="number_music">%1$s songs</string>
 </resources>
