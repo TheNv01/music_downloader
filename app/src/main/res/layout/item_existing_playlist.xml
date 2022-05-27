@@ -55,21 +55,10 @@
             android:id="@+id/ic_add"
             android:layout_width="20dp"
             android:layout_height="20dp"
+            android:background="@drawable/ic_plus_21"
             app:layout_constraintTop_toTopOf="@+id/img_background_create"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="@id/img_background_create" />
-
-        <TextView
-            android:id="@+id/tv_delete"
-            android:layout_width="77dp"
-            android:layout_height="60dp"
-            android:background="#F00000"
-            android:text="Delete"
-            android:textColor="@color/white"
-            android:gravity="center"
-            android:textSize="12sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

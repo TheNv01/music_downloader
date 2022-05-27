@@ -33,18 +33,6 @@ class PlayListFragment: BaseFragment<PlayListFragmentBinding, PlayListViewModel>
     }
 
     override fun setUpListener() {
-        binding.tvDelete.setOnClickListener {
-            if(binding.tvDelete.text.equals("Delete")){
-                binding.tvDelete.text = "Cancel"
-                adapter.isDelete = true
-                adapter.notifyDataSetChanged()
-            }
-            else{
-                binding.tvDelete.text = "Delete"
-                adapter.isDelete = false
-                adapter.notifyDataSetChanged()
-            }
-        }
         binding.imgBackgroundCreate.setOnClickListener {
             (activity as MainActivity).findNavController(R.id.activity_main_nav_host_fragment).navigate(R.id.createPlaylistDialog)
         }
@@ -56,7 +44,6 @@ class PlayListFragment: BaseFragment<PlayListFragmentBinding, PlayListViewModel>
                 R.layout.item_existing_playlist,
                 it as ArrayList<Playlist>,
                 false,
-                requireContext(),
                 object : ItemClickListener<Playlist> {
                     override fun onClickListener(model: Playlist) {
                         val action = PlayListFragmentDirections.actionPlayListFragmentToPlaylistInsideFragment(model)

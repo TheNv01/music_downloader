@@ -9,10 +9,11 @@ import com.example.musicdownloader.model.Music
 
 class TopListenedAdapter(
     layoutID: Int,
+    private val isTopListened: Boolean,
     private val musics: List<Music>,
-    itemClickListener: ItemClickListener<Music>
+    itemClickListener: ItemClickListener<Music>,
+    private val menuClickListener: ItemClickListener<Music>
 ): BaseAdapter<Music, ItemTopListenedBinding>(layoutID, musics, itemClickListener) {
-
 
     override fun setViewHolder(binding: ViewDataBinding): BaseViewHolder<Music, ItemTopListenedBinding> {
         return TopListenedViewHolder(binding as ItemTopListenedBinding)
@@ -21,7 +22,9 @@ class TopListenedAdapter(
     inner class TopListenedViewHolder(private val binding: ItemTopListenedBinding) : BaseViewHolder<Music, ItemTopListenedBinding>(binding) {
         override fun bindData(data: Music) {
             binding.music = data
-            binding.tvId.text =  "${(adapterPosition + 1)}."
+            if(isTopListened){
+                binding.tvId.text =  "${(adapterPosition + 1)}."
+            }
             when(adapterPosition){
                 0 ->{
                     binding.tvId.setTextColor(Color.parseColor("#F89500"))
@@ -39,6 +42,9 @@ class TopListenedAdapter(
                 binding.layoutTopListened.setOnClickListener {
                     itemClickListener.onClickListener(data)
                     MusicManager.setListMusic(musics)
+                }
+                binding.popup.setOnClickListener {
+                    menuClickListener.onClickListener(data)
                 }
         }
     }

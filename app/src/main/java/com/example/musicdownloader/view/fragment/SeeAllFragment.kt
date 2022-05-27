@@ -30,6 +30,13 @@ class SeeAllFragment: BaseFragment<SeeAllFragmentBinding, SeeAllViewModel>(), On
         }
     }
 
+    private val menuClickListener = object : ItemClickListener<Music> {
+        override fun onClickListener(model: Music) {
+            TODO("Not yet implemented")
+        }
+
+    }
+
     override fun initBinding(mRootView: View): SeeAllFragmentBinding {
         return SeeAllFragmentBinding.bind(mRootView)
     }
@@ -88,8 +95,10 @@ class SeeAllFragment: BaseFragment<SeeAllFragmentBinding, SeeAllViewModel>(), On
         mViewModel.musics.observe(this){
             binding.recyclerViewSeeAll.adapter = TopListenedAdapter(
                 R.layout.item_top_listened,
+                true,
                 it,
-                musicItemClickListener)
+                musicItemClickListener,
+                menuClickListener)
         }
     }
 

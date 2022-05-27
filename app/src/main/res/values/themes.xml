@@ -23,11 +23,17 @@
     <style name="Theme_Dialog" parent="Theme.AppCompat.Light.Dialog">
         <item name="android:windowMinWidthMajor">90%</item>
         <item name="android:windowMinWidthMinor">90%</item>
-        <item name="android:background">@drawable/bg_create_playlist</item>
+        <item name="android:background">@android:color/transparent</item>
 
     </style>
-
     <style name="MineCustomTabText" parent="TextAppearance.Design.Tab">
         <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="BottomSheetDialogTheme" parent="Theme.Material3.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/BottomSheetStyle</item>
+    </style>
+    <style name="BottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@android:color/transparent</item>
     </style>
 </resources>

@@ -36,6 +36,13 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
         }
     }
 
+    private val menuClickListener = object : ItemClickListener<Music> {
+        override fun onClickListener(model: Music) {
+            TODO("Not yet implemented")
+        }
+
+    }
+
     override fun initBinding(mRootView: View): HomeFragmentBinding {
        return HomeFragmentBinding.bind(mRootView)
     }
@@ -124,9 +131,10 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
         mViewModel.topListeneds.observe(this){
             binding.recyclerViewTopListened.adapter = TopListenedAdapter(
                 R.layout.item_top_listened,
+                true,
                 it,
-
-                musicItemClickListener)
+                musicItemClickListener,
+                menuClickListener)
         }
         mViewModel.topDownloads.observe(this){
             binding.recyclerViewTopDownload.adapter = TopDownloadAdapter(

@@ -79,10 +79,10 @@
             app:layout_constraintBottom_toBottomOf="parent"/>
 
         <ImageView
-            android:layout_width="3dp"
-            android:layout_height="16dp"
+            android:id="@+id/popup"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
             android:src="@drawable/kebab_menu_listened"
-            android:layout_marginEnd="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>

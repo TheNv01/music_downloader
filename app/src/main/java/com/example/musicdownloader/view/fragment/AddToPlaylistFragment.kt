@@ -5,21 +5,18 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.setFragmentResultListener
 import com.example.musicdownloader.R
 import com.example.musicdownloader.adapter.ExistingPlaylistAdapter
 import com.example.musicdownloader.databinding.AddToPlaylistFragmentBinding
-import com.example.musicdownloader.interfaces.itemclickinterface.AddMusicToPlaylist
 import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
-import com.example.musicdownloader.model.Music
-import com.example.musicdownloader.model.Option
+import com.example.musicdownloader.manager.MusicManager
 import com.example.musicdownloader.model.Playlist
 import com.example.musicdownloader.view.MainActivity
 import com.example.musicdownloader.view.dialog.CreatePlaylistDialog
 import com.example.musicdownloader.viewmodel.PlayListViewModel
 
 class AddToPlaylistFragment: BaseFragment<AddToPlaylistFragmentBinding, PlayListViewModel>() {
-
-    private lateinit var adapter: ExistingPlaylistAdapter
 
     override fun initBinding(mRootView: View): AddToPlaylistFragmentBinding {
         return AddToPlaylistFragmentBinding.bind(mRootView)
@@ -34,22 +31,7 @@ class AddToPlaylistFragment: BaseFragment<AddToPlaylistFragmentBinding, PlayList
     }
 
     override fun initViews() {
-        adapter = ExistingPlaylistAdapter(
-            R.layout.item_existing_playlist,
-            mViewModel.existingPlaylist.value as ArrayList<Playlist>,
-            true,
-            requireContext(),
-            object : ItemClickListener<Playlist> {
-                override fun onClickListener(model: Playlist) {
-                    Log.d("asdfasdf", "hahaha")
-                }
-            })
-        adapter.addMusicToPlaylist = object : AddMusicToPlaylist {
-            override fun onClickAddMusicListener(namePlaylist: String, music: Music) {
-                mViewModel.addMusicToPlaylist(namePlaylist, music)
-                Toast.makeText(context, "Add to playlist successfully", Toast.LENGTH_SHORT).show()
-            }
-        }
+
     }
 
     override fun setUpListener() {
@@ -58,6 +40,14 @@ class AddToPlaylistFragment: BaseFragment<AddToPlaylistFragmentBinding, PlayList
         }
         binding.imgBackgroundCreate.setOnClickListener {
             showCreatePlaylistDialog()
+        }
+        setFragmentResultListener("playlistKey") { _, bundle ->
+            bundle.get("playlist").also {
+                if(it is String){
+                    Log.d("afasfasd", it)
+                    mViewModel.createPlaylist(Playlist(it, ArrayList()))
+                }
+            }
         }
     }
 
@@ -68,8 +58,27 @@ class AddToPlaylistFragment: BaseFragment<AddToPlaylistFragmentBinding, PlayList
                 activity?.supportFragmentManager?.popBackStack("addToPlaylist", FragmentManager.POP_BACK_STACK_INCLUSIVE)
             }
         })
+        setupRecyclerView()
+        mViewModel.isExist.observe(viewLifecycleOwner){
+            if(it){
+                Toast.makeText(context, "Baì hát đã tồn tại trong playlist", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
-        binding.recyclerViewExistingPlaylist.adapter = adapter
+    private fun setupRecyclerView(){
+        mViewModel.existingPlaylist.observe(this){
+            binding.recyclerViewExistingPlaylist.adapter = ExistingPlaylistAdapter(
+                R.layout.item_existing_playlist,
+                it as ArrayList<Playlist>,
+                true,
+                object : ItemClickListener<Playlist> {
+                    override fun onClickListener(model: Playlist) {
+                        mViewModel.addMusicToPlaylist(model.name, model.id, MusicManager.getCurrentMusic()!!)
+                        Log.d("asdfas", "adfasdf")
+                    }
+                })
+        }
 
     }
     private fun showCreatePlaylistDialog() {

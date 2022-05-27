@@ -11,6 +11,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResult
+import androidx.navigation.findNavController
 import com.example.musicdownloader.MusicService
 import com.example.musicdownloader.R
 import com.example.musicdownloader.cusomseekbar.ProgressListener
@@ -129,11 +130,14 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
                     binding.layoutPlayMusic.transitionToStart()
                 }
                 else{
-                    (activity as MainActivity).playMusicFragment = null
                     if((activity as MainActivity).supportFragmentManager.findFragmentById(R.id.activity_main_nav_host_fragment)?.childFragmentManager?.backStackEntryCount == 0){
+                        (activity as MainActivity).playMusicFragment = null
                         gotoService(MusicService.ACTION_CLOSE)
+                        activity?.supportFragmentManager!!.popBackStack("playFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE)
                     }
-                    activity?.supportFragmentManager!!.popBackStack()
+                    else{
+                        activity?.findNavController(R.id.activity_main_nav_host_fragment)?.popBackStack()
+                    }
                 }
             }
         })
