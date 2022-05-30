@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="musicdownloading"
+            type="com.example.musicdownloader.model.MusicDownloading" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/bg_item_downloading"
+        android:padding="9dp">
+
+        <ImageView
+            android:id="@+id/img_music"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:src="@drawable/img_dowloading"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/tv_music"
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@{musicdownloading.music}"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginStart="15dp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_artist"
+            app:layout_constraintStart_toEndOf="@id/img_music"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="spread" />
+
+        <TextView
+            android:id="@+id/tv_artist"
+            android:layout_width="260dp"
+            android:layout_height="wrap_content"
+            android:alpha="0.6"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@{musicdownloading.artist}"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:layout_marginTop="6dp"
+            app:layout_constraintStart_toStartOf="@id/tv_music"
+            app:layout_constraintTop_toBottomOf="@id/tv_music"
+            app:layout_constraintBottom_toTopOf="@id/progress_horizontal"
+            app:layout_constraintVertical_chainStyle="spread" />
+
+        <ProgressBar
+            android:id="@+id/progress_horizontal"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="185dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:progressTint="#FF728C"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@id/tv_artist"
+            app:layout_constraintTop_toBottomOf="@id/tv_artist"
+            app:layout_constraintVertical_chainStyle="spread" />
+
+        <TextView
+            android:id="@+id/tv_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0%"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:layout_marginStart="8dp"
+            app:layout_constraintStart_toEndOf="@id/progress_horizontal"
+            app:layout_constraintTop_toTopOf="@id/progress_horizontal"
+            app:layout_constraintBottom_toBottomOf="@id/progress_horizontal" />
+
+        <ImageView
+            android:id="@+id/popup"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/kebab_menu_listened"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
+

@@ -12,25 +12,23 @@ import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListen
 import com.example.musicdownloader.model.Option
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class PlaylistInsidePopup(private val options: List<Option>) : BottomSheetDialogFragment() {
+
+class DownloadPopup(private val options: List<Option>) : BottomSheetDialogFragment() {
 
     lateinit var itemClickListener: ItemClickListener<Int>
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setStyle(STYLE_NORMAL, R.style.BottomSheetDialogTheme)
-    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.playlist_popup, container, false)
+        return inflater.inflate(R.layout.download_popup, container, false)
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setUpLayout(view.findViewById(R.id.layout))
+        setUpLayout(view.findViewById(R.id.layout_bottom_downloading))
 
     }
 
@@ -44,15 +42,23 @@ class PlaylistInsidePopup(private val options: List<Option>) : BottomSheetDialog
         return view
     }
 
-    private fun setUpLayout(linerLayout: LinearLayout) {
+    private fun setUpLayout(linearLayout: LinearLayout) {
 
         for (option in options) {
             val v: View = initView(option)
             v.setOnClickListener {
+                if(option.icon == R.drawable.ic_pause_download){
+                    option.icon = R.drawable.ic_play_not_background
+                    option.name = "Resume Download"
+                }
+                else if(option.icon == R.drawable.ic_play_not_background){
+                    option.icon = R.drawable.ic_pause_download
+                    option.name = "Pause Download"
+                }
                 itemClickListener.onClickListener(option.icon)
                 dismiss()
             }
-            linerLayout.addView(v)
+            linearLayout.addView(v)
         }
     }
 

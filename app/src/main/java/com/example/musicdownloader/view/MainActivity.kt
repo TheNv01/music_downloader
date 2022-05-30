@@ -1,6 +1,8 @@
 package com.example.musicdownloader.view
 
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
@@ -25,5 +27,6 @@ class MainActivity : AppCompatActivity() {
         binding.bottomView.itemIconTintList = null
         binding.bottomView.setupWithNavController(findNavController(R.id.activity_main_nav_host_fragment))
     }
+
 
 }
