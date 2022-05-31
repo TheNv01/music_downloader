@@ -1,5 +1,6 @@
 package com.example.musicdownloader
 
+import android.graphics.Bitmap
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
@@ -30,6 +31,13 @@ fun bindImage(imgView: ImageView, imgUrl: String?) {
         }
     }
 
+}
+
+@BindingAdapter("imageBitmap")
+fun bindImage(imgView: ImageView, bitmap: Bitmap?) {
+    if(bitmap != null){
+        imgView.setImageBitmap(bitmap)
+    }
 }
 
 

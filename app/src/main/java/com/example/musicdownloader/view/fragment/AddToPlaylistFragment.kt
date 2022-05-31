@@ -11,12 +11,15 @@ import com.example.musicdownloader.adapter.ExistingPlaylistAdapter
 import com.example.musicdownloader.databinding.AddToPlaylistFragmentBinding
 import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
 import com.example.musicdownloader.manager.MusicManager
+import com.example.musicdownloader.model.MusicDownloaded
 import com.example.musicdownloader.model.Playlist
 import com.example.musicdownloader.view.MainActivity
 import com.example.musicdownloader.view.dialog.CreatePlaylistDialog
 import com.example.musicdownloader.viewmodel.PlayListViewModel
 
 class AddToPlaylistFragment: BaseFragment<AddToPlaylistFragmentBinding, PlayListViewModel>() {
+
+    var musicDownloaded: MusicDownloaded ?= null
 
     override fun initBinding(mRootView: View): AddToPlaylistFragmentBinding {
         return AddToPlaylistFragmentBinding.bind(mRootView)
@@ -74,8 +77,13 @@ class AddToPlaylistFragment: BaseFragment<AddToPlaylistFragmentBinding, PlayList
                 true,
                 object : ItemClickListener<Playlist> {
                     override fun onClickListener(model: Playlist) {
-                        mViewModel.addMusicToPlaylist(model.name, model.id, MusicManager.getCurrentMusic()!!)
-                        Log.d("asdfas", "adfasdf")
+                        if(musicDownloaded == null){
+                            mViewModel.addMusicToPlaylist(model.name, model.id, MusicManager.getCurrentMusic()!!)
+                        }
+                        else{
+                            Log.d("asdfas", "adfasdf")
+                        }
+
                     }
                 })
         }

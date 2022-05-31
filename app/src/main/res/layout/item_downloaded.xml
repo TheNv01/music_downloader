@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="musicdownloaded"
+            type="com.example.musicdownloader.model.MusicDownloaded" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout_top_listened"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_view"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            app:cardCornerRadius="6dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/img_top_listened"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                imageBitmap="@{musicdownloaded.bitmap}"
+                android:scaleType="fitCenter" />
+
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/tv_music"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            android:text="@{musicdownloaded.music}"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:layout_marginStart="11dp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            app:layout_constraintStart_toEndOf="@id/card_view"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/tv_artist"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"/>
+
+        <TextView
+            android:id="@+id/tv_artist"
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            android:text="@{musicdownloaded.artist}"
+            android:textSize="12sp"
+            android:layout_marginStart="11dp"
+            android:textColor="@color/white"
+            android:layout_marginTop="6dp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            app:layout_constraintStart_toEndOf="@id/card_view"
+            app:layout_constraintTop_toBottomOf="@+id/tv_music"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <ImageView
+            android:id="@+id/popup"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/kebab_menu_listened"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

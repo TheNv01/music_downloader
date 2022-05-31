@@ -1,5 +1,6 @@
 package com.example.musicdownloader.adapter
 
+import android.util.Log
 import androidx.databinding.ViewDataBinding
 import com.example.musicdownloader.databinding.ItemDownloadingBinding
 import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
@@ -40,10 +41,14 @@ class DownloadingAdapter(
                         }
                     }
                     override fun onDownloadBlockUpdated(download: Download, downloadBlock: DownloadBlock, totalBlocks: Int) {}
-                    override fun onError(download: Download, error: Error, throwable: Throwable?) {}
+                    override fun onError(download: Download, error: Error, throwable: Throwable?) {
+                        Log.d("error", error.name)
+                    }
                     override fun onPaused(download: Download) {}
                     override fun onResumed(download: Download) {}
-                    override fun onStarted(download: Download, downloadBlocks: List<DownloadBlock>, totalBlocks: Int) {}
+                    override fun onStarted(download: Download, downloadBlocks: List<DownloadBlock>, totalBlocks: Int) {
+                        Log.d("started", "ha")
+                    }
                     override fun onWaitingNetwork(download: Download) {}
                     override fun onAdded(download: Download) {}
                     override fun onCancelled(download: Download) {}

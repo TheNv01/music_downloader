@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Environment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
@@ -26,6 +27,10 @@ import com.example.musicdownloader.model.Option
 import com.example.musicdownloader.view.MainActivity
 import com.example.musicdownloader.viewmodel.AddFavoriteViewModel
 import com.tonyodev.fetch2.*
+import com.tonyodev.fetch2core.DownloadBlock
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.io.File
 
 class AddFavoriteFragment: BaseFragment<AddFavoriteFragmentBinding, AddFavoriteViewModel>(), OnActionCallBack {
@@ -114,14 +119,42 @@ class AddFavoriteFragment: BaseFragment<AddFavoriteFragmentBinding, AddFavoriteV
         request.priority = Priority.HIGH
         request.networkType = NetworkType.ALL
 
-        DownloadingManager.listDownloading().add(
-            MusicDownloading(MusicManager.getCurrentMusic()!!.name!!,
-                MusicManager.getCurrentMusic()!!.artistName!!,
-                request)
-        )
+        val musicDownloading = MusicDownloading(MusicManager.getCurrentMusic()!!.name!!,
+            MusicManager.getCurrentMusic()!!.artistName!!,
+            request)
+
+        DownloadingManager.listDownloading().add(musicDownloading)
+
         DownloadingManager.getFetch(requireContext()).enqueue(request,
             { Toast.makeText(context, "Downloading...", Toast.LENGTH_SHORT).show()},
             { Toast.makeText(context, "Something wrong!...", Toast.LENGTH_SHORT).show() })
+        DownloadingManager.fetch!!.addListener(
+            object : FetchListener {
+                override fun onQueued(download: Download, waitingOnNetwork: Boolean) {}
+                override fun onRemoved(download: Download) {}
+                override fun onCompleted(download: Download) {
+                    DownloadingManager.listDownloading().remove(musicDownloading)
+                }
+                override fun onDeleted(download: Download) {}
+                override fun onDownloadBlockUpdated(download: Download, downloadBlock: DownloadBlock, totalBlocks: Int) {}
+                override fun onError(download: Download, error: Error, throwable: Throwable?) {
+                    Log.d("error", error.name)
+                }
+                override fun onPaused(download: Download) {}
+                override fun onResumed(download: Download) {}
+                override fun onStarted(download: Download, downloadBlocks: List<DownloadBlock>, totalBlocks: Int) {
+                    Log.d("started", "ha")
+                }
+                override fun onWaitingNetwork(download: Download) {}
+                override fun onAdded(download: Download) {}
+                override fun onCancelled(download: Download) {}
+                override fun onProgress(
+                    download: Download,
+                    etaInMilliSeconds: Long,
+                    downloadedBytesPerSecond: Long
+                ) {}
+
+            })
     }
     private val permReqLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
@@ -129,18 +162,25 @@ class AddFavoriteFragment: BaseFragment<AddFavoriteFragmentBinding, AddFavoriteV
                 it.value == true
             }
             if (granted) {
-                startDownload()
+                GlobalScope.launch(Dispatchers.IO) {
+                    startDownload()
+                }
+
             }
         }
 
     private fun checkPermissions() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            startDownload()
+            GlobalScope.launch(Dispatchers.IO) {
+                startDownload()
+            }
         }
         val permission = arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
         activity?.let {
             if (hasPermissions(activity as Context, permission)) {
-                startDownload()
+                GlobalScope.launch(Dispatchers.IO) {
+                    startDownload()
+                }
             } else {
                 permReqLauncher.launch(
                     permission

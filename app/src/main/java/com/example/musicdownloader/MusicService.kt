@@ -17,6 +17,7 @@ import com.example.musicdownloader.manager.MusicManager
 import com.example.musicdownloader.manager.RepeatStatus
 import com.example.musicdownloader.model.MessageEvent
 import com.example.musicdownloader.model.Music
+import com.example.musicdownloader.model.MusicDownloaded
 import com.example.musicdownloader.networking.Services
 import com.example.musicdownloader.view.MainActivity
 import kotlinx.coroutines.*
@@ -43,7 +44,13 @@ class MusicService : Service() {
         if (action != 0) {
             when (action) {
                 ACTION_START ->{
-                    MusicManager.getCurrentMusic()?.let { startMusic(it) }
+                    if(MusicManager.currentMusicDownloaded == null) {
+                        MusicManager.getCurrentMusic()?.let { startMusic(it) }
+                    }
+                    else {
+                        MusicManager.currentMusicDownloaded?.let { startMusicDownloaded(it) }
+                    }
+
                 }
                 ACTION_RESUME -> {
                     MediaManager.resumeMedia()
@@ -71,6 +78,15 @@ class MusicService : Service() {
         }
         return START_NOT_STICKY
     }
+
+    private fun startMusicDownloaded(musicDownloaded: MusicDownloaded){
+        MediaManager.resetMedia()
+            MediaManager.playMusic(musicDownloaded.uri.toString()){
+
+                MusicManager.getCurrentMusic()?.let { it1 -> pushNotification(it1) }
+            }
+        }
+
 
     private fun startMusic(music: Music) {
         MediaManager.resetMedia()

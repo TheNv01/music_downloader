@@ -86,7 +86,12 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
     override fun initViews() {
         callBack = this
         MediaManager.setProgress(0)
-        playSong(MusicManager.getCurrentMusic()!!)
+        if(MusicManager.currentMusicDownloaded == null){
+            playSong(MusicManager.getCurrentMusic()!!)
+        }
+        else{
+            playSong()
+        }
     }
 
     override fun setUpListener() {
@@ -143,13 +148,22 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
         })
     }
 
-    private fun playSong(music: Music) {
+    private fun playSong(music: Music? = null) {
         rotateImageView()
-        binding.tvMusic.text = music.artistName
-        binding.tvSingle.text = music.name
-        binding.tvProgressMax.text = formattedTime(music.duration!!)
+        if(music != null){
+            binding.tvMusic.text = music.artistName
+            binding.tvSingle.text = music.name
+            binding.tvProgressMax.text = formattedTime(music.duration!!)
+            initSeekBar()
+        }
+        else{
+            binding.tvMusic.text = MusicManager.currentMusicDownloaded?.music
+            binding.tvSingle.text = MusicManager.currentMusicDownloaded?.artist
+            binding.tvProgressMax.text = formattedTime(MusicManager.currentMusicDownloaded?.duration!!.toInt())
+            initSeekBar()
+        }
         gotoService(MusicService.ACTION_START)
-        initSeekBar(MusicManager.getCurrentMusic()!!)
+
     }
 
     private fun gotoService(action: Int){
@@ -236,8 +250,14 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
         binding.layoutPlayMusic.transitionToEnd()
     }
 
-    private fun initSeekBar(music: Music) {
-        binding.seekBar.maxProgress = music.duration!!
+    private fun initSeekBar() {
+        if(MusicManager.currentMusicDownloaded == null){
+            binding.seekBar.maxProgress = MusicManager.getCurrentMusic()?.duration!!
+        }
+        else{
+            binding.seekBar.maxProgress = MusicManager.currentMusicDownloaded?.duration!!.toInt()
+        }
+
         (activity as MainActivity).runOnUiThread(object : Runnable {
             override fun run() {
                 val currentPosition: Int = MediaManager.getProgress()/1000
