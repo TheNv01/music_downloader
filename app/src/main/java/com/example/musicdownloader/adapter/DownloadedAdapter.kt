@@ -5,6 +5,7 @@ import androidx.databinding.ViewDataBinding
 import com.example.musicdownloader.databinding.ItemDownloadedBinding
 import com.example.musicdownloader.databinding.ItemTopListenedBinding
 import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
+import com.example.musicdownloader.manager.MusicDonwnloadedManager
 import com.example.musicdownloader.manager.MusicManager
 import com.example.musicdownloader.model.Music
 import com.example.musicdownloader.model.MusicDownloaded
@@ -29,7 +30,7 @@ class DownloadedAdapter(
         override fun clickListener(data: MusicDownloaded, itemClickListener: ItemClickListener<MusicDownloaded>) {
             binding.layoutTopListened.setOnClickListener {
                 itemClickListener.onClickListener(data)
-                MusicManager.musicsDownloaded = musicsDownloaded
+                MusicDonwnloadedManager.musicsDownloaded = musicsDownloaded
             }
             binding.popup.setOnClickListener {
                 menuClickListener.onClickListener(data)

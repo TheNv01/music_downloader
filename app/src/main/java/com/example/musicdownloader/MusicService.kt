@@ -8,11 +8,13 @@ import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.os.Build
 import android.os.IBinder
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import coil.ImageLoader
 import coil.request.ImageRequest
 import coil.request.SuccessResult
 import com.example.musicdownloader.manager.MediaManager
+import com.example.musicdownloader.manager.MusicDonwnloadedManager
 import com.example.musicdownloader.manager.MusicManager
 import com.example.musicdownloader.manager.RepeatStatus
 import com.example.musicdownloader.model.MessageEvent
@@ -44,11 +46,11 @@ class MusicService : Service() {
         if (action != 0) {
             when (action) {
                 ACTION_START ->{
-                    if(MusicManager.currentMusicDownloaded == null) {
+                    if(MusicDonwnloadedManager.currentMusicDownloaded == null) {
                         MusicManager.getCurrentMusic()?.let { startMusic(it) }
                     }
                     else {
-                        MusicManager.currentMusicDownloaded?.let { startMusicDownloaded(it) }
+                        MusicDonwnloadedManager.currentMusicDownloaded?.let { startMusicDownloaded(it) }
                     }
 
                 }
@@ -59,14 +61,31 @@ class MusicService : Service() {
                     MediaManager.pauseMedia()
                 }
                 ACTION_PREVIOUS ->{
-                    MusicManager.previousMusic()
+                    if(MusicDonwnloadedManager.currentMusicDownloaded == null) {
+                        MusicManager.previousMusic()
+                    }
+                    else {
+                        MusicDonwnloadedManager.previousMusic()
+                    }
+
                 }
                 ACTION_NEXT ->{
                     if(MusicManager.isRandom()){
-                        MusicManager.randomMusic()
+                        if(MusicDonwnloadedManager.currentMusicDownloaded == null) {
+                            MusicManager.randomMusic()
+                        }
+                        else {
+                            MusicDonwnloadedManager.randomMusic()
+                        }
                     }
                     else{
-                        MusicManager.nextMusic()
+                        if(MusicDonwnloadedManager.currentMusicDownloaded == null) {
+                            MusicManager.nextMusic()
+                        }
+                        else {
+                            Log.d("downloaded", MusicDonwnloadedManager.musicsDownloaded.size.toString())
+                            MusicDonwnloadedManager.nextMusic()
+                        }
                     }
                 }
                 ACTION_CLOSE -> {
@@ -74,7 +93,12 @@ class MusicService : Service() {
                 }
             }
             EventBus.getDefault().post(MessageEvent(action))
-            MusicManager.getCurrentMusic()?.let { pushNotification(it) }
+            if(MusicDonwnloadedManager.currentMusicDownloaded == null) {
+                MusicManager.getCurrentMusic()?.let { pushNotification(it) }
+            }
+            else {
+                pushNotification()
+            }
         }
         return START_NOT_STICKY
     }
@@ -82,8 +106,26 @@ class MusicService : Service() {
     private fun startMusicDownloaded(musicDownloaded: MusicDownloaded){
         MediaManager.resetMedia()
             MediaManager.playMusic(musicDownloaded.uri.toString()){
-
-                MusicManager.getCurrentMusic()?.let { it1 -> pushNotification(it1) }
+                when(MusicManager.getRepeatStatus()){
+                    RepeatStatus.NoRepeat ->{
+                        if(MusicDonwnloadedManager.getIndexOfCurrentMusic() == MusicDonwnloadedManager.getSizeMusicList() -1){
+                            EventBus.getDefault().post(MessageEvent(ACTION_PAUSE))
+                            MediaManager.pauseMedia()
+                        }
+                        else{
+                            MusicDonwnloadedManager.nextMusic()
+                            EventBus.getDefault().post(MessageEvent(ACTION_NEXT))
+                        }
+                    }
+                    RepeatStatus.RepeatListMusic ->{
+                        MusicDonwnloadedManager.nextMusic()
+                        EventBus.getDefault().post(MessageEvent(ACTION_NEXT))
+                    }
+                    RepeatStatus.RepeatOneMusic ->{
+                        EventBus.getDefault().post(MessageEvent(ACTION_NEXT))
+                    }
+                }
+                pushNotification()
             }
         }
 
@@ -124,7 +166,7 @@ class MusicService : Service() {
         }
     }
 
-    private fun pushNotification(music: Music) {
+    private fun pushNotification(music: Music ?= null) {
         // Create an Intent for the activity you want to start
         val resultIntent = Intent(this, MainActivity::class.java)
         resultIntent.putExtra("from notification", 1)
@@ -138,10 +180,9 @@ class MusicService : Service() {
         GlobalScope.launch {
             val builder = NotificationCompat.Builder(this@MusicService, App.CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .setLargeIcon(getBitmapFromURL(music.image!!))
+
                 .setSubText("Music Player")
-                .setContentTitle(music.name)
-                .setContentText(music.artistName)
+
                 .setContentIntent(resultPendingIntent)
                 .addAction(R.drawable.ic_previous_notification, "Previous", getIntent(ACTION_PREVIOUS))
                 .addAction(
@@ -153,6 +194,17 @@ class MusicService : Service() {
                 .addAction(R.drawable.ic_close_notification, "Close", getIntent(ACTION_CLOSE))
                 .setStyle(androidx.media.app.NotificationCompat.MediaStyle()
                     .setShowActionsInCompactView(0, 1, 2, 3))
+
+            if(music == null){
+                builder.setContentTitle(MusicDonwnloadedManager.currentMusicDownloaded!!.music)
+                    .setContentText(MusicDonwnloadedManager.currentMusicDownloaded!!.artist)
+                    .setLargeIcon(MusicDonwnloadedManager.currentMusicDownloaded!!.bitmap)
+            }
+            else{
+                builder.setContentTitle(music.name)
+                    .setContentText(music.artistName)
+                    .setLargeIcon(getBitmapFromURL(music.image!!))
+            }
 
             startForeground(1, builder.build())
         }

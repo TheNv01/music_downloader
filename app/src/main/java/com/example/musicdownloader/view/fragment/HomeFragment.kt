@@ -14,6 +14,7 @@ import com.example.musicdownloader.adapter.*
 import com.example.musicdownloader.databinding.HomeFragmentBinding
 import com.example.musicdownloader.interfaces.OnActionCallBack
 import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
+import com.example.musicdownloader.manager.MusicDonwnloadedManager
 import com.example.musicdownloader.manager.MusicManager
 import com.example.musicdownloader.model.Genres
 import com.example.musicdownloader.model.Music
@@ -31,6 +32,7 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
 
     private val musicItemClickListener = object : ItemClickListener<Music> {
         override fun onClickListener(model: Music) {
+            MusicDonwnloadedManager.currentMusicDownloaded = null
             MusicManager.setCurrentMusic(model)
             callBack.callBack(KEY_SHOW_PLAY_MUSIC, null)
         }

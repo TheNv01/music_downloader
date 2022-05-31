@@ -7,9 +7,7 @@ enum class RepeatStatus {RepeatOneMusic, NoRepeat, RepeatListMusic }
 
 object MusicManager {
     private var musicList: List<Music> = ArrayList()
-     var musicsDownloaded: List<MusicDownloaded> = ArrayList()
     private var currentMusic: Music? = null
-    var currentMusicDownloaded: MusicDownloaded? = null
     private var repeatStatus = RepeatStatus.NoRepeat
     private var isRandom = false
 

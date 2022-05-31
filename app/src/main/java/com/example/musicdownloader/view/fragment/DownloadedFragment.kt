@@ -1,9 +1,5 @@
 package com.example.musicdownloader.view.fragment
 
-import android.Manifest
-import android.app.Activity
-import android.content.Intent
-import android.content.pm.PackageManager
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
@@ -19,6 +15,7 @@ import com.example.musicdownloader.adapter.DownloadedAdapter
 import com.example.musicdownloader.databinding.DownloadedFragmentBinding
 import com.example.musicdownloader.interfaces.OnActionCallBack
 import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
+import com.example.musicdownloader.manager.MusicDonwnloadedManager
 import com.example.musicdownloader.manager.MusicManager
 import com.example.musicdownloader.model.MusicDownloaded
 import com.example.musicdownloader.view.MainActivity
@@ -34,7 +31,8 @@ class DownloadedFragment: BaseFragment<DownloadedFragmentBinding, DownloadedView
 
     private val itemClickListener = object : ItemClickListener<MusicDownloaded> {
         override fun onClickListener(model: MusicDownloaded) {
-            MusicManager.currentMusicDownloaded = model
+            MusicManager.setCurrentMusic(null)
+            MusicDonwnloadedManager.currentMusicDownloaded = model
             callback.callBack(HomeFragment.KEY_SHOW_PLAY_MUSIC, null)
         }
 

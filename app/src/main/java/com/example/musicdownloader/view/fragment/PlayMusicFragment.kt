@@ -18,6 +18,7 @@ import com.example.musicdownloader.cusomseekbar.ProgressListener
 import com.example.musicdownloader.databinding.PlayMusicFragmentBinding
 import com.example.musicdownloader.interfaces.OnActionCallBack
 import com.example.musicdownloader.manager.MediaManager
+import com.example.musicdownloader.manager.MusicDonwnloadedManager
 import com.example.musicdownloader.manager.MusicManager
 import com.example.musicdownloader.manager.RepeatStatus
 import com.example.musicdownloader.model.MessageEvent
@@ -73,7 +74,12 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
             }
             MusicService.ACTION_NEXT,
             MusicService.ACTION_PREVIOUS ->{
-                MusicManager.getCurrentMusic()?.let { playSong(it) }
+                if(MusicDonwnloadedManager.currentMusicDownloaded == null){
+                    MusicManager.getCurrentMusic()?.let { playSong(it) }
+                }
+                else{
+                    playSong()
+                }
                 rotateImageView()
                 binding.icPlayOrPause.setImageResource(R.drawable.ic_pause_not_background)
             }
@@ -86,7 +92,7 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
     override fun initViews() {
         callBack = this
         MediaManager.setProgress(0)
-        if(MusicManager.currentMusicDownloaded == null){
+        if(MusicDonwnloadedManager.currentMusicDownloaded == null){
             playSong(MusicManager.getCurrentMusic()!!)
         }
         else{
@@ -157,9 +163,9 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
             initSeekBar()
         }
         else{
-            binding.tvMusic.text = MusicManager.currentMusicDownloaded?.music
-            binding.tvSingle.text = MusicManager.currentMusicDownloaded?.artist
-            binding.tvProgressMax.text = formattedTime(MusicManager.currentMusicDownloaded?.duration!!.toInt())
+            binding.tvMusic.text = MusicDonwnloadedManager.currentMusicDownloaded?.music
+            binding.tvSingle.text = MusicDonwnloadedManager.currentMusicDownloaded?.artist
+            binding.tvProgressMax.text = formattedTime(MusicDonwnloadedManager.currentMusicDownloaded?.duration!!.toInt())
             initSeekBar()
         }
         gotoService(MusicService.ACTION_START)
@@ -251,11 +257,11 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
     }
 
     private fun initSeekBar() {
-        if(MusicManager.currentMusicDownloaded == null){
+        if(MusicDonwnloadedManager.currentMusicDownloaded == null){
             binding.seekBar.maxProgress = MusicManager.getCurrentMusic()?.duration!!
         }
         else{
-            binding.seekBar.maxProgress = MusicManager.currentMusicDownloaded?.duration!!.toInt()
+            binding.seekBar.maxProgress = MusicDonwnloadedManager.currentMusicDownloaded?.duration!!.toInt()
         }
 
         (activity as MainActivity).runOnUiThread(object : Runnable {
@@ -278,7 +284,13 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
     }
 
     fun updateSong() {
-        playSong(MusicManager.getCurrentMusic()!!)
+        if(MusicDonwnloadedManager.currentMusicDownloaded == null){
+            playSong(MusicManager.getCurrentMusic()!!)
+        }
+        else{
+            playSong()
+        }
+
         binding.layoutPlayMusic.transitionToEnd()
     }
 
