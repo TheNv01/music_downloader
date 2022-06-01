@@ -10,6 +10,7 @@ import com.example.musicdownloader.adapter.TopListenedAdapter
 import com.example.musicdownloader.databinding.SeeAllFragmentBinding
 import com.example.musicdownloader.interfaces.OnActionCallBack
 import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
+import com.example.musicdownloader.manager.MusicDonwnloadedManager
 import com.example.musicdownloader.manager.MusicManager
 import com.example.musicdownloader.model.Genres
 import com.example.musicdownloader.model.Music
@@ -24,6 +25,7 @@ class SeeAllFragment: BaseFragment<SeeAllFragmentBinding, SeeAllViewModel>(), On
 
     private val musicItemClickListener = object : ItemClickListener<Music> {
         override fun onClickListener(model: Music) {
+            MusicDonwnloadedManager.currentMusicDownloaded = null
             MusicManager.setCurrentMusic(model)
             mViewModel.musics.value?.let { MusicManager.setListMusic(it) }
             callBack.callBack(null, null)

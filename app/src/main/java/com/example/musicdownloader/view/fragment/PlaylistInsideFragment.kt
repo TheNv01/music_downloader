@@ -12,6 +12,7 @@ import com.example.musicdownloader.adapter.TopListenedAdapter
 import com.example.musicdownloader.databinding.PlaylistInsideFragmentBinding
 import com.example.musicdownloader.interfaces.OnActionCallBack
 import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
+import com.example.musicdownloader.manager.MusicDonwnloadedManager
 import com.example.musicdownloader.manager.MusicManager
 import com.example.musicdownloader.model.Music
 import com.example.musicdownloader.view.MainActivity
@@ -25,6 +26,7 @@ class PlaylistInsideFragment : BaseFragment<PlaylistInsideFragmentBinding, Playl
 
     private val musicItemClickListener = object : ItemClickListener<Music> {
         override fun onClickListener(model: Music) {
+            MusicDonwnloadedManager.currentMusicDownloaded = null
             MusicManager.setCurrentMusic(model)
             mViewModel.musics.value?.let { MusicManager.setListMusic(it) }
             callBack.callBack(null, null)

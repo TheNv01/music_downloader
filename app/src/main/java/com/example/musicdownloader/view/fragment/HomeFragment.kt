@@ -40,7 +40,6 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
 
     private val menuClickListener = object : ItemClickListener<Music> {
         override fun onClickListener(model: Music) {
-            TODO("Not yet implemented")
         }
 
     }
@@ -160,7 +159,7 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
     private fun setupTrendingViewPager(){
         val viewPager = binding.viewPagerTrending
         mViewModel.trends.observe(this){
-            viewPager.adapter = TrendingAdapter(R.layout.item_trending, it as MutableList<Music>, viewPager, musicItemClickListener)
+            viewPager.adapter = TrendingAdapter(R.layout.item_trending, it as ArrayList<Music>, viewPager, musicItemClickListener)
         }
         viewPager.clipToPadding = false
         viewPager.clipChildren = false

@@ -1,15 +1,16 @@
 package com.example.musicdownloader.view.fragment
 
+import android.content.ContentValues
+import android.content.Intent
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
-import android.os.Bundle
+import android.provider.MediaStore
 import android.provider.Settings
 import android.util.Log
+import android.view.Gravity
 import android.view.View
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.fragment.app.setFragmentResult
+import android.widget.Toast
 import com.example.musicdownloader.R
 import com.example.musicdownloader.adapter.DownloadedAdapter
 import com.example.musicdownloader.databinding.DownloadedFragmentBinding
@@ -82,26 +83,71 @@ class DownloadedFragment: BaseFragment<DownloadedFragmentBinding, DownloadedView
         bottomSheetDialog.itemClickListener = object : ItemClickListener<Int>{
             override fun onClickListener(model: Int) {
                 when(model){
-                    R.drawable.ic_add_to_playlist ->{
-                        callback.callBack(AddFavoriteFragment.KEY_SHOW_ADD_TO_PLAYLIST, musicDownloaded)
-                    }
                     R.drawable.ic_delete ->{
                         musicDownloaded.uri?.let { File(it).delete() }
                         mViewModel.getListMusicDownloaded()
                         adapter.notifyDataSetChanged()
                     }
                     R.drawable.ic_bell ->{
-                        Log.d("hahahaa", "hjahaaa")
-                        RingtoneManager.setActualDefaultRingtoneUri(
-                            context,
-                            RingtoneManager.TYPE_RINGTONE,
-                            Uri.parse(musicDownloaded.uri)
-                        )
+                        checkSystemWritePermission(musicDownloaded)
                     }
 
                 }
             }
         }
+    }
+
+    private fun checkSystemWritePermission(musicDownloaded: MusicDownloaded) {
+        val retVal: Boolean
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            retVal = Settings.System.canWrite(context)
+            if (retVal) {
+                setAsRingtone(musicDownloaded)
+                val toast = Toast.makeText(context, "Set as ringtone successfully", Toast.LENGTH_SHORT)
+                toast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 0, 50)
+                toast.show()
+            } else {
+                val toast = Toast.makeText(context, "Please allow Modify System Setting permission to change ringtone.",
+                    Toast.LENGTH_SHORT)
+                toast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 0, 50)
+                toast.show()
+                val intent = Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS)
+                intent.data = Uri.parse("package:" + requireContext().packageName)
+                startActivity(intent)
+            }
+        }
+    }
+
+    private fun setAsRingtone(musicDownloaded: MusicDownloaded){
+        val k = File(musicDownloaded.uri!!)
+        val values = ContentValues()
+        values.put(MediaStore.MediaColumns.DATA, k.absolutePath)
+        values.put(MediaStore.MediaColumns.TITLE, musicDownloaded.music)
+
+        values.put(MediaStore.MediaColumns.SIZE, k.length())
+        values.put(MediaStore.MediaColumns.MIME_TYPE, "audio/mp3")
+        values.put(MediaStore.Audio.Media.ARTIST, musicDownloaded.artist)
+
+        values.put(MediaStore.Audio.Media.DURATION, musicDownloaded.duration!!.toInt())
+        values.put(MediaStore.Audio.Media.IS_RINGTONE, true)
+        values.put(MediaStore.Audio.Media.IS_NOTIFICATION, false)
+        values.put(MediaStore.Audio.Media.IS_ALARM, false)
+        values.put(MediaStore.Audio.Media.IS_MUSIC, false)
+
+        val uri = MediaStore.Audio.Media.getContentUriForPath(k.absolutePath)
+        if (uri != null) {
+            requireContext().contentResolver.delete(
+                uri,
+                MediaStore.MediaColumns.DATA + "=\""
+                        + k.absolutePath + "\"", null)
+        }
+        val newUri = context?.contentResolver!!.insert(uri!!, values)
+
+        RingtoneManager.setActualDefaultRingtoneUri(
+            context,
+            RingtoneManager.TYPE_RINGTONE,
+            newUri
+        )
     }
 
 
@@ -121,13 +167,6 @@ class DownloadedFragment: BaseFragment<DownloadedFragmentBinding, DownloadedView
                     }
                     tran.commit()
                 }
-            }
-            AddFavoriteFragment.KEY_SHOW_ADD_TO_PLAYLIST ->{
-                val addToPlaylistFragment = AddToPlaylistFragment()
-                addToPlaylistFragment.musicDownloaded = data as MusicDownloaded
-                tran.add(R.id.container_layout_playing, addToPlaylistFragment)
-                tran.addToBackStack("addToPlaylist")
-                tran.commit()
             }
         }
     }

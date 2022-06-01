@@ -12,9 +12,8 @@ import com.example.musicdownloader.view.MainActivity
 import com.example.musicdownloader.view.dialog.DownloadPopup
 import com.example.musicdownloader.viewmodel.DownloadingViewModel
 
-class DownloadingFragment : BaseFragment<DownloadingFragmentBinding, DownloadingViewModel>(), OnActionCallBack {
+class DownloadingFragment : BaseFragment<DownloadingFragmentBinding, DownloadingViewModel>(){
 
-    private lateinit var callback: OnActionCallBack
     var bottomSheetDialog: DownloadPopup ?= null
 
     override fun initBinding(mRootView: View): DownloadingFragmentBinding {
@@ -30,7 +29,6 @@ class DownloadingFragment : BaseFragment<DownloadingFragmentBinding, Downloading
     }
 
     override fun initViews() {
-        callback = this
     }
 
     override fun setUpListener() {
@@ -57,9 +55,6 @@ class DownloadingFragment : BaseFragment<DownloadingFragmentBinding, Downloading
         bottomSheetDialog!!.itemClickListener = object : ItemClickListener<Int>{
             override fun onClickListener(model: Int) {
                 when(model){
-                    R.drawable.ic_add_to_playlist ->{
-                        callback.callBack(AddFavoriteFragment.KEY_SHOW_ADD_TO_PLAYLIST, null)
-                    }
                     R.drawable.ic_remove ->{
                         DownloadingManager.fetch!!.cancel(musicDownloading.request.id)
                         DownloadingManager.fetch!!.delete(musicDownloading.request.id)
@@ -73,13 +68,5 @@ class DownloadingFragment : BaseFragment<DownloadingFragmentBinding, Downloading
                 }
             }
         }
-    }
-
-    override fun callBack(key: String?, data: Any?) {
-        val addToPlaylistFragment = AddToPlaylistFragment()
-        val tran = (activity as MainActivity).supportFragmentManager.beginTransaction()
-        tran.add(R.id.container_layout_playing, addToPlaylistFragment)
-        tran.addToBackStack("addToPlaylist")
-        tran.commit()
     }
 }

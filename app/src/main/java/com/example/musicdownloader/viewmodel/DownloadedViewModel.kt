@@ -21,7 +21,6 @@ class DownloadedViewModel : BaseViewModel() {
     }
 
     private fun initOption(){
-        optionsDownloaded.add(Option("Add to playlist", R.drawable.ic_add_to_playlist))
         optionsDownloaded.add(Option("Remove Downloaded Song", R.drawable.ic_delete))
         optionsDownloaded.add(Option("Set as Ringtone", R.drawable.ic_bell))
     }
@@ -32,20 +31,22 @@ class DownloadedViewModel : BaseViewModel() {
             downloadeds.clear()
             val mediaMetadataRetriever = MediaMetadataRetriever()
             file.listFiles()?.forEach { musicFile ->
-                mediaMetadataRetriever.setDataSource(musicFile.path)
-                val songName =
-                    mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE)
-                val artist =
-                    mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)
-                val art = mediaMetadataRetriever.embeddedPicture
-                val duration = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.substring(0,3)
-                val songImage = art?.let {
-                    BitmapFactory
-                        .decodeByteArray(art, 0, it.size)
+                if(musicFile.length() != 0L){
+                    mediaMetadataRetriever.setDataSource(musicFile.path)
+                    val songName =
+                        mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE)
+                    val artist =
+                        mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)
+                    val art = mediaMetadataRetriever.embeddedPicture
+                    val duration = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.substring(0,3)
+                    val songImage = art?.let {
+                        BitmapFactory
+                            .decodeByteArray(art, 0, it.size)
+                    }
+                    downloadeds.add(MusicDownloaded(
+                        songName, artist, musicFile.path, songImage, duration
+                    ))
                 }
-                downloadeds.add(MusicDownloaded(
-                    songName, artist, musicFile.path, songImage, duration
-                ))
             }
 
         }

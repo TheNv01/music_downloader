@@ -12,7 +12,6 @@ class DownloadingViewModel: BaseViewModel() {
 
     private fun initOption(){
 
-        optionsDownloading.add(Option("Add to playlist", R.drawable.ic_add_to_playlist))
         optionsDownloading.add(Option("Remove Download", R.drawable.ic_remove))
         optionsDownloading.add(Option("Pause Download", R.drawable.ic_pause_download))
 

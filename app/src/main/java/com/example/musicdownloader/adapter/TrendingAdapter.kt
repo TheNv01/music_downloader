@@ -9,7 +9,7 @@ import com.example.musicdownloader.model.Music
 
 class TrendingAdapter(
     layoutID: Int,
-    var musics: MutableList<Music>,
+    var musics: ArrayList<Music>,
     private val viewPager: ViewPager2,
     itemClickListener: ItemClickListener<Music>
 ): BaseAdapter<Music, ItemTrendingBinding>(layoutID, musics, itemClickListener) {
