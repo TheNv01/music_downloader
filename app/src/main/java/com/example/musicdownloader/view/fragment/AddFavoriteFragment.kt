@@ -2,8 +2,11 @@ package com.example.musicdownloader.view.fragment
 
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Environment
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,8 +17,11 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResultListener
+import androidx.lifecycle.viewModelScope
+import coil.load
 import com.example.musicdownloader.R
 import com.example.musicdownloader.databinding.AddFavoriteFragmentBinding
 import com.example.musicdownloader.interfaces.OnActionCallBack
@@ -32,6 +38,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.File
+import java.io.InputStream
 
 class AddFavoriteFragment: BaseFragment<AddFavoriteFragmentBinding, AddFavoriteViewModel>(), OnActionCallBack {
 
@@ -73,6 +80,8 @@ class AddFavoriteFragment: BaseFragment<AddFavoriteFragmentBinding, AddFavoriteV
                 if(it is Music){
                    binding.tvMusic.text = it.name
                     binding.tvSingle.text = it.artistName
+                    bindImage(binding.imgBackground, it.image)
+                    bindImage(binding.imgCornersRadius, it.image)
                 }
             }
         }
@@ -82,6 +91,28 @@ class AddFavoriteFragment: BaseFragment<AddFavoriteFragmentBinding, AddFavoriteV
                 activity?.supportFragmentManager?.popBackStack("addFavorite", FragmentManager.POP_BACK_STACK_INCLUSIVE)
             }
         })
+    }
+
+    private fun bindImage(imgView: ImageView, imgUrl: String?) {
+        if(imgUrl == null){
+            imgView.setImageResource(R.drawable.ic_broken_image)
+        }
+        else{
+            val reallyImgUrl: String = if(imgUrl.length < 15){
+                "http://marstechstudio.com/img-msd/$imgUrl"
+            }
+            else{
+                imgUrl
+            }
+            reallyImgUrl.let {
+                val imgUri = reallyImgUrl.toUri().buildUpon().scheme("http").build()
+                imgView.load(imgUri){
+                    placeholder(R.drawable.loading_animation)
+                    error(R.drawable.ic_broken_image)
+                }
+            }
+        }
+
     }
 
     private fun initTopicView(option: Option): View {

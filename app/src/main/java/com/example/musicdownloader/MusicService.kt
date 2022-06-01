@@ -13,10 +13,7 @@ import androidx.core.app.NotificationCompat
 import coil.ImageLoader
 import coil.request.ImageRequest
 import coil.request.SuccessResult
-import com.example.musicdownloader.manager.MediaManager
-import com.example.musicdownloader.manager.MusicDonwnloadedManager
-import com.example.musicdownloader.manager.MusicManager
-import com.example.musicdownloader.manager.RepeatStatus
+import com.example.musicdownloader.manager.*
 import com.example.musicdownloader.model.MessageEvent
 import com.example.musicdownloader.model.Music
 import com.example.musicdownloader.model.MusicDownloaded
@@ -213,6 +210,7 @@ class MusicService : Service() {
     override fun onDestroy() {
         super.onDestroy()
         MediaManager.resetMedia()
+        DownloadingManager.fetch?.close()
     }
 
     private suspend fun getBitmapFromURL(url: String): Bitmap? {

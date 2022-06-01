@@ -55,12 +55,11 @@
             android:id="@+id/img_background_rectangle"
             android:layout_width="150dp"
             android:layout_height="71dp"
-            android:scaleType="fitXY"
-            android:layout_marginBottom="80dp"
             android:layout_marginStart="16dp"
-            android:src="@drawable/bg_play_music_rectangle"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="80dp"
             android:alpha="0"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
         <androidx.constraintlayout.utils.widget.ImageFilterView
@@ -74,15 +73,15 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/img_circle"
             android:layout_width="61dp"
             android:layout_height="61dp"
-            android:src="@drawable/background_play_music"
-            app:layout_constraintStart_toStartOf="@id/img_cover_background"
-            app:layout_constraintTop_toTopOf="@id/img_cover_background"
+            android:layout_marginStart="16dp"
+
             app:layout_constraintBottom_toBottomOf="@id/img_cover_background"
-            android:layout_marginStart="16dp"/>
+            app:layout_constraintStart_toStartOf="@id/img_cover_background"
+            app:layout_constraintTop_toTopOf="@id/img_cover_background" />
 
         <TextView
             android:id="@+id/tv_single"

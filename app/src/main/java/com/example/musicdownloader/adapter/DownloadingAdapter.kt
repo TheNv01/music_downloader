@@ -43,12 +43,13 @@ class DownloadingAdapter(
                     override fun onDownloadBlockUpdated(download: Download, downloadBlock: DownloadBlock, totalBlocks: Int) {}
                     override fun onError(download: Download, error: Error, throwable: Throwable?) {
                         Log.d("error", error.name)
+                        if(data.request.id == download.id){
+                            DownloadingManager.fetch!!.retry(data.request.id)
+                        }
                     }
                     override fun onPaused(download: Download) {}
                     override fun onResumed(download: Download) {}
-                    override fun onStarted(download: Download, downloadBlocks: List<DownloadBlock>, totalBlocks: Int) {
-                        Log.d("started", "ha")
-                    }
+                    override fun onStarted(download: Download, downloadBlocks: List<DownloadBlock>, totalBlocks: Int) {}
                     override fun onWaitingNetwork(download: Download) {}
                     override fun onAdded(download: Download) {}
                     override fun onCancelled(download: Download) {}

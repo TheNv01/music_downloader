@@ -2,16 +2,21 @@ package com.example.musicdownloader.view.fragment
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
 import android.view.animation.LinearInterpolator
+import android.widget.ImageView
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.motion.widget.MotionLayout
+import androidx.core.net.toUri
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResult
+import androidx.lifecycle.viewModelScope
 import androidx.navigation.findNavController
+import coil.load
 import com.example.musicdownloader.MusicService
 import com.example.musicdownloader.R
 import com.example.musicdownloader.cusomseekbar.ProgressListener
@@ -25,9 +30,12 @@ import com.example.musicdownloader.model.MessageEvent
 import com.example.musicdownloader.model.Music
 import com.example.musicdownloader.view.MainActivity
 import com.example.musicdownloader.viewmodel.PlayMusicViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import java.io.InputStream
 import kotlin.math.abs
 
 class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewModel>(), OnActionCallBack {
@@ -160,16 +168,42 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
             binding.tvMusic.text = music.artistName
             binding.tvSingle.text = music.name
             binding.tvProgressMax.text = formattedTime(music.duration!!)
-            initSeekBar()
+            bindImage(binding.imgBackgroundRectangle, music.image)
+            bindImage(binding.imgCircle, music.image)
+
         }
         else{
-            binding.tvMusic.text = MusicDonwnloadedManager.currentMusicDownloaded?.music
-            binding.tvSingle.text = MusicDonwnloadedManager.currentMusicDownloaded?.artist
-            binding.tvProgressMax.text = formattedTime(MusicDonwnloadedManager.currentMusicDownloaded?.duration!!.toInt())
-            initSeekBar()
+            val musicDownloaded = MusicDonwnloadedManager.currentMusicDownloaded
+            binding.tvMusic.text = musicDownloaded?.music
+            binding.tvSingle.text = musicDownloaded?.artist
+            binding.tvProgressMax.text = formattedTime(musicDownloaded?.duration!!.toInt())
+            binding.imgBackgroundRectangle.setImageBitmap(musicDownloaded.bitmap)
+            binding.imgCircle.setImageBitmap(musicDownloaded.bitmap)
         }
+        initSeekBar()
         gotoService(MusicService.ACTION_START)
 
+    }
+
+    private fun bindImage(imgView: ImageView, imgUrl: String?) {
+        if(imgUrl == null){
+            imgView.setImageResource(R.drawable.ic_broken_image)
+        }
+        else{
+            val reallyImgUrl: String = if(imgUrl.length < 15){
+                "http://marstechstudio.com/img-msd/$imgUrl"
+            }
+            else{
+                imgUrl
+            }
+            reallyImgUrl.let {
+                val imgUri = reallyImgUrl.toUri().buildUpon().scheme("http").build()
+                imgView.load(imgUri){
+                    placeholder(R.drawable.loading_animation)
+                    error(R.drawable.ic_broken_image)
+                }
+            }
+        }
     }
 
     private fun gotoService(action: Int){
