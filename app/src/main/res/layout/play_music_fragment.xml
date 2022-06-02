@@ -138,10 +138,22 @@
             android:id="@+id/ic_favorite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
             android:visibility="gone"
             android:src="@drawable/ic_favorite"
+            app:layout_constraintEnd_toStartOf="@id/ic_share"
+            app:layout_constraintBottom_toBottomOf="@id/tv_single"
+            app:layout_constraintTop_toTopOf="@+id/tv_single" />
+
+        <ImageView
+            android:id="@+id/ic_share"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:visibility="gone"
+            android:src="@drawable/ic_share"
+            app:layout_constraintStart_toEndOf="@id/ic_favorite"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/tv_single"
             app:layout_constraintTop_toTopOf="@+id/tv_single" />
 
         <TextView

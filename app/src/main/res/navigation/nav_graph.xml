@@ -22,6 +22,9 @@
         <action
             android:id="@+id/action_homeFragment_to_seeAllGenresFragment"
             app:destination="@id/seeAllGenresFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_insideGenresFragment"
+            app:destination="@id/insideGenresFragment" />
     </fragment>
     <fragment
         android:id="@+id/playListFragment"
@@ -53,6 +56,7 @@
             android:name="option"
             app:argType="string"
             app:nullable="true" />
+
     </fragment>
     <dialog
         android:id="@+id/changeRegionDialog"
@@ -78,6 +82,18 @@
     <fragment
         android:id="@+id/seeAllGenresFragment"
         android:name="com.example.musicdownloader.view.fragment.SeeAllGenresFragment"
-        android:label="SeeAllGenresFragment" />
+        android:label="SeeAllGenresFragment" >
+        <action
+            android:id="@+id/action_seeAllGenresFragment_to_insideGenresFragment"
+            app:destination="@id/insideGenresFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/insideGenresFragment"
+        android:name="com.example.musicdownloader.view.fragment.InsideGenresFragment"
+        android:label="InsideGenresFragment" >
+        <argument
+            android:name="genres"
+            app:argType="string" />
+    </fragment>
 
 </navigation>

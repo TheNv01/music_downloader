@@ -28,5 +28,11 @@ interface Api {
         @Query("offset") offset: Int,
         @Query("query") country: String = ""): General<List<Music>>
 
+    @GET("bygenre?")
+    suspend fun getMusicsByGenres(
+        @Query("query") genres: String,
+        @Query("offset") offset: Int,
+        @Query("country") country: String = "vn"): General<List<Music>>
+
 
 }

@@ -1,9 +1,11 @@
 package com.example.musicdownloader.view
 
-import android.content.pm.PackageManager
 import android.os.Bundle
-import android.widget.Toast
+import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.musicdownloader.R
@@ -26,6 +28,13 @@ class MainActivity : AppCompatActivity() {
     private fun setupBottomNavigation(){
         binding.bottomView.itemIconTintList = null
         binding.bottomView.setupWithNavController(findNavController(R.id.activity_main_nav_host_fragment))
+        findNavController(R.id.activity_main_nav_host_fragment).addOnDestinationChangedListener { _, destination, _ ->
+            if(destination.id == R.id.seeAllFragment || destination.id == R.id.insideGenresFragment) {
+                binding.bottomView.visibility = View.GONE
+            } else {
+                binding.bottomView.visibility = View.VISIBLE
+            }
+        }
     }
 
 

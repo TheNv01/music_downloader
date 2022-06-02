@@ -270,19 +270,18 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
         binding.layoutPlayMusic.setTransitionListener(object : MotionLayout.TransitionListener {
             override fun onTransitionChange(motionLayout: MotionLayout?, startId: Int, endId: Int, progress: Float) {
 
-                (activity as MainActivity).also {
-                    it.binding.mainMotionLayout.progress = abs(progress)
-                }
             }
             override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
-
-                (activity as MainActivity).also {
-                    if(binding.layoutPlayMusic.currentState == R.id.start){
-                        it.binding.mainMotionLayout.transitionToStart()
-                    }
+                if (currentId == R.id.end){
+                    (activity as MainActivity).binding.bottomView.visibility = View.GONE
                 }
+                else if (currentId == R.id.start){
+                    (activity as MainActivity).binding.bottomView.visibility = View.VISIBLE
+                }
+
             }
             override fun onTransitionStarted(p0: MotionLayout?, p1: Int, p2: Int) {
+
             }
             override fun onTransitionTrigger(p0: MotionLayout?, p1: Int, p2: Boolean, p3: Float) {
             }

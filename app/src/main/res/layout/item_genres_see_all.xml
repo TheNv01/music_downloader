@@ -13,17 +13,18 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_genres"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp">
+        android:layout_marginBottom="12dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginEnd="6dp">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/card_view"
-            android:layout_width="190dp"
-            android:layout_height="85dp"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
             app:cardCornerRadius="10dp"
             android:translationZ="1dp"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 

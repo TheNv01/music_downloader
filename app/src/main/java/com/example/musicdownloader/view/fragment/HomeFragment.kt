@@ -154,9 +154,9 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
             GenresBinding,
             object : ItemClickListener<Genres> {
                 override fun onClickListener(model: Genres) {
-                    Log.d("asdfasdf", "hahaha")
+                    val action = HomeFragmentDirections.actionHomeFragmentToInsideGenresFragment(model.name!!)
+                    requireActivity().findNavController(R.id.activity_main_nav_host_fragment).navigate(action)
                 }
-
             })
     }
 

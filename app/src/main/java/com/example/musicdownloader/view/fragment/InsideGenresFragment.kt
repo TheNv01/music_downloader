@@ -1,26 +1,32 @@
 package com.example.musicdownloader.view.fragment
 
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import androidx.navigation.fragment.navArgs
 import com.example.musicdownloader.R
 import com.example.musicdownloader.SharedPreferencesManager
-import com.example.musicdownloader.adapter.*
-import com.example.musicdownloader.databinding.SeeAllFragmentBinding
+import com.example.musicdownloader.adapter.GenericAdapter
+import com.example.musicdownloader.adapter.SearchBinding
+import com.example.musicdownloader.adapter.SeeAllBinding
+import com.example.musicdownloader.databinding.InsideGenresFragmentBinding
+import com.example.musicdownloader.databinding.SplashFragmentBinding
 import com.example.musicdownloader.interfaces.OnActionCallBack
 import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
 import com.example.musicdownloader.manager.MusicDonwnloadedManager
 import com.example.musicdownloader.manager.MusicManager
-import com.example.musicdownloader.model.Genres
 import com.example.musicdownloader.model.Music
 import com.example.musicdownloader.model.Region
 import com.example.musicdownloader.view.MainActivity
-import com.example.musicdownloader.viewmodel.SeeAllViewModel
+import com.example.musicdownloader.viewmodel.InsideGenresViewModel
+import com.example.musicdownloader.viewmodel.SplashViewModel
 
-class SeeAllFragment: BaseFragment<SeeAllFragmentBinding, SeeAllViewModel>(), OnActionCallBack {
+class InsideGenresFragment : BaseFragment<InsideGenresFragmentBinding, InsideGenresViewModel>(), OnActionCallBack {
+
 
     lateinit var callBack: OnActionCallBack
-    private val args: SeeAllFragmentArgs by navArgs()
+    private val args: InsideGenresFragmentArgs by navArgs()
 
     private val musicItemClickListener = object : ItemClickListener<Music> {
         override fun onClickListener(model: Music) {
@@ -31,32 +37,24 @@ class SeeAllFragment: BaseFragment<SeeAllFragmentBinding, SeeAllViewModel>(), On
         }
     }
 
-    private val menuClickListener = object : ItemClickListener<Music> {
-        override fun onClickListener(model: Music) {
-            TODO("Not yet implemented")
-        }
-
+    override fun initBinding(mRootView: View): InsideGenresFragmentBinding {
+        return InsideGenresFragmentBinding.bind(mRootView)
     }
 
-    override fun initBinding(mRootView: View): SeeAllFragmentBinding {
-        return SeeAllFragmentBinding.bind(mRootView)
-    }
-
-    override fun getViewModelClass(): Class<SeeAllViewModel> {
-        return SeeAllViewModel::class.java
+    override fun getViewModelClass(): Class<InsideGenresViewModel> {
+        return InsideGenresViewModel::class.java
     }
 
     override fun getLayoutId(): Int {
-        return R.layout.see_all_fragment
+        return R.layout.inside_genres_fragment
     }
+
 
     override fun initViews() {
         callBack = this
-        var option = args.option?.uppercase()
-        if(option == "RANKING"){
-            option = "RATING"
-        }
-        binding.tvTitle.text = getString(R.string.title, option)
+        binding.tvTitle.text = args.genres
+
+        loadData(args.genres)
 
     }
 
@@ -64,15 +62,14 @@ class SeeAllFragment: BaseFragment<SeeAllFragmentBinding, SeeAllViewModel>(), On
         binding.icBack.setOnClickListener {
             (activity as MainActivity).onBackPressed()
         }
-
     }
 
-    private fun loadData(option: String){
+    private fun loadData(genres: String){
         SharedPreferencesManager.get<Region>("country").let { region ->
             if (region == null) {
-                mViewModel.getMusics(option, null)
+                mViewModel.getMusics(genres, null)
             } else {
-                mViewModel.getMusics(option, region.regionCode)
+                mViewModel.getMusics(genres, region.regionCode)
             }
         }
     }
@@ -80,17 +77,16 @@ class SeeAllFragment: BaseFragment<SeeAllFragmentBinding, SeeAllViewModel>(), On
     override fun setUpObserver() {
         binding.viewmodel = mViewModel
         binding.lifecycleOwner = this
-        loadData(args.option.toString())
 
-        SeeAllBinding.itemClickListener = object : ItemClickListener<Music>{
+        SearchBinding.itemClickListener = object : ItemClickListener<Music>{
             override fun onClickListener(model: Music) {
                 Log.d("hahaha", model.name!!)
             }
 
         }
-        binding.recyclerViewSeeAll.adapter = GenericAdapter(
+        binding.recyclerViewGenres.adapter = GenericAdapter(
             R.layout.item_top_listened,
-            SeeAllBinding,
+            SearchBinding,
             musicItemClickListener)
     }
 
@@ -109,4 +105,6 @@ class SeeAllFragment: BaseFragment<SeeAllFragmentBinding, SeeAllViewModel>(), On
             tran?.commit()
         }
     }
+
+
 }

@@ -2,6 +2,7 @@ package com.example.musicdownloader.view.fragment
 
 import android.util.Log
 import android.view.View
+import androidx.navigation.findNavController
 import com.example.musicdownloader.R
 import com.example.musicdownloader.adapter.GenericAdapter
 import com.example.musicdownloader.adapter.GenresSeeAllBinding
@@ -41,7 +42,8 @@ class SeeAllGenresFragment : BaseFragment<SeeAllGenresFragmentBinding, SeeAllGen
             GenresSeeAllBinding,
             object : ItemClickListener<Genres> {
                 override fun onClickListener(model: Genres) {
-                    Log.d("asdfasdf", "hahaha")
+                    val action = SeeAllGenresFragmentDirections.actionSeeAllGenresFragmentToInsideGenresFragment(model.name!!)
+                    requireActivity().findNavController(R.id.activity_main_nav_host_fragment).navigate(action)
                 }
 
             })
