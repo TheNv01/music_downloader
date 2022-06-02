@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_homeFragment_to_changeRegionDialog"
             app:destination="@id/changeRegionDialog" />
+        <action
+            android:id="@+id/action_homeFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
     </fragment>
     <fragment
         android:id="@+id/playListFragment"
@@ -65,5 +68,9 @@
             android:name="playList"
             app:argType="com.example.musicdownloader.model.Playlist" />
     </fragment>
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.musicdownloader.view.fragment.SearchFragment"
+        android:label="SearchFragment" />
 
 </navigation>

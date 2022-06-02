@@ -210,7 +210,6 @@ class MusicService : Service() {
     override fun onDestroy() {
         super.onDestroy()
         MediaManager.resetMedia()
-        DownloadingManager.fetch?.close()
     }
 
     private suspend fun getBitmapFromURL(url: String): Bitmap? {

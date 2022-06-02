@@ -6,8 +6,18 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
+import androidx.databinding.ViewDataBinding
+import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.example.musicdownloader.adapter.GenericAdapter
 import com.example.musicdownloader.viewmodel.ApiStatus
+
+
+@BindingAdapter("listData")
+fun <T: Any, V: ViewDataBinding> bindRecyclerView(recyclerView: RecyclerView, data: List<T>?) {
+    val adapter = recyclerView.adapter as GenericAdapter<T, V>
+    adapter.submitList(data)
+}
 
 @BindingAdapter("imageUrl")
 fun bindImage(imgView: ImageView, imgUrl: String?) {

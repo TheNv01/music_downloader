@@ -8,6 +8,7 @@ import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
@@ -137,7 +138,15 @@ class AddFavoriteFragment: BaseFragment<AddFavoriteFragmentBinding, AddFavoriteV
                     if (!file.exists()){
                         file.mkdirs()
                     }
-                    checkPermissions()
+                    if(MusicManager.getCurrentMusic()?.audioDownloadAllowed == true){
+                        checkPermissions()
+                    }
+                    else{
+                        val toast = Toast.makeText(context, "Can't download", Toast.LENGTH_SHORT)
+                        toast.setGravity(Gravity.CENTER, 0, 0)
+                        toast.show()
+                    }
+
                 }
             }
             binding.layoutBottom.addView(v)
@@ -169,13 +178,11 @@ class AddFavoriteFragment: BaseFragment<AddFavoriteFragmentBinding, AddFavoriteV
                 override fun onDeleted(download: Download) {}
                 override fun onDownloadBlockUpdated(download: Download, downloadBlock: DownloadBlock, totalBlocks: Int) {}
                 override fun onError(download: Download, error: Error, throwable: Throwable?) {
-                    Log.d("error", error.name)
+                    DownloadingManager.fetch!!.retry(request.id)
                 }
                 override fun onPaused(download: Download) {}
                 override fun onResumed(download: Download) {}
-                override fun onStarted(download: Download, downloadBlocks: List<DownloadBlock>, totalBlocks: Int) {
-                    Log.d("started", "ha")
-                }
+                override fun onStarted(download: Download, downloadBlocks: List<DownloadBlock>, totalBlocks: Int) {}
                 override fun onWaitingNetwork(download: Download) {}
                 override fun onAdded(download: Download) {}
                 override fun onCancelled(download: Download) {}

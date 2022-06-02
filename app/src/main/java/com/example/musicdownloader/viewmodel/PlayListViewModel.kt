@@ -51,7 +51,6 @@ class PlayListViewModel(application: Application) : AndroidViewModel(application
                 musics.add(music)
                 repository.updatePlaylist(Playlist(name, musics, id))
             }
-
         }
     }
 }

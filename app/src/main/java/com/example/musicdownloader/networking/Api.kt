@@ -23,4 +23,10 @@ interface Api {
     @GET("genre")
     suspend fun getGenres(): General<List<Genres>>
 
+    @GET("search?")
+    suspend fun searchMusic(
+        @Query("offset") offset: Int,
+        @Query("query") country: String = ""): General<List<Music>>
+
+
 }

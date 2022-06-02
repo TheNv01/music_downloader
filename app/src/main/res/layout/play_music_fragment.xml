@@ -24,10 +24,10 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginEnd="10dp"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/img_cover_background"
             app:layout_constraintEnd_toStartOf="@id/ic_play_or_pause"
-            app:layout_constraintTop_toTopOf="@id/img_cover_background"
-            app:layout_constraintBottom_toBottomOf="@id/img_cover_background"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/img_cover_background" />
 
         <ImageView
             android:id="@+id/ic_back"
@@ -67,8 +67,8 @@
             android:layout_width="match_parent"
             android:layout_height="71dp"
             android:layout_marginBottom="80dp"
-            android:src="@drawable/cover_background_expand"
             android:scaleType="fitXY"
+            android:src="@drawable/cover_background_expand"
             app:altSrc="@drawable/cover_background_collapsed"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

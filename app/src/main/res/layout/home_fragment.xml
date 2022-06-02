@@ -56,6 +56,7 @@
 
 
             <ImageView
+                android:id="@+id/ic_search"
                 android:layout_width="20dp"
                 android:layout_height="0dp"
                 android:src="@drawable/ic_search"
@@ -134,6 +135,7 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="5dp"
                 android:orientation="horizontal"
+                listData="@{viewmodel.topRatings}"
                 app:layout_constraintTop_toBottomOf="@id/tv_top_rating"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 apiStatusView="@{viewmodel.statusRating}"/>
@@ -182,6 +184,7 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="10dp"
                 android:orientation="vertical"
+                listData="@{viewmodel.topListeneds}"
                 apiStatusView="@{viewmodel.statusListened}"
                 app:layout_constraintTop_toBottomOf="@id/tv_top_listened"
                 app:layout_constraintStart_toStartOf="parent"
@@ -232,6 +235,7 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal"
+                listData="@{viewmodel.topDownloads}"
                 apiStatusView="@{viewmodel.statusDownload}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -283,6 +287,7 @@
                 android:layout_marginStart="18dp"
                 android:layout_marginTop="21dp"
                 android:orientation="horizontal"
+                listData="@{viewmodel.genres}"
                 apiStatusView="@{viewmodel.statusGenres}"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

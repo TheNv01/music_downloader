@@ -14,6 +14,7 @@ import com.example.musicdownloader.adapter.*
 import com.example.musicdownloader.databinding.HomeFragmentBinding
 import com.example.musicdownloader.interfaces.OnActionCallBack
 import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
+import com.example.musicdownloader.adapter.TopListenedBinding
 import com.example.musicdownloader.manager.MusicDonwnloadedManager
 import com.example.musicdownloader.manager.MusicManager
 import com.example.musicdownloader.model.Genres
@@ -67,6 +68,11 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
     }
 
     override fun setUpListener() {
+
+        binding.icSearch.setOnClickListener {
+            requireActivity().findNavController(R.id.activity_main_nav_host_fragment).navigate(R.id.searchFragment)
+        }
+
         binding.tvSeeAllDownload.setOnClickListener {
             val action = HomeFragmentDirections.actionHomeFragmentToSeeAllFragment("download")
             requireActivity().findNavController(R.id.activity_main_nav_host_fragment).navigate(action)
@@ -123,37 +129,34 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
 
     private fun setupRecyclerview(){
 
-        mViewModel.topRatings.observe(this){
-            binding.recyclerViewTopRating.adapter = TopRatingAdapter(
-                R.layout.item_top_rating,
-                it,
-                musicItemClickListener)
-        }
-        mViewModel.topListeneds.observe(this){
-            binding.recyclerViewTopListened.adapter = TopListenedAdapter(
-                R.layout.item_top_listened,
-                true,
-                it,
-                musicItemClickListener,
-                menuClickListener)
-        }
-        mViewModel.topDownloads.observe(this){
-            binding.recyclerViewTopDownload.adapter = TopDownloadAdapter(
-                R.layout.item_top_download,
-                it,
-                musicItemClickListener)
-        }
-        mViewModel.genres.observe(this){
-            binding.recyclerViewGenres.adapter = GenresAdapter(
-                R.layout.item_genres,
-                it,
-                object : ItemClickListener<Genres> {
-                    override fun onClickListener(model: Genres) {
-                        Log.d("asdfasdf", "hahaha")
-                    }
+        TopListenedBinding.itemClickListener = object : ItemClickListener<Music>{
+            override fun onClickListener(model: Music) {
+                Log.d("hahaha", model.name!!)
+            }
 
-                })
         }
+        binding.recyclerViewTopRating.adapter = GenericAdapter(
+            R.layout.item_top_rating,
+            TopRatingBinding,
+            musicItemClickListener)
+
+        binding.recyclerViewTopListened.adapter = GenericAdapter(
+            R.layout.item_top_listened,
+            TopListenedBinding,
+            musicItemClickListener)
+        binding.recyclerViewTopDownload.adapter = GenericAdapter(
+            R.layout.item_top_download,
+            TopDownloadBinding,
+            musicItemClickListener)
+        binding.recyclerViewGenres.adapter = GenericAdapter(
+            R.layout.item_genres,
+            GenresBinding,
+            object : ItemClickListener<Genres> {
+                override fun onClickListener(model: Genres) {
+                    Log.d("asdfasdf", "hahaha")
+                }
+
+            })
     }
 
     private fun setupTrendingViewPager(){

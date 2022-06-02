@@ -1,6 +1,8 @@
 package com.example.musicdownloader.view.fragment
 
-import android.util.Log
+import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
@@ -46,11 +48,20 @@ class SettingFragment: BaseFragment<SettingFragmentBinding, SettingViewModel>() 
         return view
     }
 
+    @SuppressLint("QueryPermissionsNeeded")
     private fun setUpLayoutTopic() {
         for (option in mViewModel.optionSettings) {
             val v: View = initTopicView(option)
             v.setOnClickListener {
-                Log.d("tag", "hello")
+                if(option.icon == R.drawable.ic_feedback){
+                    val intent = Intent(Intent.ACTION_SENDTO)
+                    intent.data = Uri.parse("mailto:")
+                    intent.putExtra(Intent.EXTRA_EMAIL, arrayOf("lionelvanthe@gmail.com"))
+                    intent.putExtra(Intent.EXTRA_SUBJECT, "Feedback: MUSIC DOWNLOADER")
+                    if (intent.resolveActivity(requireContext().packageManager) != null) {
+                        startActivity(intent)
+                    }
+                }
             }
             binding.layoutBottom.addView(v)
         }

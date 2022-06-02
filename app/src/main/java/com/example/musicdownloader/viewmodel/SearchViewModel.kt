@@ -3,33 +3,31 @@ package com.example.musicdownloader.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.musicdownloader.model.Genres
 import com.example.musicdownloader.model.Music
 import com.example.musicdownloader.networking.Services
 import kotlinx.coroutines.launch
 
-class SeeAllViewModel: BaseViewModel() {
-    private var _status = MutableLiveData<ApiStatus>()
-    val status: LiveData<ApiStatus> = _status
+class SearchViewModel: BaseViewModel() {
 
     private var _musics = MutableLiveData<List<Music>>()
     val musics: LiveData<List<Music>> = _musics
 
+    init {
+        getMusics(null)
+    }
 
-    fun  getMusics(option: String, country: String?, offset: Int = 0,){
+    fun  getMusics(keyword: String?, offset: Int = 0){
         viewModelScope.launch {
             try{
-                if(country == null){
-                    Services.retrofitService.getMusics(option, offset).let {
+                if(keyword == null){
+                    Services.retrofitService.searchMusic( offset).let {
                         _musics.value = it.data
                     }
-                    _status.value = ApiStatus.DONE
                 }
                 else{
-                    Services.retrofitService.getMusics(option, offset,country).let {
+                    Services.retrofitService.searchMusic(offset, keyword).let {
                         _musics.value = it.data
                     }
-                    _status.value = ApiStatus.DONE
                 }
 
             } catch (e: Exception){

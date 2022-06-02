@@ -25,9 +25,7 @@ class DownloadFragment: BaseFragment<DownloadFragmentBinding, DownloadViewModel>
     }
 
     override fun initViews() {
-
         setUpViewPager()
-        reduceMarginsInTabs(binding.tabLayout)
     }
 
     override fun setUpListener() {
@@ -49,19 +47,5 @@ class DownloadFragment: BaseFragment<DownloadFragmentBinding, DownloadViewModel>
             tab.text = adapter.getTabTitle(position)
         }.attach()
 
-    }
-
-    private fun reduceMarginsInTabs(tabLayout: TabLayout) {
-        val tabStrip = tabLayout.getChildAt(0)
-        if (tabStrip is ViewGroup) {
-            for (i in 0 until tabStrip.childCount) {
-                val tabView = tabStrip.getChildAt(i)
-                if (tabView.layoutParams is MarginLayoutParams) {
-                    (tabView.layoutParams as MarginLayoutParams).leftMargin = 125
-                    (tabView.layoutParams as MarginLayoutParams).rightMargin = 125
-                }
-            }
-            tabLayout.requestLayout()
-        }
     }
 }
