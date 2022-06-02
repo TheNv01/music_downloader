@@ -19,6 +19,9 @@
         <action
             android:id="@+id/action_homeFragment_to_searchFragment"
             app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_seeAllGenresFragment"
+            app:destination="@id/seeAllGenresFragment" />
     </fragment>
     <fragment
         android:id="@+id/playListFragment"
@@ -72,5 +75,9 @@
         android:id="@+id/searchFragment"
         android:name="com.example.musicdownloader.view.fragment.SearchFragment"
         android:label="SearchFragment" />
+    <fragment
+        android:id="@+id/seeAllGenresFragment"
+        android:name="com.example.musicdownloader.view.fragment.SeeAllGenresFragment"
+        android:label="SeeAllGenresFragment" />
 
 </navigation>

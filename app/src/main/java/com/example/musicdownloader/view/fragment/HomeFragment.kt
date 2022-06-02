@@ -86,6 +86,7 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
             requireActivity().findNavController(R.id.activity_main_nav_host_fragment).navigate(action)
         }
         binding.tvSeeAllGenres.setOnClickListener {
+            requireActivity().findNavController(R.id.activity_main_nav_host_fragment).navigate(R.id.seeAllGenresFragment)
         }
         binding.tvRegion.setOnClickListener {
             (activity as MainActivity).findNavController(R.id.activity_main_nav_host_fragment).navigate(R.id.changeRegionDialog)
