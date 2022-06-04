@@ -37,6 +37,9 @@
         <action
             android:id="@+id/action_playListFragment_to_playlistNoDataFragment"
             app:destination="@id/playlistNoDataFragment" />
+        <action
+            android:id="@+id/action_playListFragment_to_favoriteFragment"
+            app:destination="@id/favoriteFragment" />
     </fragment>
     <fragment
         android:id="@+id/downloadFragment"
@@ -130,5 +133,9 @@
             app:argType="integer"
             android:defaultValue="-1" />
     </fragment>
+    <fragment
+        android:id="@+id/favoriteFragment"
+        android:name="com.example.musicdownloader.view.fragment.FavoriteFragment"
+        android:label="FavoriteFragment" />
 
 </navigation>

@@ -6,14 +6,17 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.musicdownloader.TypeConverter
+import com.example.musicdownloader.database.dao.FavoriteDAO
 import com.example.musicdownloader.database.dao.PlaylistDAO
+import com.example.musicdownloader.model.Music
 import com.example.musicdownloader.model.Playlist
 
-@Database(entities = [Playlist::class], version = 1, exportSchema = false)
+@Database(entities = [Playlist::class, Music::class], version = 1, exportSchema = false)
 @TypeConverters(TypeConverter::class)
 abstract class MusicRoomDatabase : RoomDatabase() {
 
     abstract fun playlistDAO(): PlaylistDAO
+    abstract fun favoriteDAO(): FavoriteDAO
 
     object MusicDatabaseBuilder{
 

@@ -10,6 +10,7 @@ import com.example.musicdownloader.database.MusicRoomDatabase
 import com.example.musicdownloader.model.Music
 import com.example.musicdownloader.model.Option
 import com.example.musicdownloader.model.Playlist
+import com.example.musicdownloader.repository.FavoriteRepository
 import com.example.musicdownloader.repository.PlaylistRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,21 +19,30 @@ class PlaylistOnViewModel(application: Application) : AndroidViewModel(applicati
 
     val existingPlaylist: LiveData<List<Playlist>>
     val optionsDownloaded = ArrayList<Option>()
-    private val repository: PlaylistRepository
+    private val playlistRepository: PlaylistRepository
     var id = MutableLiveData<Long>()
+    private val favoriteRepository: FavoriteRepository
+    val musics: LiveData<List<Music>>
+
 
     init {
         val playlistDAO =
             MusicRoomDatabase.MusicDatabaseBuilder.getInstance(application.applicationContext)
                 .playlistDAO()
-        repository = PlaylistRepository(playlistDAO)
-        existingPlaylist = repository.playlists
+        playlistRepository = PlaylistRepository(playlistDAO)
+
+        val favoriteDAO =
+            MusicRoomDatabase.MusicDatabaseBuilder.getInstance(application.applicationContext)
+                .favoriteDAO()
+        favoriteRepository = FavoriteRepository(favoriteDAO)
+        existingPlaylist = playlistRepository.playlists
+        musics = favoriteRepository.musics
         initOption()
     }
 
     fun createPlaylist(playlist: Playlist) {
         viewModelScope.launch(Dispatchers.IO) {
-            id.postValue(repository.insertPlaylist(playlist))
+            id.postValue(playlistRepository.insertPlaylist(playlist))
         }
     }
 
@@ -43,12 +53,12 @@ class PlaylistOnViewModel(application: Application) : AndroidViewModel(applicati
     }
 
     fun deletePlaylist(id: Int){
-        repository.deletePlaylist(id)
+        playlistRepository.deletePlaylist(id)
     }
 
     fun renamePlaylist(name: String, id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.renamePlaylist(name, id)
+            playlistRepository.renamePlaylist(name, id)
         }
     }
 

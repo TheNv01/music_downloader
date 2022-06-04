@@ -1,8 +1,12 @@
 package com.example.musicdownloader.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import java.io.Serializable
 
+@Entity(tableName = "favorite")
 data class Music(
+    @PrimaryKey
     val id: String,
     val name: String?,
     val duration: Int?,

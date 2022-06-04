@@ -1,6 +1,5 @@
 package com.example.musicdownloader.adapter
 
-import android.graphics.Color
 import com.example.musicdownloader.databinding.ItemTopListenedBinding
 import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
 import com.example.musicdownloader.interfaces.recyclerbindinginterface.RecyclerBindingInterface

@@ -37,6 +37,10 @@ class PlaylistOnFragment: BaseFragment<PlaylistOnFragmentBinding, PlaylistOnView
         binding.imgBackgroundCreate.setOnClickListener {
             showCreatePlaylistDialog()
         }
+        binding.imgBackgroundFavorite.setOnClickListener {
+            val action = PlayListFragmentDirections.actionPlayListFragmentToFavoriteFragment()
+            requireActivity().findNavController(R.id.activity_main_nav_host_fragment).navigate(action)
+        }
     }
 
     override fun setUpObserver() {

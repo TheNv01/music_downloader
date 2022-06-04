@@ -97,6 +97,7 @@ fun bindImage(imgView: ImageView, bitmap: Bitmap?) {
 }
 
 
+
 @BindingAdapter("fromResource")
 fun setBackground(imgView: ImageView, resource: Int) {
     imgView.setImageResource(resource)
@@ -130,5 +131,15 @@ fun bindStatusView(view: View, status: ApiStatus?) {
     }
     else{
         view.visibility = View.INVISIBLE
+    }
+}
+
+@BindingAdapter("setFavorite")
+fun bindStatusFavorite(imgView: ImageView, isExisted: Boolean) {
+    if(isExisted){
+        imgView.setImageResource(R.drawable.ic_favorite_selected)
+    }
+    else{
+        imgView.setImageResource(R.drawable.ic_favorite)
     }
 }

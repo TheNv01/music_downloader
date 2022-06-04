@@ -2,7 +2,6 @@ package com.example.musicdownloader.view.fragment
 
 import android.app.Dialog
 import android.content.Intent
-import android.net.Uri
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
@@ -121,10 +120,10 @@ class PlaylistInsideFragment : BaseFragment<PlaylistInsideFragmentBinding, Playl
         mViewModel.existingPlaylist.observe(viewLifecycleOwner){
             loadData()
         }
-        mViewModel.musics.observe(viewLifecycleOwner){
-            binding.tvQuantitySong.text = getString(R.string.number_music,it.size.toString())
-
-        }
+//        mViewModel.musics.observe(viewLifecycleOwner){
+//            binding.tvQuantitySong.text = getString(R.string.number_music,it.size.toString())
+//
+//        }
     }
 
     private fun setupRecyclerview(){

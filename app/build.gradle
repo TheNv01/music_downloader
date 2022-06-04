@@ -95,6 +95,5 @@ dependencies {
     kapt "androidx.room:room-compiler:2.4.2"
     implementation "androidx.tonyodev.fetch2:xfetch2:3.1.6"
 
-    implementation 'com.liulishuo.filedownloader:library:1.7.7'
 
 }

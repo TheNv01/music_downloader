@@ -55,7 +55,7 @@
                 android:maxLines="1"
                 android:alpha="0.5"
                 android:ellipsize="end"
-                android:text="0 songs"
+                intToString="@{viewmodel.musics.size()}"
                 app:layout_constraintStart_toEndOf="@id/img_background_favorite"
                 app:layout_constraintTop_toBottomOf="@id/tv_name_playlist"
                 app:layout_constraintBottom_toBottomOf="@id/img_background_favorite"

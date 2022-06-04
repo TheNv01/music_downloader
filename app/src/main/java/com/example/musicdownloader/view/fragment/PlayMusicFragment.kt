@@ -17,7 +17,6 @@ import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.findNavController
 import coil.load
 import com.example.musicdownloader.MusicService
@@ -29,16 +28,11 @@ import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListen
 import com.example.musicdownloader.manager.*
 import com.example.musicdownloader.model.MessageEvent
 import com.example.musicdownloader.model.Music
-import com.example.musicdownloader.model.MusicDownloading
-import com.example.musicdownloader.networking.Services
 import com.example.musicdownloader.view.MainActivity
 import com.example.musicdownloader.view.dialog.AddToPlaylistBottomDialog
 import com.example.musicdownloader.view.dialog.BottomDialog
 import com.example.musicdownloader.viewmodel.PlayMusicViewModel
-import com.tonyodev.fetch2.*
-import com.tonyodev.fetch2core.DownloadBlock
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -49,6 +43,8 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
     lateinit var callBack: OnActionCallBack
     lateinit var file: File
     private var bottomSheetDialog: BottomDialog ?= null
+
+    private var isExited: Boolean = false
 
     companion object{
         const val KEY_SHOW_SERVICE = "KEY_SHOW_SERVICE"
@@ -110,8 +106,11 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
         if(MusicDonwnloadedManager.currentMusicDownloaded == null){
             mViewModel.initOption(false)
             playSong(MusicManager.getCurrentMusic()!!)
+            mViewModel.existInFavorite()
+
         }
         else{
+            binding.icFavorite.setImageResource(R.drawable.ic_add_to_playlist)
             mViewModel.initOption()
             playSong()
         }
@@ -120,9 +119,6 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
     override fun setUpListener() {
 
         setupMotionLayout()
-        binding.icFavorite.setOnClickListener {
-           Log.d("asdfas", "hahaha")
-        }
         binding.icMenu.setOnClickListener {
             openBottomSheet()
         }
@@ -152,6 +148,35 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
         binding.icShare.setOnClickListener {
             shareMusic()
         }
+        binding.icFavorite.setOnClickListener {
+            if(MusicDonwnloadedManager.currentMusicDownloaded == null){
+                if(!isExited){
+                    insertMusicToFavorite()
+                }
+                else{
+                    deleteMusicFromFavorite()
+                }
+                mViewModel.existInFavorite()
+            }
+        }
+    }
+
+    private fun insertMusicToFavorite(){
+        val music = MusicManager.getCurrentMusic()!!
+        music.isFavorite = true
+        mViewModel.insertMusicToFavorite(music)
+        binding.icFavorite.setImageResource(R.drawable.ic_favorite_selected)
+        val toast = Toast.makeText(context, "Added the song to the favorite", Toast.LENGTH_SHORT)
+        toast.setGravity(Gravity.CENTER, 0, 0)
+        toast.show()
+    }
+    private fun deleteMusicFromFavorite(){
+        val music = MusicManager.getCurrentMusic()!!
+        mViewModel.deleteMusicFromFavorite(music.id)
+        binding.icFavorite.setImageResource(R.drawable.ic_favorite)
+        val toast = Toast.makeText(context, "Deleted the song to the favorite", Toast.LENGTH_SHORT)
+        toast.setGravity(Gravity.CENTER, 0, 0)
+        toast.show()
     }
 
     private fun shareMusic(){
@@ -165,13 +190,14 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
             }
         }
         else{
-            intent.type = "audio/mp3";
+            intent.type = "audio/mp3"
             intent.putExtra(Intent.EXTRA_STREAM, Uri.parse(MusicDonwnloadedManager.currentMusicDownloaded!!.uri.toString()))
             Log.d("urrrrrll;", MusicDonwnloadedManager.currentMusicDownloaded!!.uri.toString())
             startActivity(Intent.createChooser(intent, "Share file"))
         }
 
     }
+
 
     private fun openBottomSheet() {
         if(bottomSheetDialog == null){
@@ -186,7 +212,17 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
                         bottomSheetDialog.show((activity as MainActivity).supportFragmentManager, null)
                     }
                     R.drawable.ic_favorite ->{
-                        binding.icFavorite.setImageResource(R.drawable.ic_favorite_selected)
+                        if(MusicManager.getCurrentMusic() != null){
+                            if(isExited){
+                                val toast = Toast.makeText(context, "the song already exists in favorite", Toast.LENGTH_SHORT)
+                                toast.setGravity(Gravity.CENTER, 0, 0)
+                                toast.show()
+                            }
+                            else{
+                                insertMusicToFavorite()
+                            }
+
+                        }
                     }
                     R.drawable.ic_white_dowload ->{
                         file = File(Environment.getExternalStorageDirectory().toString().plus("/music downloader"))
@@ -208,67 +244,24 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
         }
     }
 
-    private fun startDownload(){
-        val path = file.toString() +"/"+ MusicManager.getCurrentMusic()!!.name.plus(".mp3")
-        val request = Request(MusicManager.getCurrentMusic()!!.audioDownload!!, path)
-        request.priority = Priority.HIGH
-        request.networkType = NetworkType.ALL
-
-        val musicDownloading = MusicDownloading(MusicManager.getCurrentMusic()!!.name!!,
-            MusicManager.getCurrentMusic()!!.artistName!!,
-            request)
-
-        DownloadingManager.listDownloading().add(musicDownloading)
-
-        mViewModel.viewModelScope.launch(Dispatchers.IO) {
-            DownloadingManager.getFetch(requireContext()).enqueue(request,
-                { Toast.makeText(context, "Downloading...", Toast.LENGTH_SHORT).show()},
-                { Toast.makeText(context, "Something wrong!...", Toast.LENGTH_SHORT).show() })
-            DownloadingManager.fetch!!.addListener(
-                object : FetchListener {
-                    override fun onQueued(download: Download, waitingOnNetwork: Boolean) {}
-                    override fun onRemoved(download: Download) {}
-                    override fun onCompleted(download: Download) {
-                        DownloadingManager.listDownloading().remove(musicDownloading)
-                    }
-                    override fun onDeleted(download: Download) {}
-                    override fun onDownloadBlockUpdated(download: Download, downloadBlock: DownloadBlock, totalBlocks: Int) {}
-                    override fun onError(download: Download, error: Error, throwable: Throwable?) {
-                        DownloadingManager.fetch!!.retry(request.id)
-                    }
-                    override fun onPaused(download: Download) {}
-                    override fun onResumed(download: Download) {}
-                    override fun onStarted(download: Download, downloadBlocks: List<DownloadBlock>, totalBlocks: Int) {}
-                    override fun onWaitingNetwork(download: Download) {}
-                    override fun onAdded(download: Download) {}
-                    override fun onCancelled(download: Download) {}
-                    override fun onProgress(
-                        download: Download,
-                        etaInMilliSeconds: Long,
-                        downloadedBytesPerSecond: Long
-                    ) {}
-
-                })
-        }
-    }
     private val permReqLauncher =
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
             val granted = permissions.entries.all {
                 it.value == true
             }
             if (granted) {
-                startDownload()
+                mViewModel.startDownload(file)
             }
         }
 
     private fun checkPermissions() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            startDownload()
+            mViewModel.startDownload(file)
         }
         val permission = arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
         activity?.let {
             if (hasPermissions(activity as Context, permission)) {
-                startDownload()
+                mViewModel.startDownload(file)
             } else {
                 permReqLauncher.launch(
                     permission
@@ -282,6 +275,13 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
     }
 
     override fun setUpObserver() {
+        binding.viewmodel = mViewModel
+        binding.lifecycleOwner = viewLifecycleOwner
+
+        mViewModel.isExisted.observe(viewLifecycleOwner){
+            isExited = it
+        }
+
         (activity as MainActivity).onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 if(binding.layoutPlayMusic.currentState != R.id.start){
@@ -309,7 +309,6 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
             binding.tvProgressMax.text = formattedTime(music.duration!!)
             bindImage(binding.imgBackgroundRectangle, music.image)
             bindImage(binding.imgCircle, music.image)
-
         }
         else{
             val musicDownloaded = MusicDonwnloadedManager.currentMusicDownloaded
@@ -458,6 +457,7 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
     fun updateSong() {
         if(MusicDonwnloadedManager.currentMusicDownloaded == null){
             playSong(MusicManager.getCurrentMusic()!!)
+            mViewModel.existInFavorite()
         }
         else{
             playSong()

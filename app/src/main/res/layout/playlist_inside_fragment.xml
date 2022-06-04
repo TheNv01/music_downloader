@@ -103,6 +103,7 @@
             android:textSize="12sp"
             android:alpha="0.5"
             android:layout_marginTop="9dp"
+            intToString="@{viewmodel.musics.size()}"
             app:layout_constraintStart_toStartOf="@id/tv_name_playlist"
             app:layout_constraintBottom_toTopOf="@id/tv_add_song"
             app:layout_constraintTop_toBottomOf="@id/tv_name_playlist"/>
