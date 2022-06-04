@@ -15,10 +15,12 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.app.ActivityCompat
+import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.findNavController
 import coil.load
+import com.example.musicdownloader.BuildConfig
 import com.example.musicdownloader.MusicService
 import com.example.musicdownloader.R
 import com.example.musicdownloader.cusomseekbar.ProgressListener
@@ -190,10 +192,18 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
             }
         }
         else{
-            intent.type = "audio/mp3"
-            intent.putExtra(Intent.EXTRA_STREAM, Uri.parse(MusicDonwnloadedManager.currentMusicDownloaded!!.uri.toString()))
-            Log.d("urrrrrll;", MusicDonwnloadedManager.currentMusicDownloaded!!.uri.toString())
-            startActivity(Intent.createChooser(intent, "Share file"))
+            val fileUri: Uri = FileProvider.getUriForFile(
+                requireContext(),
+                BuildConfig.APPLICATION_ID + ".provider",
+                File(MusicDonwnloadedManager.currentMusicDownloaded!!.uri)
+            )
+
+
+            intent.type = "audio/*"
+            intent.setDataAndType(fileUri, requireContext().contentResolver.getType(fileUri))
+            intent.putExtra(Intent.EXTRA_STREAM, fileUri)
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            startActivity(Intent.createChooser(intent, "Share Sound File"))
         }
 
     }
