@@ -70,7 +70,8 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
     override fun setUpListener() {
 
         binding.icSearch.setOnClickListener {
-            requireActivity().findNavController(R.id.activity_main_nav_host_fragment).navigate(R.id.searchFragment)
+            val action = HomeFragmentDirections.actionHomeFragmentToSearchFragment( 0)
+            requireActivity().findNavController(R.id.activity_main_nav_host_fragment).navigate(action)
         }
 
         binding.tvSeeAllDownload.setOnClickListener {
@@ -122,7 +123,7 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
                 mViewModel.factoryMusics("download", it.regionCode)
             }
         }
-        binding.lifecycleOwner = this
+        binding.lifecycleOwner = viewLifecycleOwner
         binding.viewmodel = mViewModel
         setupTrendingViewPager()
         setupRecyclerview()

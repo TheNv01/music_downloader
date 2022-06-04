@@ -22,5 +22,7 @@ data class Music(
     val shareurl: String?,
     val image: String?,
     val audioDownloadAllowed: Boolean?,
-    val source: String?
+    val source: String?,
+    var isFavorite: Boolean = false,
+    var isAddToPlaylist: Boolean = false
 ): Serializable

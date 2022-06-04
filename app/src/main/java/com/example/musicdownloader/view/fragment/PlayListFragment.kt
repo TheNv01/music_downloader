@@ -1,20 +1,14 @@
 package com.example.musicdownloader.view.fragment
 
-import android.util.Log
 import android.view.View
-import androidx.fragment.app.setFragmentResultListener
-import androidx.navigation.findNavController
 import com.example.musicdownloader.R
-import com.example.musicdownloader.adapter.ExistingPlaylistAdapter
+import com.example.musicdownloader.adapter.FragmentAdapter
 import com.example.musicdownloader.databinding.PlayListFragmentBinding
-import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
-import com.example.musicdownloader.model.Playlist
-import com.example.musicdownloader.view.MainActivity
 import com.example.musicdownloader.viewmodel.PlayListViewModel
+import com.google.android.material.tabs.TabLayoutMediator
 
 class PlayListFragment: BaseFragment<PlayListFragmentBinding, PlayListViewModel>() {
 
-    private lateinit var adapter: ExistingPlaylistAdapter
 
     override fun initBinding(mRootView: View): PlayListFragmentBinding {
         return PlayListFragmentBinding.bind(mRootView)
@@ -29,36 +23,26 @@ class PlayListFragment: BaseFragment<PlayListFragmentBinding, PlayListViewModel>
     }
 
     override fun initViews() {
-
+        setUpViewPager()
     }
 
     override fun setUpListener() {
-        binding.imgBackgroundCreate.setOnClickListener {
-            (activity as MainActivity).findNavController(R.id.activity_main_nav_host_fragment).navigate(R.id.createPlaylistDialog)
-        }
+
     }
 
     override fun setUpObserver() {
-        mViewModel.existingPlaylist.observe(this){
-            adapter = ExistingPlaylistAdapter(
-                R.layout.item_existing_playlist,
-                it as ArrayList<Playlist>,
-                false,
-                object : ItemClickListener<Playlist> {
-                    override fun onClickListener(model: Playlist) {
-                        val action = PlayListFragmentDirections.actionPlayListFragmentToPlaylistInsideFragment(model)
-                        requireActivity().findNavController(R.id.activity_main_nav_host_fragment).navigate(action)
-                    }
-                })
-            binding.recyclerViewExistingPlaylist.adapter = adapter
-        }
-        setFragmentResultListener("playlistKey") { _, bundle ->
-            bundle.get("playlist").also {
-                if(it is String){
-                    Log.d("afasfasd", it)
-                    mViewModel.createPlaylist(Playlist(it, ArrayList()))
-                }
-            }
-        }
+    }
+
+    private fun setUpViewPager(){
+        val adapter = FragmentAdapter(this)
+        adapter.addFragment(PlaylistOnFragment(), "Online Music")
+        adapter.addFragment(PlaylistOffFragment(), "My Music")
+
+        binding.viewPager.adapter = adapter
+        binding.viewPager.currentItem = 0
+        TabLayoutMediator(binding.tabLayout, binding.viewPager) { tab, position ->
+            tab.text = adapter.getTabTitle(position)
+        }.attach()
+
     }
 }

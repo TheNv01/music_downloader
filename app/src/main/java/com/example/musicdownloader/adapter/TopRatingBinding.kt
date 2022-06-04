@@ -12,6 +12,7 @@ object TopRatingBinding: RecyclerBindingInterface<ItemTopRatingBinding, Music> {
         position: Int,
         itemListener: ItemClickListener<Music>) {
         binder.music = model
+        binder.tvOrder.text = "#${(position + 1)}"
         binder.layoutTopRatting.setOnClickListener{
             itemListener.onClickListener(model)
         }

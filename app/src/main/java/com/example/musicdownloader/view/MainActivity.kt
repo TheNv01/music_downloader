@@ -1,11 +1,8 @@
 package com.example.musicdownloader.view
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.NavController
-import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.musicdownloader.R
@@ -29,10 +26,12 @@ class MainActivity : AppCompatActivity() {
         binding.bottomView.itemIconTintList = null
         binding.bottomView.setupWithNavController(findNavController(R.id.activity_main_nav_host_fragment))
         findNavController(R.id.activity_main_nav_host_fragment).addOnDestinationChangedListener { _, destination, _ ->
-            if(destination.id == R.id.seeAllFragment || destination.id == R.id.insideGenresFragment) {
-                binding.bottomView.visibility = View.GONE
-            } else {
-                binding.bottomView.visibility = View.VISIBLE
+
+            when(destination.id){
+                R.id.homeFragment, R.id.playListFragment, R.id.downloadFragment, R.id.settingFragment->{
+                    binding.bottomView.visibility = View.VISIBLE
+                }
+                else -> binding.bottomView.visibility = View.GONE
             }
         }
     }

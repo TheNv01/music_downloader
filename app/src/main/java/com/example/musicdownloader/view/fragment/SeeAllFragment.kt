@@ -79,7 +79,7 @@ class SeeAllFragment: BaseFragment<SeeAllFragmentBinding, SeeAllViewModel>(), On
 
     override fun setUpObserver() {
         binding.viewmodel = mViewModel
-        binding.lifecycleOwner = this
+        binding.lifecycleOwner = viewLifecycleOwner
         loadData(args.option.toString())
 
         SeeAllBinding.itemClickListener = object : ItemClickListener<Music>{

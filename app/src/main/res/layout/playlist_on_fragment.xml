@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="viewmodel"
+            type="com.example.musicdownloader.viewmodel.PlaylistOnViewModel" />
+
+    </data>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:scrollbars="none">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/black">
+
+            <ImageView
+                android:id="@+id/img_background_favorite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:background="@drawable/bg_favorite"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+
+            <TextView
+                android:id="@+id/tv_name_playlist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Favorite Songs"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:maxLines="1"
+                android:ellipsize="end"
+                app:layout_constraintStart_toEndOf="@id/img_background_favorite"
+                app:layout_constraintTop_toTopOf="@id/img_background_favorite"
+                app:layout_constraintBottom_toTopOf="@id/tv_quantity_song"
+                android:layout_marginStart="16dp"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/tv_quantity_song"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:maxLines="1"
+                android:alpha="0.5"
+                android:ellipsize="end"
+                android:text="0 songs"
+                app:layout_constraintStart_toEndOf="@id/img_background_favorite"
+                app:layout_constraintTop_toBottomOf="@id/tv_name_playlist"
+                app:layout_constraintBottom_toBottomOf="@id/img_background_favorite"
+                android:layout_marginStart="16dp"
+                android:textSize="12sp"/>
+
+            <TextView
+                android:id="@+id/tv_create"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Create new playlist"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@id/img_background_favorite"
+                app:layout_constraintTop_toBottomOf="@id/img_background_favorite"
+                android:layout_marginTop="18dp"
+                android:textSize="14sp"/>
+
+            <ImageView
+                android:id="@+id/img_background_create"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/bg_create_playlist"
+                app:layout_constraintStart_toStartOf="@id/tv_create"
+                app:layout_constraintTop_toBottomOf="@+id/tv_create"
+                android:layout_marginTop="15dp"/>
+
+            <TextView
+                android:id="@+id/tv_create_playlist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Create playlist"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@id/img_background_create"
+                app:layout_constraintTop_toTopOf="@id/img_background_create"
+                app:layout_constraintBottom_toBottomOf="@id/img_background_create"
+                android:layout_marginStart="16dp"
+                android:textSize="14sp"/>
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:alpha="0.3"
+                app:layout_constraintTop_toBottomOf="@id/img_background_create"
+                android:layout_marginTop="17dp"
+                android:background="#818181"/>
+
+
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view_existing_playlist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/view"
+                app:layout_constraintTop_toBottomOf="@id/view"
+                android:layout_marginTop="17dp"
+                android:layout_marginStart="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                listData="@{viewmodel.existingPlaylist}"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:orientation="vertical"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+
+</layout>

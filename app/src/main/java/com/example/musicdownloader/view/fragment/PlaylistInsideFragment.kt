@@ -1,14 +1,16 @@
 package com.example.musicdownloader.view.fragment
 
 import android.app.Dialog
-import android.util.Log
+import android.content.Intent
+import android.net.Uri
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.musicdownloader.R
-import com.example.musicdownloader.adapter.TopListenedAdapter
+import com.example.musicdownloader.adapter.GenericAdapter
+import com.example.musicdownloader.adapter.PlaylistInsideBinding
 import com.example.musicdownloader.databinding.PlaylistInsideFragmentBinding
 import com.example.musicdownloader.interfaces.OnActionCallBack
 import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
@@ -16,7 +18,7 @@ import com.example.musicdownloader.manager.MusicDonwnloadedManager
 import com.example.musicdownloader.manager.MusicManager
 import com.example.musicdownloader.model.Music
 import com.example.musicdownloader.view.MainActivity
-import com.example.musicdownloader.view.dialog.PlaylistInsidePopup
+import com.example.musicdownloader.view.dialog.BottomDialog
 import com.example.musicdownloader.viewmodel.PlaylistInsideViewModel
 
 class PlaylistInsideFragment : BaseFragment<PlaylistInsideFragmentBinding, PlaylistInsideViewModel>(), OnActionCallBack {
@@ -52,7 +54,6 @@ class PlaylistInsideFragment : BaseFragment<PlaylistInsideFragmentBinding, Playl
 
     override fun initViews() {
         callBack = this
-
     }
 
     override fun setUpListener() {
@@ -60,10 +61,15 @@ class PlaylistInsideFragment : BaseFragment<PlaylistInsideFragmentBinding, Playl
         binding.icPopup.setOnClickListener {
             openPlaylistBottomSheet()
         }
+        binding.tvAddSong.setOnClickListener {
+            val action = PlaylistInsideFragmentDirections
+                .actionPlaylistInsideFragmentToSearchFragment( 2, args.playList)
+            requireActivity().findNavController(R.id.activity_main_nav_host_fragment).navigate(action)
+        }
     }
 
     private fun openPlaylistBottomSheet() {
-        val bottomSheetDialog = PlaylistInsidePopup(mViewModel.optionsPlaylist)
+        val bottomSheetDialog = BottomDialog(mViewModel.optionsPlaylist)
         bottomSheetDialog.show((activity as MainActivity).supportFragmentManager, null)
         bottomSheetDialog.itemClickListener = object : ItemClickListener<Int>{
             override fun onClickListener(model: Int) {
@@ -79,34 +85,53 @@ class PlaylistInsideFragment : BaseFragment<PlaylistInsideFragmentBinding, Playl
     }
 
     private fun openSongBottomSheet(music: Music) {
-        val bottomSheetDialog = PlaylistInsidePopup(mViewModel.optionsSong)
+        val bottomSheetDialog = BottomDialog(mViewModel.optionsSong)
         bottomSheetDialog.show((activity as MainActivity).supportFragmentManager, null)
         bottomSheetDialog.itemClickListener = object : ItemClickListener<Int> {
             override fun onClickListener(model: Int) {
-                if (model == R.drawable.ic_delete) {
-                    Log.d("remove", "hjahahaa")
-                    mViewModel.removeMusic(args.playList.name, args.playList.id, music)
+                when(model){
+                    R.drawable.ic_delete -> {
+                        mViewModel.removeMusic(args.playList.name, args.playList.id, music)
+                    }
+                    R.drawable.ic_share -> {
+                        val intent = Intent(Intent.ACTION_SEND)
+                        intent.type = "text/plain"
+                        intent.putExtra(Intent.EXTRA_SUBJECT, "Subject Here")
+                        intent.putExtra(Intent.EXTRA_TEXT, music.audio)
+                        startActivity(Intent.createChooser(intent, "Share via"));
+                    }
+                    R.drawable.ic_bell -> {
+                        mViewModel.removeMusic(args.playList.name, args.playList.id, music)
+                    }
+                    R.drawable.ic_favorite -> {
+                        mViewModel.removeMusic(args.playList.name, args.playList.id, music)
+                    }
+
                 }
-                else{
-                    Log.d("elsesss", "hahahaha")
-                }
+
             }
         }
     }
 
     override fun setUpObserver() {
-        mViewModel.existingPlaylist.observe(this){
+        PlaylistInsideBinding.itemClickListener = menuClickListener
+        binding.viewmodel = mViewModel
+        binding.lifecycleOwner = viewLifecycleOwner
+        setupRecyclerview()
+        mViewModel.existingPlaylist.observe(viewLifecycleOwner){
             loadData()
-            mViewModel.musics.observe(this){
-                binding.recyclerViewPlaylistInside.adapter = TopListenedAdapter(
-                    R.layout.item_top_listened,
-                    false,
-                    it,
-                    musicItemClickListener,
-                    menuClickListener)
-                binding.tvQuantitySong.text = getString(R.string.number_music, it.size.toString())
-            }
         }
+        mViewModel.musics.observe(viewLifecycleOwner){
+            binding.tvQuantitySong.text = getString(R.string.number_music,it.size.toString())
+
+        }
+    }
+
+    private fun setupRecyclerview(){
+        binding.recyclerViewPlaylistInside.adapter = GenericAdapter(
+            R.layout.item_top_listened,
+            PlaylistInsideBinding,
+            musicItemClickListener)
     }
 
     fun showRenamePlaylistDialog() {

@@ -42,7 +42,7 @@
 
         <ImageView
             android:id="@+id/ic_menu"
-            android:layout_width="4dp"
+            android:layout_width="30dp"
             android:layout_height="17dp"
             android:alpha="0"
             android:src="@drawable/kebab_menu_listened"

@@ -10,10 +10,8 @@ import com.example.musicdownloader.database.MusicRoomDatabase
 import com.example.musicdownloader.model.Music
 import com.example.musicdownloader.model.Option
 import com.example.musicdownloader.model.Playlist
-import com.example.musicdownloader.networking.Services
 import com.example.musicdownloader.repository.PlaylistRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class PlaylistInsideViewModel(application: Application): AndroidViewModel(application) {
@@ -42,6 +40,7 @@ class PlaylistInsideViewModel(application: Application): AndroidViewModel(applic
         optionsSong.add(Option("Remove song from playlist", R.drawable.ic_delete))
         optionsSong.add(Option("Share", R.drawable.ic_share))
         optionsSong.add(Option("Set as ringtone", R.drawable.ic_bell))
+        optionsSong.add(Option("Add to Favorite", R.drawable.ic_favorite))
 
     }
 

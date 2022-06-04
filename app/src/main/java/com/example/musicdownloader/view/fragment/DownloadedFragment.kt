@@ -7,7 +7,6 @@ import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import android.provider.Settings
-import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.Toast
@@ -20,10 +19,9 @@ import com.example.musicdownloader.manager.MusicDonwnloadedManager
 import com.example.musicdownloader.manager.MusicManager
 import com.example.musicdownloader.model.MusicDownloaded
 import com.example.musicdownloader.view.MainActivity
-import com.example.musicdownloader.view.dialog.DownloadPopup
+import com.example.musicdownloader.view.dialog.BottomDialog
 import com.example.musicdownloader.viewmodel.DownloadedViewModel
 import java.io.File
-
 
 class DownloadedFragment: BaseFragment<DownloadedFragmentBinding, DownloadedViewModel>(), OnActionCallBack {
 
@@ -78,7 +76,7 @@ class DownloadedFragment: BaseFragment<DownloadedFragmentBinding, DownloadedView
     }
 
     private fun openDownloadingBottomSheet(musicDownloaded: MusicDownloaded) {
-        val bottomSheetDialog = DownloadPopup(mViewModel.optionsDownloaded)
+        val bottomSheetDialog = BottomDialog(mViewModel.optionsDownloaded)
         bottomSheetDialog.show((activity as MainActivity).supportFragmentManager, null)
         bottomSheetDialog.itemClickListener = object : ItemClickListener<Int>{
             override fun onClickListener(model: Int) {

@@ -16,29 +16,23 @@
         android:id="@+id/layout_item_existing_playlist"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/black"
         android:layout_marginBottom="23dp">
 
         <ImageView
             android:id="@+id/img_background_create"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:background="@drawable/bg_create_playlist"
+            list="@{playlist.musics}"
+            position="@{1}"
+            android:background="@drawable/bg_playlist"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
 
-        <ImageView
-            android:id="@+id/img_content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/ic_music"
-            app:layout_constraintStart_toStartOf="@id/img_background_create"
-            app:layout_constraintTop_toTopOf="@+id/img_background_create"
-            app:layout_constraintEnd_toEndOf="@id/img_background_create"
-            app:layout_constraintBottom_toBottomOf="@id/img_background_create" />
 
         <TextView
-            android:id="@+id/tv_create_playlist"
-            android:layout_width="300dp"
+            android:id="@+id/tv_name_playlist"
+            android:layout_width="290dp"
             android:layout_height="wrap_content"
             android:text="@{playlist.name}"
             android:textColor="@color/white"
@@ -47,15 +41,31 @@
             android:ellipsize="end"
             app:layout_constraintStart_toEndOf="@id/img_background_create"
             app:layout_constraintTop_toTopOf="@id/img_background_create"
-            app:layout_constraintBottom_toBottomOf="@id/img_background_create"
+            app:layout_constraintBottom_toTopOf="@id/tv_quantity_song"
             android:layout_marginStart="16dp"
             android:textSize="14sp"/>
 
+        <TextView
+            android:id="@+id/tv_quantity_song"
+            android:layout_width="290dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:alpha="0.5"
+            android:ellipsize="end"
+            intToString="@{playlist.musics.size()}"
+            app:layout_constraintStart_toEndOf="@id/img_background_create"
+            app:layout_constraintTop_toBottomOf="@id/tv_name_playlist"
+            app:layout_constraintBottom_toBottomOf="@id/img_background_create"
+            android:layout_marginStart="16dp"
+            android:textSize="12sp"/>
+
         <ImageView
-            android:id="@+id/ic_add"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:background="@drawable/ic_plus_21"
+            android:id="@+id/ic_menu"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/kebab_menu_listened"
             app:layout_constraintTop_toTopOf="@+id/img_background_create"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="@id/img_background_create" />

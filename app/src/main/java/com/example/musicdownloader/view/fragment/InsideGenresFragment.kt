@@ -76,9 +76,9 @@ class InsideGenresFragment : BaseFragment<InsideGenresFragmentBinding, InsideGen
 
     override fun setUpObserver() {
         binding.viewmodel = mViewModel
-        binding.lifecycleOwner = this
+        binding.lifecycleOwner = viewLifecycleOwner
 
-        SearchBinding.itemClickListener = object : ItemClickListener<Music>{
+        SearchBinding.menuClickListener = object : ItemClickListener<Music>{
             override fun onClickListener(model: Music) {
                 Log.d("hahaha", model.name!!)
             }

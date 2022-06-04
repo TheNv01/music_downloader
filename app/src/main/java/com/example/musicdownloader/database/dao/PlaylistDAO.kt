@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface PlaylistDAO {
     @Insert
-    suspend fun insertPlaylist(playlist: Playlist)
+    suspend fun insertPlaylist(playlist: Playlist): Long
 
     @Update
     suspend fun updatePlaylist(playlist: Playlist)
@@ -21,6 +21,9 @@ interface PlaylistDAO {
 
     @Query("select * from playlist where id = :id")
     fun getOnePlaylist(id: Int): Playlist
+
+    @Query("select * from playlist where name like :name")
+    fun getPlaylistFlowName(name: String): LiveData<List<Playlist>>
 
     @Query("UPDATE playlist SET name = :name WHERE id = :id")
     suspend fun renamePlaylist(name: String, id: Int)

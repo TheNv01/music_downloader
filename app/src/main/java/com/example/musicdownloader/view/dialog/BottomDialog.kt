@@ -12,7 +12,7 @@ import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListen
 import com.example.musicdownloader.model.Option
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class PlaylistInsidePopup(private val options: List<Option>) : BottomSheetDialogFragment() {
+class BottomDialog (private val options: List<Option>) : BottomSheetDialogFragment() {
 
     lateinit var itemClickListener: ItemClickListener<Int>
 

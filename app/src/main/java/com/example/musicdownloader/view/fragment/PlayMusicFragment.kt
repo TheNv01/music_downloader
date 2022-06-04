@@ -2,18 +2,21 @@ package com.example.musicdownloader.view.fragment
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.BitmapFactory
-import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.*
+import android.util.Log
+import android.view.Gravity
 import android.view.View
 import android.view.animation.LinearInterpolator
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.constraintlayout.motion.widget.MotionLayout
+import androidx.core.app.ActivityCompat
 import androidx.core.net.toUri
 import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.findNavController
 import coil.load
@@ -22,28 +25,32 @@ import com.example.musicdownloader.R
 import com.example.musicdownloader.cusomseekbar.ProgressListener
 import com.example.musicdownloader.databinding.PlayMusicFragmentBinding
 import com.example.musicdownloader.interfaces.OnActionCallBack
-import com.example.musicdownloader.manager.MediaManager
-import com.example.musicdownloader.manager.MusicDonwnloadedManager
-import com.example.musicdownloader.manager.MusicManager
-import com.example.musicdownloader.manager.RepeatStatus
+import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
+import com.example.musicdownloader.manager.*
 import com.example.musicdownloader.model.MessageEvent
 import com.example.musicdownloader.model.Music
+import com.example.musicdownloader.model.MusicDownloading
+import com.example.musicdownloader.networking.Services
 import com.example.musicdownloader.view.MainActivity
+import com.example.musicdownloader.view.dialog.AddToPlaylistBottomDialog
+import com.example.musicdownloader.view.dialog.BottomDialog
 import com.example.musicdownloader.viewmodel.PlayMusicViewModel
+import com.tonyodev.fetch2.*
+import com.tonyodev.fetch2core.DownloadBlock
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import java.io.InputStream
-import kotlin.math.abs
+import java.io.File
 
 class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewModel>(), OnActionCallBack {
 
     lateinit var callBack: OnActionCallBack
+    lateinit var file: File
+    private var bottomSheetDialog: BottomDialog ?= null
 
     companion object{
-        const val KEY_SHOW_ADD_FAVORITE = "KEY_SHOW_ADD_FAVORITE"
         const val KEY_SHOW_SERVICE = "KEY_SHOW_SERVICE"
     }
 
@@ -101,9 +108,11 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
         callBack = this
         MediaManager.setProgress(0)
         if(MusicDonwnloadedManager.currentMusicDownloaded == null){
+            mViewModel.initOption(false)
             playSong(MusicManager.getCurrentMusic()!!)
         }
         else{
+            mViewModel.initOption()
             playSong()
         }
     }
@@ -112,10 +121,10 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
 
         setupMotionLayout()
         binding.icFavorite.setOnClickListener {
-            callBack.callBack(KEY_SHOW_ADD_FAVORITE, null)
-            val bundle = Bundle()
-            bundle.putSerializable("favoriteMusic", MusicManager.getCurrentMusic())
-            setFragmentResult("favoriteKey", bundle)
+           Log.d("asdfas", "hahaha")
+        }
+        binding.icMenu.setOnClickListener {
+            openBottomSheet()
         }
         binding.icClose.setOnClickListener{
             (activity as MainActivity).playMusicFragment = null
@@ -140,6 +149,136 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
         binding.imgRandom.setOnClickListener {
             handleRandom()
         }
+        binding.icShare.setOnClickListener {
+            shareMusic()
+        }
+    }
+
+    private fun shareMusic(){
+        val intent = Intent(Intent.ACTION_SEND)
+        if(MusicDonwnloadedManager.currentMusicDownloaded == null){
+            mViewModel.linkAudio.observe(viewLifecycleOwner){
+                intent.type = "text/plain"
+                intent.putExtra(Intent.EXTRA_SUBJECT, "Subject Here")
+                intent.putExtra(Intent.EXTRA_TEXT,it)
+                startActivity(Intent.createChooser(intent, "Share link"))
+            }
+        }
+        else{
+            intent.type = "audio/mp3";
+            intent.putExtra(Intent.EXTRA_STREAM, Uri.parse(MusicDonwnloadedManager.currentMusicDownloaded!!.uri.toString()))
+            Log.d("urrrrrll;", MusicDonwnloadedManager.currentMusicDownloaded!!.uri.toString())
+            startActivity(Intent.createChooser(intent, "Share file"))
+        }
+
+    }
+
+    private fun openBottomSheet() {
+        if(bottomSheetDialog == null){
+            bottomSheetDialog = BottomDialog(mViewModel.optionsDownloaded)
+        }
+        bottomSheetDialog!!.show((activity as MainActivity).supportFragmentManager, null)
+        bottomSheetDialog!!.itemClickListener = object : ItemClickListener<Int> {
+            override fun onClickListener(model: Int) {
+                when(model){
+                    R.drawable.ic_add_to_playlist ->{
+                        val bottomSheetDialog = AddToPlaylistBottomDialog()
+                        bottomSheetDialog.show((activity as MainActivity).supportFragmentManager, null)
+                    }
+                    R.drawable.ic_favorite ->{
+                        binding.icFavorite.setImageResource(R.drawable.ic_favorite_selected)
+                    }
+                    R.drawable.ic_white_dowload ->{
+                        file = File(Environment.getExternalStorageDirectory().toString().plus("/music downloader"))
+                        if (!file.exists()){
+                            file.mkdirs()
+                        }
+                        if(MusicManager.getCurrentMusic()?.audioDownloadAllowed == true){
+                            checkPermissions()
+                        }
+                        else{
+                            val toast = Toast.makeText(context, "Can't download", Toast.LENGTH_SHORT)
+                            toast.setGravity(Gravity.CENTER, 0, 0)
+                            toast.show()
+                        }
+                    }
+
+                }
+            }
+        }
+    }
+
+    private fun startDownload(){
+        val path = file.toString() +"/"+ MusicManager.getCurrentMusic()!!.name.plus(".mp3")
+        val request = Request(MusicManager.getCurrentMusic()!!.audioDownload!!, path)
+        request.priority = Priority.HIGH
+        request.networkType = NetworkType.ALL
+
+        val musicDownloading = MusicDownloading(MusicManager.getCurrentMusic()!!.name!!,
+            MusicManager.getCurrentMusic()!!.artistName!!,
+            request)
+
+        DownloadingManager.listDownloading().add(musicDownloading)
+
+        mViewModel.viewModelScope.launch(Dispatchers.IO) {
+            DownloadingManager.getFetch(requireContext()).enqueue(request,
+                { Toast.makeText(context, "Downloading...", Toast.LENGTH_SHORT).show()},
+                { Toast.makeText(context, "Something wrong!...", Toast.LENGTH_SHORT).show() })
+            DownloadingManager.fetch!!.addListener(
+                object : FetchListener {
+                    override fun onQueued(download: Download, waitingOnNetwork: Boolean) {}
+                    override fun onRemoved(download: Download) {}
+                    override fun onCompleted(download: Download) {
+                        DownloadingManager.listDownloading().remove(musicDownloading)
+                    }
+                    override fun onDeleted(download: Download) {}
+                    override fun onDownloadBlockUpdated(download: Download, downloadBlock: DownloadBlock, totalBlocks: Int) {}
+                    override fun onError(download: Download, error: Error, throwable: Throwable?) {
+                        DownloadingManager.fetch!!.retry(request.id)
+                    }
+                    override fun onPaused(download: Download) {}
+                    override fun onResumed(download: Download) {}
+                    override fun onStarted(download: Download, downloadBlocks: List<DownloadBlock>, totalBlocks: Int) {}
+                    override fun onWaitingNetwork(download: Download) {}
+                    override fun onAdded(download: Download) {}
+                    override fun onCancelled(download: Download) {}
+                    override fun onProgress(
+                        download: Download,
+                        etaInMilliSeconds: Long,
+                        downloadedBytesPerSecond: Long
+                    ) {}
+
+                })
+        }
+    }
+    private val permReqLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+            val granted = permissions.entries.all {
+                it.value == true
+            }
+            if (granted) {
+                startDownload()
+            }
+        }
+
+    private fun checkPermissions() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            startDownload()
+        }
+        val permission = arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        activity?.let {
+            if (hasPermissions(activity as Context, permission)) {
+                startDownload()
+            } else {
+                permReqLauncher.launch(
+                    permission
+                )
+            }
+        }
+    }
+
+    private fun hasPermissions(context: Context, permissions: Array<String>): Boolean = permissions.all {
+        ActivityCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
     }
 
     override fun setUpObserver() {
@@ -345,13 +484,6 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
                     intent.putExtra("action", data as Int)
                     (activity as MainActivity).startService(intent)
                 }
-            }
-            KEY_SHOW_ADD_FAVORITE ->{
-                val addFavoriteFragment = AddFavoriteFragment()
-                val tran = (activity as MainActivity).supportFragmentManager.beginTransaction()
-                tran.add(R.id.container_layout_playing, addFavoriteFragment)
-                tran.addToBackStack("addFavorite")
-                tran.commit()
             }
         }
     }

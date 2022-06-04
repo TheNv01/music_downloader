@@ -1,18 +1,16 @@
 package com.example.musicdownloader.repository
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.example.musicdownloader.database.dao.PlaylistDAO
-import com.example.musicdownloader.model.Option
 import com.example.musicdownloader.model.Playlist
-import kotlinx.coroutines.flow.Flow
 
 class PlaylistRepository(private val playlistDAO: PlaylistDAO) {
 
     var playlists = playlistDAO.getAllPlaylist()
 
-    suspend fun insertPlaylist(playlist: Playlist) {
-        playlistDAO.insertPlaylist(playlist)
+
+    suspend fun insertPlaylist(playlist: Playlist): Long {
+        return playlistDAO.insertPlaylist(playlist)
     }
 
     suspend fun updatePlaylist(playlist: Playlist){
@@ -21,6 +19,10 @@ class PlaylistRepository(private val playlistDAO: PlaylistDAO) {
 
     fun getListMusic(id: Int): Playlist{
         return playlistDAO.getOnePlaylist(id)
+    }
+
+    fun getPlaylistFlowName(name: String): LiveData<List<Playlist>> {
+        return playlistDAO.getPlaylistFlowName(name)
     }
 
     suspend fun renamePlaylist(name: String, id: Int){

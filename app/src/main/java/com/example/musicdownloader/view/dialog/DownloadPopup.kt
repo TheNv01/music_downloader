@@ -12,7 +12,6 @@ import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListen
 import com.example.musicdownloader.model.Option
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-
 class DownloadPopup(private val options: List<Option>) : BottomSheetDialogFragment() {
 
     lateinit var itemClickListener: ItemClickListener<Int>
@@ -22,13 +21,13 @@ class DownloadPopup(private val options: List<Option>) : BottomSheetDialogFragme
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.download_popup, container, false)
+        return inflater.inflate(R.layout.bottom_sheet_dialog, container, false)
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setUpLayout(view.findViewById(R.id.layout_bottom_downloading))
+        setUpLayout(view.findViewById(R.id.layout))
 
     }
 

@@ -38,6 +38,11 @@ abstract class BaseFragment<K: ViewDataBinding, V: ViewModel>: Fragment() {
         setUpObserver()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding.unbind()
+    }
+
     protected abstract fun initBinding(mRootView: View): K
 
     protected abstract fun getViewModelClass(): Class<V>

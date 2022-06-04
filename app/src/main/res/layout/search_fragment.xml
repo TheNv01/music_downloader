@@ -19,6 +19,15 @@
             android:layout_height="match_parent"
             android:background="@color/black">
 
+            <ImageView
+                android:id="@+id/ic_close"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/ic_close"
+                app:layout_constraintEnd_toEndOf="@id/search_song"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="25dp"
+                app:layout_constraintBottom_toTopOf="@id/search_song"/>
 
             <androidx.appcompat.widget.SearchView
                 android:id="@+id/search_song"
@@ -27,9 +36,11 @@
                 android:background="@drawable/bg_tab_indicator"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="80dp"
+                app:layout_constraintTop_toBottomOf="@id/ic_close"
+                android:layout_marginTop="25dp"
                 android:layout_marginStart="16dp"
+                app:searchIcon="@drawable/ic_search_view"
+                app:closeIcon="@null"
                 android:layout_marginEnd="16dp"
                 app:iconifiedByDefault="false"
                 app:queryHint="Search song name"/>
@@ -46,6 +57,30 @@
                 android:textSize="14sp"
                 android:textStyle="bold"/>
 
+            <TextView
+                android:id="@+id/tv_quantity_song_added"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add (0)"
+                android:gravity="center"
+                 android:background="@drawable/bg_added"
+                app:layout_constraintEnd_toEndOf="@id/search_song"
+                app:layout_constraintTop_toTopOf="@id/tv_recommend"
+                app:layout_constraintBottom_toBottomOf="@id/tv_recommend"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:textStyle="bold"/>
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:visibility="gone"
+                apiStatus="@{viewmodel.status}"/>
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view_song_recommend"
                 android:layout_width="match_parent"
@@ -55,6 +90,8 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="20dp"
                 listData="@{viewmodel.musics}"
+                apiStatusView="@{viewmodel.status}"
+                android:layout_marginEnd="10dp"
                 app:layout_constraintStart_toStartOf="@id/search_song"
                 app:layout_constraintTop_toBottomOf="@id/tv_recommend"/>
 

@@ -4,26 +4,73 @@ import android.graphics.Bitmap
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.core.net.toUri
 import androidx.databinding.BindingAdapter
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.musicdownloader.adapter.GenericAdapter
+import com.example.musicdownloader.model.Music
 import com.example.musicdownloader.viewmodel.ApiStatus
-
 
 @BindingAdapter("listData")
 fun <T: Any, V: ViewDataBinding> bindRecyclerView(recyclerView: RecyclerView, data: List<T>?) {
-    val adapter = recyclerView.adapter as GenericAdapter<T, V>
-    adapter.submitList(data)
+    if(data != null){
+        val adapter = recyclerView.adapter as GenericAdapter<T, V>
+        adapter.submitList(data)
+    }
+
+}
+
+@BindingAdapter("list", "position")
+fun bindImagePlaylist(imgView: ImageView, musics: List<Music>?, position: Int) {
+
+    if(musics != null) {
+        when (position) {
+            1 -> {
+                if (musics.isNotEmpty()) {
+                    bindImage(imgView, musics[0].image)
+                }
+                else{
+                    imgView.setImageResource(R.drawable.bg_playlist)
+                }
+            }
+            2 -> {
+                if (musics.size >= 2) {
+                    bindImage(imgView, musics[1].image)
+                }
+                else{
+                    imgView.setImageResource(R.drawable.bg_playlist)
+                }
+            }
+            3 -> {
+                if (musics.size >= 3) {
+                    bindImage(imgView, musics[2].image)
+                }
+                else{
+                    imgView.setImageResource(R.drawable.bg_playlist)
+                }
+            }
+            4 -> {
+                if (musics.size >= 4) {
+                    bindImage(imgView, musics[3].image)
+                }
+                else{
+                    imgView.setImageResource(R.drawable.bg_playlist)
+                }
+            }
+
+        }
+    }
+
 }
 
 @BindingAdapter("imageUrl")
 fun bindImage(imgView: ImageView, imgUrl: String?) {
 
     if(imgUrl == null){
-        imgView.setImageResource(R.drawable.ic_broken_image)
+        imgView.setImageResource(R.drawable.bg_playlist)
     }
     else{
         val reallyImgUrl: String = if(imgUrl.length < 15){
@@ -40,7 +87,6 @@ fun bindImage(imgView: ImageView, imgUrl: String?) {
             }
         }
     }
-
 }
 
 @BindingAdapter("imageBitmap")
@@ -64,6 +110,17 @@ fun bindStatus(progressBar: ProgressBar, status: ApiStatus?) {
     else{
         progressBar.visibility = View.VISIBLE
     }
+}
+
+@BindingAdapter("intToString")
+fun bindTextView(textView: TextView, sizeList: Int) {
+    if(sizeList < 2){
+        textView.text = sizeList.toString().plus(" song")
+    }
+    else{
+        textView.text = sizeList.toString().plus(" songs")
+    }
+
 }
 
 @BindingAdapter("apiStatusView")

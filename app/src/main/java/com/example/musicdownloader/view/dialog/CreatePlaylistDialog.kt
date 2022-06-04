@@ -17,7 +17,7 @@ class CreatePlaylistDialog : DialogFragment(){
 
     private var mRootView: View?= null
     private var binding: CreatePlaylistFragmentBinding?= null
-    var text: String = ""
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

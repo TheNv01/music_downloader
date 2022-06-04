@@ -35,7 +35,7 @@ class SeeAllGenresFragment : BaseFragment<SeeAllGenresFragmentBinding, SeeAllGen
 
     override fun setUpObserver() {
         binding.viewmodel = mViewModel
-        binding.lifecycleOwner = this
+        binding.lifecycleOwner = viewLifecycleOwner
 
         binding.recyclerViewSeeAllGenres.adapter = GenericAdapter(
             R.layout.item_genres_see_all,

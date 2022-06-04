@@ -24,7 +24,7 @@
         <Constraint
             android:id="@+id/ic_menu"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_width="4dp"
+            android:layout_width="30dp"
             android:layout_height="17dp"
             android:translationZ="2dp"
             app:layout_constraintBottom_toBottomOf="@id/ic_back"
@@ -61,7 +61,7 @@
         <Constraint
             android:id="@+id/tv_single"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_width="350dp"
+            android:layout_width="315dp"
             android:layout_height="24dp"
             android:translationZ="2dp"
             app:layout_constraintBottom_toTopOf="@id/tv_music"

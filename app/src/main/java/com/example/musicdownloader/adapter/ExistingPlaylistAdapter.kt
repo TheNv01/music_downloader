@@ -22,10 +22,10 @@ class ExistingPlaylistAdapter(
         override fun bindData(data: Playlist) {
             binding.playlist = data
             if(isAdd){
-                binding.icAdd.visibility = View.VISIBLE
+                binding.icMenu.visibility = View.VISIBLE
             }
             else{
-                binding.icAdd.visibility = View.GONE
+                binding.icMenu.visibility = View.GONE
             }
         }
 
@@ -33,7 +33,7 @@ class ExistingPlaylistAdapter(
             binding.layoutItemExistingPlaylist.setOnClickListener {
                 if(isAdd){
                     itemClickListener.onClickListener(data)
-                    binding.icAdd.setImageResource(R.drawable.ic_choosed)
+                    binding.icMenu.setImageResource(R.drawable.ic_choosed)
 
                 }
                 else{

@@ -4,17 +4,16 @@ import android.view.View
 import com.example.musicdownloader.R
 import com.example.musicdownloader.adapter.DownloadingAdapter
 import com.example.musicdownloader.databinding.DownloadingFragmentBinding
-import com.example.musicdownloader.interfaces.OnActionCallBack
 import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
 import com.example.musicdownloader.manager.DownloadingManager
 import com.example.musicdownloader.model.MusicDownloading
 import com.example.musicdownloader.view.MainActivity
-import com.example.musicdownloader.view.dialog.DownloadPopup
+import com.example.musicdownloader.view.dialog.BottomDialog
 import com.example.musicdownloader.viewmodel.DownloadingViewModel
 
 class DownloadingFragment : BaseFragment<DownloadingFragmentBinding, DownloadingViewModel>(){
 
-    var bottomSheetDialog: DownloadPopup ?= null
+    var bottomSheetDialog: BottomDialog ?= null
 
     override fun initBinding(mRootView: View): DownloadingFragmentBinding {
         return DownloadingFragmentBinding.bind(mRootView)
@@ -48,7 +47,7 @@ class DownloadingFragment : BaseFragment<DownloadingFragmentBinding, Downloading
 
     private fun openDownloadingBottomSheet(musicDownloading: MusicDownloading) {
         if(bottomSheetDialog == null){
-            bottomSheetDialog = DownloadPopup(mViewModel.optionsDownloading)
+            bottomSheetDialog = BottomDialog(mViewModel.optionsDownloading)
         }
 
         bottomSheetDialog!!.show((activity as MainActivity).supportFragmentManager, null)
