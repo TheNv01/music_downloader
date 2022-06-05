@@ -1,4 +1,6 @@
 package com.example.musicdownloader.viewmodel
 
-class SplashViewModel: BaseViewModel() {
+import android.app.Application
+
+class SplashViewModel(application: Application) : BaseViewModel(application) {
 }

@@ -1,4 +1,6 @@
 package com.example.musicdownloader.viewmodel
 
-class DownloadViewModel: BaseViewModel() {
+import android.app.Application
+
+class DownloadViewModel(application: Application) : BaseViewModel(application) {
 }

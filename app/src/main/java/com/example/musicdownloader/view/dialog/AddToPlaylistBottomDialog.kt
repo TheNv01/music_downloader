@@ -19,11 +19,12 @@ import com.example.musicdownloader.adapter.PlaylistExistBinding
 import com.example.musicdownloader.databinding.AddToPlaylistBottomsheetBinding
 import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
 import com.example.musicdownloader.manager.MusicManager
+import com.example.musicdownloader.model.Music
 import com.example.musicdownloader.model.Playlist
 import com.example.musicdownloader.viewmodel.AddToPlaylistViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class AddToPlaylistBottomDialog  : BottomSheetDialogFragment() {
+class AddToPlaylistBottomDialog(music: Music)  : BottomSheetDialogFragment() {
 
     private var mRootView: View ?= null
     private var binding: AddToPlaylistBottomsheetBinding?= null
@@ -33,7 +34,7 @@ class AddToPlaylistBottomDialog  : BottomSheetDialogFragment() {
         PlaylistExistBinding,
         object : ItemClickListener<Playlist> {
             override fun onClickListener(model: Playlist) {
-                viewModel.addMusicToPlaylist(model.name, model.id, MusicManager.getCurrentMusic()!!)
+                viewModel.addMusicToPlaylist(model.name, model.id, music)
                 dismiss()
                 val toast = Toast.makeText(context, "Added the song to the playlist", Toast.LENGTH_SHORT)
                 toast.setGravity(Gravity.CENTER, 0, 0)

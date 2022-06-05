@@ -1,5 +1,6 @@
 package com.example.musicdownloader.viewmodel
 
+import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -7,7 +8,7 @@ import com.example.musicdownloader.model.Genres
 import com.example.musicdownloader.networking.Services
 import kotlinx.coroutines.launch
 
-class SeeAllGenresViewModel: BaseViewModel() {
+class SeeAllGenresViewModel(application: Application) : BaseViewModel(application) {
 
     private var _statusGenres = MutableLiveData<ApiStatus>()
     val statusGenres: LiveData<ApiStatus> = _statusGenres

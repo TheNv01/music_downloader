@@ -1,36 +1,29 @@
 package com.example.musicdownloader.viewmodel
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.musicdownloader.R
-import com.example.musicdownloader.database.MusicRoomDatabase
 import com.example.musicdownloader.model.Option
 import com.example.musicdownloader.model.Playlist
-import com.example.musicdownloader.repository.PlaylistRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class PlaylistOffViewModel(application: Application) : AndroidViewModel(application) {
+class PlaylistOffViewModel(application: Application) : BaseViewModel(application) {
     private var _existingPlaylist = MutableLiveData<List<Playlist>>()
     val existingPlaylist: LiveData<List<Playlist>> = _existingPlaylist
-    val optionsDownloaded = ArrayList<Option>()
-    private val repository: PlaylistRepository
+    private val optionsDownloaded = ArrayList<Option>()
 
     init {
-        val playlistDAO =
-            MusicRoomDatabase.MusicDatabaseBuilder.getInstance(application.applicationContext)
-                .playlistDAO()
-        repository = PlaylistRepository(playlistDAO)
+
         _existingPlaylist.postValue(ArrayList())
         initOption()
     }
 
     fun createPlaylist(playlist: Playlist) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.insertPlaylist(playlist)
+            playlistRepository.insertPlaylist(playlist)
         }
     }
 
@@ -41,12 +34,12 @@ class PlaylistOffViewModel(application: Application) : AndroidViewModel(applicat
     }
 
     fun deletePlaylist(id: Int){
-        repository.deletePlaylist(id)
+        playlistRepository.deletePlaylist(id)
     }
 
     fun renamePlaylist(name: String, id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.renamePlaylist(name, id)
+            playlistRepository.renamePlaylist(name, id)
         }
     }
 }

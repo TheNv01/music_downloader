@@ -43,7 +43,6 @@ import java.io.File
 class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewModel>(), OnActionCallBack {
 
     lateinit var callBack: OnActionCallBack
-    lateinit var file: File
     private var bottomSheetDialog: BottomDialog ?= null
 
     private var isExited: Boolean = false
@@ -103,6 +102,7 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
     }
 
     override fun initViews() {
+        music = MusicManager.getCurrentMusic()!!
         callBack = this
         MediaManager.setProgress(0)
         if(MusicDonwnloadedManager.currentMusicDownloaded == null){
@@ -218,7 +218,7 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
             override fun onClickListener(model: Int) {
                 when(model){
                     R.drawable.ic_add_to_playlist ->{
-                        val bottomSheetDialog = AddToPlaylistBottomDialog()
+                        val bottomSheetDialog = AddToPlaylistBottomDialog(MusicManager.getCurrentMusic()!!)
                         bottomSheetDialog.show((activity as MainActivity).supportFragmentManager, null)
                     }
                     R.drawable.ic_favorite ->{
@@ -235,53 +235,11 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
                         }
                     }
                     R.drawable.ic_white_dowload ->{
-                        file = File(Environment.getExternalStorageDirectory().toString().plus("/music downloader"))
-                        if (!file.exists()){
-                            file.mkdirs()
-                        }
-                        if(MusicManager.getCurrentMusic()?.audioDownloadAllowed == true){
-                            checkPermissions()
-                        }
-                        else{
-                            val toast = Toast.makeText(context, "Can't download", Toast.LENGTH_SHORT)
-                            toast.setGravity(Gravity.CENTER, 0, 0)
-                            toast.show()
-                        }
+                        download(MusicManager.getCurrentMusic()!!)
                     }
-
                 }
             }
         }
-    }
-
-    private val permReqLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
-            val granted = permissions.entries.all {
-                it.value == true
-            }
-            if (granted) {
-                mViewModel.startDownload(file)
-            }
-        }
-
-    private fun checkPermissions() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            mViewModel.startDownload(file)
-        }
-        val permission = arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        activity?.let {
-            if (hasPermissions(activity as Context, permission)) {
-                mViewModel.startDownload(file)
-            } else {
-                permReqLauncher.launch(
-                    permission
-                )
-            }
-        }
-    }
-
-    private fun hasPermissions(context: Context, permissions: Array<String>): Boolean = permissions.all {
-        ActivityCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
     }
 
     override fun setUpObserver() {

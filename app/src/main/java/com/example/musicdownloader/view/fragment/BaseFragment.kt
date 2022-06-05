@@ -1,20 +1,44 @@
 package com.example.musicdownloader.view.fragment
 
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.Nullable
+import androidx.core.app.ActivityCompat
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import com.example.musicdownloader.R
+import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
+import com.example.musicdownloader.manager.MusicManager
+import com.example.musicdownloader.model.Music
+import com.example.musicdownloader.networking.Services
+import com.example.musicdownloader.view.MainActivity
+import com.example.musicdownloader.view.dialog.AddToPlaylistBottomDialog
+import com.example.musicdownloader.view.dialog.BottomDialog
+import com.example.musicdownloader.viewmodel.BaseViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.io.File
 
 abstract class BaseFragment<K: ViewDataBinding, V: ViewModel>: Fragment() {
 
     private lateinit var mRootView: View
     protected lateinit var mViewModel: V
     lateinit var binding: K
+    protected lateinit var music: Music
+    protected lateinit var file: File
 
     @Nullable
     override fun onCreateView(
@@ -41,6 +65,115 @@ abstract class BaseFragment<K: ViewDataBinding, V: ViewModel>: Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         binding.unbind()
+    }
+
+    protected fun optionBottomDialog(musicClicked: Music){
+        music = musicClicked
+        val bottomSheetDialog = BottomDialog((mViewModel as BaseViewModel).options)
+        bottomSheetDialog.show((activity as MainActivity).supportFragmentManager, null)
+        bottomSheetDialog.itemClickListener = object : ItemClickListener<Int>{
+            override fun onClickListener(model: Int) {
+
+                when(model){
+                    R.drawable.ic_add_to_playlist ->{
+                        addToPlayList(musicClicked)
+                    }
+                    R.drawable.ic_white_dowload ->{
+                        download(musicClicked)
+                    }
+                    R.drawable.ic_favorite ->{
+                        addToFavorite(musicClicked)
+                    }
+                    R.drawable.ic_share ->{
+                        shareMusic()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun addToPlayList(music: Music){
+        val bottomSheetDialog = AddToPlaylistBottomDialog(music)
+        bottomSheetDialog.show((activity as MainActivity).supportFragmentManager, null)
+    }
+
+    protected fun download(music: Music){
+        file = File(Environment.getExternalStorageDirectory().toString().plus("/music downloader"))
+        if (!file.exists()){
+            file.mkdirs()
+        }
+        if(music.audioDownload != null){
+            checkPermissions()
+        }
+        else{
+            val toast = Toast.makeText(context, "Can't download", Toast.LENGTH_SHORT)
+            toast.setGravity(Gravity.CENTER, 0, 0)
+            toast.show()
+        }
+    }
+
+    private fun addToFavorite(music: Music){
+        if((mViewModel as BaseViewModel).existInFavorite(music.id) == null){
+            (mViewModel as BaseViewModel).insertMusicToFavorite(music)
+            val toast = Toast.makeText(context, "Added the song to the favorite", Toast.LENGTH_SHORT)
+            toast.setGravity(Gravity.CENTER, 0, 0)
+            toast.show()
+        }
+        else{
+            val toast = Toast.makeText(context, "the song already exists in favorite", Toast.LENGTH_SHORT)
+            toast.setGravity(Gravity.CENTER, 0, 0)
+            toast.show()
+        }
+    }
+
+    private fun shareMusic(){
+
+        val intent = Intent(Intent.ACTION_SEND)
+
+        mViewModel.viewModelScope.launch (Dispatchers.IO){
+            intent.type = "text/plain"
+            intent.putExtra(Intent.EXTRA_SUBJECT, "Subject Here")
+            intent.putExtra(Intent.EXTRA_TEXT,getLinkAudio(music))
+            startActivity(Intent.createChooser(intent, "Share link"))
+        }
+    }
+
+    private suspend fun getLinkAudio(music: Music): String{
+        return if(music.source.equals("SC")){
+            Services.retrofitService.getLinkSourceSc(music.id).data
+        } else{
+            music.audio!!
+        }
+    }
+
+    private val permReqLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+            val granted = permissions.entries.all {
+                it.value == true
+            }
+            if (granted) {
+                (mViewModel as BaseViewModel).startDownload(music, file)
+            }
+        }
+
+    private fun checkPermissions() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            (mViewModel as BaseViewModel).startDownload(music, file)
+        }
+        val permission = arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        activity?.let {
+            if (hasPermissions(activity as Context, permission)) {
+                (mViewModel as BaseViewModel).startDownload(music, file)
+            } else {
+                permReqLauncher.launch(
+                    permission
+                )
+            }
+        }
+    }
+
+    private fun hasPermissions(context: Context, permissions: Array<String>): Boolean = permissions.all {
+        ActivityCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
     }
 
     protected abstract fun initBinding(mRootView: View): K

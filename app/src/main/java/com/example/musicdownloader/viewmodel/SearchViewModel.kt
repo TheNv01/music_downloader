@@ -1,20 +1,16 @@
 package com.example.musicdownloader.viewmodel
 
 import android.app.Application
-import android.util.Log
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.musicdownloader.database.MusicRoomDatabase
 import com.example.musicdownloader.model.Music
 import com.example.musicdownloader.model.Playlist
 import com.example.musicdownloader.networking.Services
-import com.example.musicdownloader.repository.PlaylistRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class SearchViewModel(application: Application): AndroidViewModel(application)  {
+class SearchViewModel(application: Application) : BaseViewModel(application)  {
 
     private var _musics = MutableLiveData<List<Music>>()
     val musics: LiveData<List<Music>> = _musics
@@ -22,23 +18,18 @@ class SearchViewModel(application: Application): AndroidViewModel(application)  
     private var _status = MutableLiveData<ApiStatus>()
     val status: LiveData<ApiStatus> = _status
 
-    private val repository: PlaylistRepository
-
     init {
         _status.value = ApiStatus.DONE
-        val playlistDAO =
-            MusicRoomDatabase.MusicDatabaseBuilder.getInstance(application.applicationContext)
-                .playlistDAO()
-        repository = PlaylistRepository(playlistDAO)
+
     }
 
     fun addMusicToPlaylist(name: String, id: Int, musicList: List<Music>) {
         viewModelScope.launch(Dispatchers.IO) {
-            val musics = repository.getListMusic(id).musics
+            val musics = playlistRepository.getListMusic(id).musics
             musicList.forEach {
                 if(!isInsideList(it, musics)){
                     musics.add(it)
-                    repository.updatePlaylist(Playlist(name, musics, id))
+                    playlistRepository.updatePlaylist(Playlist(name, musics, id))
                 }
             }
         }

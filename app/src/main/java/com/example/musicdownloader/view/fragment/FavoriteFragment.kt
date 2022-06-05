@@ -3,6 +3,7 @@ package com.example.musicdownloader.view.fragment
 import android.view.View
 import com.example.musicdownloader.R
 import com.example.musicdownloader.adapter.GenericAdapter
+import com.example.musicdownloader.adapter.SearchBinding
 import com.example.musicdownloader.adapter.SeeAllBinding
 import com.example.musicdownloader.databinding.FavoriteFragmentBinding
 import com.example.musicdownloader.interfaces.OnActionCallBack
@@ -57,6 +58,12 @@ class FavoriteFragment: BaseFragment<FavoriteFragmentBinding, FavoriteViewModel>
 
     private fun setupRecyclerview() {
 
+        SeeAllBinding.itemClickListener = object : ItemClickListener<Music> {
+            override fun onClickListener(model: Music) {
+                optionBottomDialog(model)
+            }
+        }
+
         binding.recyclerFavorite.adapter = GenericAdapter(
             R.layout.item_top_listened,
             SeeAllBinding,
@@ -79,6 +86,4 @@ class FavoriteFragment: BaseFragment<FavoriteFragmentBinding, FavoriteViewModel>
             tran?.commit()
         }
     }
-
-
 }

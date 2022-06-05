@@ -38,7 +38,7 @@ class PlaylistInsideFragment : BaseFragment<PlaylistInsideFragmentBinding, Playl
     lateinit var callBack: OnActionCallBack
     private val args: PlaylistInsideFragmentArgs by navArgs()
     private lateinit var dialog: Dialog
-    private lateinit var music: Music
+    private lateinit var musicInSidePlaylist: Music
 
     private val musicItemClickListener = object : ItemClickListener<Music> {
         override fun onClickListener(model: Music) {
@@ -116,7 +116,7 @@ class PlaylistInsideFragment : BaseFragment<PlaylistInsideFragmentBinding, Playl
                     }
                     R.drawable.ic_bell -> {
                         if(musicSelected.audioDownload != null){
-                            music = musicSelected
+                            musicInSidePlaylist = musicSelected
                             checkPermissions()
                             loadingDialog()
                         }
@@ -191,18 +191,18 @@ class PlaylistInsideFragment : BaseFragment<PlaylistInsideFragmentBinding, Playl
                 it.value == true
             }
             if (granted) {
-                mViewModel.startDownload(music)
+                mViewModel.startDownload(musicInSidePlaylist)
             }
         }
 
     private fun checkPermissions() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            mViewModel.startDownload(music)
+            mViewModel.startDownload(musicInSidePlaylist)
         }
         val permission = arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
         activity?.let {
             if (hasPermissions(activity as Context, permission)) {
-                mViewModel.startDownload(music)
+                mViewModel.startDownload(musicInSidePlaylist)
             } else {
                 permReqLauncher.launch(
                     permission

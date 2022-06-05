@@ -84,9 +84,9 @@ class SearchFragment : BaseFragment<SearchFragmentBinding, SearchViewModel>(), O
             binding.tvRecommend.visibility = View.GONE
             binding.tvQuantitySongAdded.visibility = View.GONE
             SearchBinding.isIconMenu = true
-            SeeAllBinding.itemClickListener = object : ItemClickListener<Music> {
+            SearchBinding.menuClickListener = object : ItemClickListener<Music> {
                 override fun onClickListener(model: Music) {
-                    Log.d("hahaha", model.name!!)
+                    optionBottomDialog(model)
                 }
             }
         }

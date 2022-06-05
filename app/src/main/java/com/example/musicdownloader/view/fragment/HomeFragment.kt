@@ -133,9 +133,8 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
 
         TopListenedBinding.itemClickListener = object : ItemClickListener<Music>{
             override fun onClickListener(model: Music) {
-                Log.d("hahaha", model.name!!)
+                optionBottomDialog(model)
             }
-
         }
         binding.recyclerViewTopRating.adapter = GenericAdapter(
             R.layout.item_top_rating,

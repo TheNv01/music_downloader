@@ -1,10 +1,11 @@
 package com.example.musicdownloader.viewmodel
 
 
+import androidx.lifecycle.ViewModel
 import com.example.musicdownloader.R
 import com.example.musicdownloader.model.Region
 
-class ChangeRegionViewModel: BaseViewModel(){
+class ChangeRegionViewModel: ViewModel(){
 
     private var _regions = ArrayList<Region>()
     val regions: List<Region> = _regions

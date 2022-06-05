@@ -1,5 +1,6 @@
 package com.example.musicdownloader.viewmodel
 
+import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -7,11 +8,10 @@ import com.example.musicdownloader.model.Genres
 import com.example.musicdownloader.model.Music
 import com.example.musicdownloader.networking.Services
 import kotlinx.coroutines.launch
-import kotlin.Exception
 
 enum class ApiStatus { LOADING, DONE }
 
-class HomeViewModel: BaseViewModel() {
+class HomeViewModel(application: Application): BaseViewModel(application) {
 
     private var _statusTrending = MutableLiveData<ApiStatus>()
     val statusTrending: LiveData<ApiStatus> = _statusTrending

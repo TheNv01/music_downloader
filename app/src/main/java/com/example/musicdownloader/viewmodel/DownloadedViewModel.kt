@@ -1,18 +1,17 @@
 package com.example.musicdownloader.viewmodel
 
 
+import android.app.Application
 import android.graphics.BitmapFactory
 import android.media.MediaMetadataRetriever
 import android.os.Environment
-import android.util.Log
 import com.example.musicdownloader.R
-import com.example.musicdownloader.model.Music
 import com.example.musicdownloader.model.MusicDownloaded
 import com.example.musicdownloader.model.Option
 import java.io.File
 
 
-class DownloadedViewModel : BaseViewModel() {
+class DownloadedViewModel(application: Application) : BaseViewModel(application) {
     val optionsDownloaded = ArrayList<Option>()
     val downloadeds = ArrayList<MusicDownloaded>()
 

@@ -33,7 +33,7 @@ class SeeAllFragment: BaseFragment<SeeAllFragmentBinding, SeeAllViewModel>(), On
 
     private val menuClickListener = object : ItemClickListener<Music> {
         override fun onClickListener(model: Music) {
-            TODO("Not yet implemented")
+            optionBottomDialog(model)
         }
 
     }
@@ -82,12 +82,7 @@ class SeeAllFragment: BaseFragment<SeeAllFragmentBinding, SeeAllViewModel>(), On
         binding.lifecycleOwner = viewLifecycleOwner
         loadData(args.option.toString())
 
-        SeeAllBinding.itemClickListener = object : ItemClickListener<Music>{
-            override fun onClickListener(model: Music) {
-                Log.d("hahaha", model.name!!)
-            }
-
-        }
+        SeeAllBinding.itemClickListener = menuClickListener
         binding.recyclerViewSeeAll.adapter = GenericAdapter(
             R.layout.item_top_listened,
             SeeAllBinding,

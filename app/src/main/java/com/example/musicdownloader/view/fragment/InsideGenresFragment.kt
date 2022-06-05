@@ -78,9 +78,11 @@ class InsideGenresFragment : BaseFragment<InsideGenresFragmentBinding, InsideGen
         binding.viewmodel = mViewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
+        SearchBinding.isIconMenu = true
+
         SearchBinding.menuClickListener = object : ItemClickListener<Music>{
             override fun onClickListener(model: Music) {
-                Log.d("hahaha", model.name!!)
+                optionBottomDialog(model)
             }
 
         }

@@ -1,9 +1,10 @@
 package com.example.musicdownloader.viewmodel
 
+import android.app.Application
 import com.example.musicdownloader.R
 import com.example.musicdownloader.model.Option
 
-class DownloadingViewModel: BaseViewModel() {
+class DownloadingViewModel(application: Application) : BaseViewModel(application) {
     val optionsDownloading = ArrayList<Option>()
 
     init {

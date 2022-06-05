@@ -2,25 +2,20 @@ package com.example.musicdownloader.viewmodel
 
 import android.app.Application
 import android.os.Environment
-import android.widget.Toast
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.musicdownloader.R
-import com.example.musicdownloader.database.MusicRoomDatabase
 import com.example.musicdownloader.manager.DownloadingManager
 import com.example.musicdownloader.model.Music
 import com.example.musicdownloader.model.Option
 import com.example.musicdownloader.model.Playlist
-import com.example.musicdownloader.repository.FavoriteRepository
-import com.example.musicdownloader.repository.PlaylistRepository
 import com.tonyodev.fetch2.*
 import com.tonyodev.fetch2core.DownloadBlock
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class PlaylistInsideViewModel(application: Application): AndroidViewModel(application) {
+class PlaylistInsideViewModel(application: Application) : BaseViewModel(application) {
 
     private var _musics = MutableLiveData<List<Music>>()
     val musics: LiveData<List<Music>> = _musics
@@ -30,28 +25,12 @@ class PlaylistInsideViewModel(application: Application): AndroidViewModel(applic
     private var _isDownloadComplete = MutableLiveData<Boolean>()
     val isDownloadComplete: LiveData<Boolean> = _isDownloadComplete
 
-    val existingPlaylist: LiveData<List<Playlist>>
+    val existingPlaylist: LiveData<List<Playlist>> = playlistRepository.playlists
 
     val optionsPlaylist = ArrayList<Option>()
     val optionsSong = ArrayList<Option>()
 
-    private val playlistRepository: PlaylistRepository
-    private val favoriteRepository: FavoriteRepository
-
     init {
-        val playlistDAO = MusicRoomDatabase
-            .MusicDatabaseBuilder
-            .getInstance(application.applicationContext)
-            .playlistDAO()
-        playlistRepository = PlaylistRepository(playlistDAO)
-
-        val favoriteDAO = MusicRoomDatabase
-            .MusicDatabaseBuilder
-            .getInstance(application.applicationContext)
-            .favoriteDAO()
-        favoriteRepository = FavoriteRepository(favoriteDAO)
-
-        existingPlaylist = playlistRepository.playlists
         initOption()
     }
 
@@ -105,15 +84,6 @@ class PlaylistInsideViewModel(application: Application): AndroidViewModel(applic
         }
     }
 
-    fun insertMusicToFavorite(music: Music){
-        viewModelScope.launch(Dispatchers.IO) {
-            favoriteRepository.insertMusicToFavorite(music)
-        }
-    }
-
-    fun existInFavorite(id: String): Music?{
-        return favoriteRepository.getListMusic(id)
-    }
 
     fun getMusics(id: Int){
         viewModelScope.launch(Dispatchers.IO) {
