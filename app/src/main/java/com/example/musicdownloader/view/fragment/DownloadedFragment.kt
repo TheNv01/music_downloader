@@ -10,6 +10,8 @@ import android.provider.Settings
 import android.view.Gravity
 import android.view.View
 import android.widget.Toast
+import androidx.core.content.FileProvider
+import com.example.musicdownloader.BuildConfig
 import com.example.musicdownloader.R
 import com.example.musicdownloader.adapter.DownloadedAdapter
 import com.example.musicdownloader.databinding.DownloadedFragmentBinding
@@ -89,10 +91,26 @@ class DownloadedFragment: BaseFragment<DownloadedFragmentBinding, DownloadedView
                     R.drawable.ic_bell ->{
                         checkSystemWritePermission(musicDownloaded)
                     }
+                    R.drawable.ic_share ->{
+                        shareMusic(musicDownloaded)
+                    }
 
                 }
             }
         }
+    }
+
+    private fun shareMusic(musicDownloaded: MusicDownloaded){
+        val intent = Intent(Intent.ACTION_SEND)
+        val fileUri: Uri? = FileProvider.getUriForFile(
+                requireContext(),
+                BuildConfig.APPLICATION_ID + ".provider",
+                File(musicDownloaded.uri!!))
+        intent.type = "audio/*"
+        intent.setDataAndType(fileUri, requireContext().contentResolver.getType(fileUri!!))
+        intent.putExtra(Intent.EXTRA_STREAM, fileUri)
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        startActivity(Intent.createChooser(intent, "Share Sound File"))
     }
 
     private fun checkSystemWritePermission(musicDownloaded: MusicDownloaded) {
