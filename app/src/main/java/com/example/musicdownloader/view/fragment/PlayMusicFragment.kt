@@ -192,15 +192,16 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
             }
         }
         else{
-            val fileUri: Uri = FileProvider.getUriForFile(
-                requireContext(),
-                BuildConfig.APPLICATION_ID + ".provider",
-                File(MusicDonwnloadedManager.currentMusicDownloaded!!.uri)
-            )
-
+            val fileUri: Uri? = MusicDonwnloadedManager.currentMusicDownloaded?.let {
+                FileProvider.getUriForFile(
+                    requireContext(),
+                    BuildConfig.APPLICATION_ID + ".provider",
+                    File(it.uri!!)
+                )
+            }
 
             intent.type = "audio/*"
-            intent.setDataAndType(fileUri, requireContext().contentResolver.getType(fileUri))
+            intent.setDataAndType(fileUri, requireContext().contentResolver.getType(fileUri!!))
             intent.putExtra(Intent.EXTRA_STREAM, fileUri)
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             startActivity(Intent.createChooser(intent, "Share Sound File"))
