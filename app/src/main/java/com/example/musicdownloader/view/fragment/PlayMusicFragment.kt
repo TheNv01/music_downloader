@@ -199,7 +199,6 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
                     File(it.uri!!)
                 )
             }
-
             intent.type = "audio/*"
             intent.setDataAndType(fileUri, requireContext().contentResolver.getType(fileUri!!))
             intent.putExtra(Intent.EXTRA_STREAM, fileUri)

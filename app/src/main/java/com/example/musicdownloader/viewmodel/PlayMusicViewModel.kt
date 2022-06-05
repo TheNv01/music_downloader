@@ -94,6 +94,7 @@ class PlayMusicViewModel(application: Application): AndroidViewModel(application
 
         val musicDownloading = MusicDownloading(MusicManager.getCurrentMusic()!!.name!!,
             MusicManager.getCurrentMusic()!!.artistName!!,
+            MusicManager.getCurrentMusic()!!.image!!,
             request)
 
         DownloadingManager.listDownloading().add(musicDownloading)

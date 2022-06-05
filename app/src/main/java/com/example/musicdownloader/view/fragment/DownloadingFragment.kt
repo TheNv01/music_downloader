@@ -1,15 +1,21 @@
 package com.example.musicdownloader.view.fragment
 
+import android.content.Intent
+import android.net.Uri
 import android.view.View
+import androidx.core.content.FileProvider
+import com.example.musicdownloader.BuildConfig
 import com.example.musicdownloader.R
 import com.example.musicdownloader.adapter.DownloadingAdapter
 import com.example.musicdownloader.databinding.DownloadingFragmentBinding
 import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
 import com.example.musicdownloader.manager.DownloadingManager
+import com.example.musicdownloader.manager.MusicDonwnloadedManager
 import com.example.musicdownloader.model.MusicDownloading
 import com.example.musicdownloader.view.MainActivity
 import com.example.musicdownloader.view.dialog.BottomDialog
 import com.example.musicdownloader.viewmodel.DownloadingViewModel
+import java.io.File
 
 class DownloadingFragment : BaseFragment<DownloadingFragmentBinding, DownloadingViewModel>(){
 
@@ -64,8 +70,19 @@ class DownloadingFragment : BaseFragment<DownloadingFragmentBinding, Downloading
                     R.drawable.ic_play_not_background ->{
                         DownloadingManager.fetch!!.pause(musicDownloading.request.id)
                     }
+                    R.drawable.ic_share ->{
+                        shareMusic(musicDownloading)
+                    }
                 }
             }
         }
+    }
+
+    private fun shareMusic(musicDownloading: MusicDownloading){
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.type = "text/plain"
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Subject Here")
+        intent.putExtra(Intent.EXTRA_TEXT,musicDownloading.request.url)
+        startActivity(Intent.createChooser(intent, "Share link"))
     }
 }
