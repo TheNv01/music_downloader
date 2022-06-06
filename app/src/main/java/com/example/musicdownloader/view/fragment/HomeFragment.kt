@@ -1,8 +1,8 @@
 package com.example.musicdownloader.view.fragment
 
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.setFragmentResultListener
+import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
@@ -29,20 +29,6 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
 
     companion object{
         const val KEY_SHOW_PLAY_MUSIC = "KEY_SHOW_PLAY_MUSIC"
-    }
-
-    private val musicItemClickListener = object : ItemClickListener<Music> {
-        override fun onClickListener(model: Music) {
-            MusicDonwnloadedManager.currentMusicDownloaded = null
-            MusicManager.setCurrentMusic(model)
-            callBack.callBack(KEY_SHOW_PLAY_MUSIC, null)
-        }
-    }
-
-    private val menuClickListener = object : ItemClickListener<Music> {
-        override fun onClickListener(model: Music) {
-        }
-
     }
 
     override fun initBinding(mRootView: View): HomeFragmentBinding {
@@ -139,16 +125,16 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
         binding.recyclerViewTopRating.adapter = GenericAdapter(
             R.layout.item_top_rating,
             TopRatingBinding,
-            musicItemClickListener)
+            setMusicClick(mViewModel.topRatings))
 
         binding.recyclerViewTopListened.adapter = GenericAdapter(
             R.layout.item_top_listened,
             TopListenedBinding,
-            musicItemClickListener)
+            setMusicClick(mViewModel.topListeneds))
         binding.recyclerViewTopDownload.adapter = GenericAdapter(
             R.layout.item_top_download,
             TopDownloadBinding,
-            musicItemClickListener)
+            setMusicClick(mViewModel.topDownloads))
         binding.recyclerViewGenres.adapter = GenericAdapter(
             R.layout.item_genres,
             GenresBinding,
@@ -160,10 +146,30 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
             })
     }
 
+    private fun setMusicClick(musics: LiveData<List<Music>> ?= null): ItemClickListener<Music> =
+         object : ItemClickListener<Music> {
+            override fun onClickListener(model: Music) {
+                MusicDonwnloadedManager.currentMusicDownloaded = null
+                MusicManager.setCurrentMusic(model)
+                callBack.callBack(KEY_SHOW_PLAY_MUSIC, null)
+                musics?.observe(viewLifecycleOwner){
+                    MusicManager.setListMusic(it)
+                }
+
+            }
+        }
+
+
     private fun setupTrendingViewPager(){
         val viewPager = binding.viewPagerTrending
         mViewModel.trends.observe(this){
-            viewPager.adapter = TrendingAdapter(R.layout.item_trending, it as ArrayList<Music>, viewPager, musicItemClickListener)
+            if(it.isNotEmpty()){
+                viewPager.adapter = TrendingAdapter(R.layout.item_trending, it as ArrayList<Music>, viewPager, setMusicClick())
+            }
+            else{
+                viewPager.adapter =TrendingAdapter(R.layout.item_trending, ArrayList(), viewPager, setMusicClick())
+            }
+
         }
         viewPager.clipToPadding = false
         viewPager.clipChildren = false
