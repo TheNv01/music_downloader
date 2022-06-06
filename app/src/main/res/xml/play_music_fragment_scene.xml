@@ -233,6 +233,7 @@
             android:layout_height="71dp"
             android:scaleX="50"
             app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="80dp"
             app:layout_constraintStart_toStartOf="parent" >
 
             <CustomAttribute

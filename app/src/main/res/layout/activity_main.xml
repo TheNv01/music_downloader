@@ -31,7 +31,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:translationZ="2dp"
-            app:layout_constraintBottom_toTopOf="@id/bottom_view">
+            app:layout_constraintBottom_toBottomOf="parent">
 
             <View
                 android:id="@+id/backgroundDim"

@@ -24,17 +24,27 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupBottomNavigation(){
         binding.bottomView.itemIconTintList = null
-        binding.bottomView.setupWithNavController(findNavController(R.id.activity_main_nav_host_fragment))
-        findNavController(R.id.activity_main_nav_host_fragment).addOnDestinationChangedListener { _, destination, _ ->
-
-            when(destination.id){
-                R.id.homeFragment, R.id.playListFragment, R.id.downloadFragment, R.id.settingFragment->{
-                    binding.bottomView.visibility = View.VISIBLE
+        binding.bottomView.setOnItemSelectedListener {
+            when(it.itemId){
+                R.id.homeFragment ->{
+                    findNavController(R.id.activity_main_nav_host_fragment).navigate(R.id.homeFragment)
+                    true
                 }
-                else -> {
-                    binding.bottomView.visibility = View.GONE
+                R.id.downloadFragment ->{
+                    findNavController(R.id.activity_main_nav_host_fragment).navigate(R.id.downloadFragment)
+                    true
                 }
+                R.id.playListFragment ->{
+                    findNavController(R.id.activity_main_nav_host_fragment).navigate(R.id.playListFragment)
+                    true
+                }
+                R.id.settingFragment ->{
+                    findNavController(R.id.activity_main_nav_host_fragment).navigate(R.id.settingFragment)
+                    true
+                }
+                else -> false
             }
+
         }
     }
 
