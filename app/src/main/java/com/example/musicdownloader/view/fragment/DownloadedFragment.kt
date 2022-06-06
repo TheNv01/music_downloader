@@ -5,8 +5,11 @@ import android.content.Intent
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
+import android.os.Environment
+import android.os.FileObserver
 import android.provider.MediaStore
 import android.provider.Settings
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.Toast
@@ -24,6 +27,7 @@ import com.example.musicdownloader.view.MainActivity
 import com.example.musicdownloader.view.dialog.BottomDialog
 import com.example.musicdownloader.viewmodel.DownloadedViewModel
 import java.io.File
+
 
 class DownloadedFragment: BaseFragment<DownloadedFragmentBinding, DownloadedViewModel>(), OnActionCallBack {
 
@@ -58,16 +62,9 @@ class DownloadedFragment: BaseFragment<DownloadedFragmentBinding, DownloadedView
         return R.layout.downloaded_fragment
     }
 
-    override fun initViews() {
-        callback = this
-    }
-
-    override fun setUpListener() {
-
-    }
-
-    override fun setUpObserver() {
-        mViewModel.getListMusicDownloaded()
+    override fun onResume() {
+        super.onResume()
+        mViewModel.getMusicFromExternal()
         adapter= DownloadedAdapter(
             R.layout.item_downloaded,
             mViewModel.downloadeds,
@@ -77,7 +74,19 @@ class DownloadedFragment: BaseFragment<DownloadedFragmentBinding, DownloadedView
         binding.recyclerViewDownloaded.adapter = adapter
     }
 
+    override fun initViews() {
+        callback = this
+
+    }
+
+    override fun setUpListener() {
+    }
+    override fun setUpObserver() {
+
+    }
+
     private fun openDownloadingBottomSheet(musicDownloaded: MusicDownloaded) {
+
         val bottomSheetDialog = BottomDialog(mViewModel.optionsDownloaded)
         bottomSheetDialog.show((activity as MainActivity).supportFragmentManager, null)
         bottomSheetDialog.itemClickListener = object : ItemClickListener<Int>{
@@ -85,7 +94,8 @@ class DownloadedFragment: BaseFragment<DownloadedFragmentBinding, DownloadedView
                 when(model){
                     R.drawable.ic_delete ->{
                         musicDownloaded.uri?.let { File(it).delete() }
-                        mViewModel.getListMusicDownloaded()
+                        mViewModel.getMusicFromExternal()
+                        adapter.musicsDownloaded = mViewModel.downloadeds
                         adapter.notifyDataSetChanged()
                     }
                     R.drawable.ic_bell ->{
@@ -94,7 +104,6 @@ class DownloadedFragment: BaseFragment<DownloadedFragmentBinding, DownloadedView
                     R.drawable.ic_share ->{
                         shareMusic(musicDownloaded)
                     }
-
                 }
             }
         }

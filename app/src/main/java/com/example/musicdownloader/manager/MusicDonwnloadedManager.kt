@@ -1,10 +1,18 @@
 package com.example.musicdownloader.manager
 
+import android.content.ContentResolver
+import android.database.Cursor
+import android.graphics.BitmapFactory
+import android.media.MediaMetadataRetriever
+import android.os.Environment
+import android.provider.MediaStore
 import com.example.musicdownloader.model.MusicDownloaded
+import java.io.File
+
 
 object MusicDonwnloadedManager {
 
-    var musicsDownloaded: List<MusicDownloaded> = ArrayList()
+    var musicsDownloaded: ArrayList<MusicDownloaded> = ArrayList()
     var currentMusicDownloaded: MusicDownloaded? = null
 
     fun getIndexOfCurrentMusic(): Int {
@@ -42,4 +50,6 @@ object MusicDonwnloadedManager {
             randomMusic()
         }
     }
+
+
 }

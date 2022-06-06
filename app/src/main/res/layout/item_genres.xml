@@ -13,31 +13,44 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_genres"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="19dp">
+        android:layout_height="match_parent"
+        android:layout_marginBottom="12dp"
+        android:layout_marginStart="6dp"
+        android:layout_marginEnd="6dp">
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/img_genres"
-            android:layout_width="85dp"
-            android:layout_height="85dp"
-            app:civ_border_width="1dp"
-            app:civ_border_color="@color/white"
-            imageUrl="@{genres.image}"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_view"
+            android:layout_width="140dp"
+            android:layout_height="80dp"
+            app:cardCornerRadius="10dp"
+            android:translationZ="1dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/background_genres"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                imageUrl="@{genres.image}"
+                android:scaleType="fitXY"/>
+
+        </androidx.cardview.widget.CardView>
 
         <TextView
-            android:id="@+id/tv_pop"
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_genres"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:text="@{genres.name}"
-            android:textStyle="bold"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:textColor="@color/white"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            android:text="@{genres.name}"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:translationZ="3dp"
+            android:textStyle="bold"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="6dp"
+            app:layout_constraintBottom_toBottomOf="@id/card_view"
+            app:layout_constraintStart_toStartOf="@id/card_view"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

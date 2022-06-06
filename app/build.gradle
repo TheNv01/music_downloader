@@ -95,5 +95,8 @@ dependencies {
     kapt "androidx.room:room-compiler:2.4.2"
     implementation "androidx.tonyodev.fetch2:xfetch2:3.1.6"
 
+    implementation 'com.github.wseemann:FFmpegMediaMetadataRetriever-core:1.0.16'
+    implementation 'com.github.wseemann:FFmpegMediaMetadataRetriever-native:1.0.16'
+
 
 }

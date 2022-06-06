@@ -22,7 +22,6 @@
             android:id="@+id/view"
             android:layout_width="match_parent"
             android:layout_height="71dp"
-            android:layout_marginBottom="80dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -63,7 +62,7 @@
             android:layout_width="150dp"
             android:layout_height="71dp"
             android:layout_marginStart="16dp"
-            android:layout_marginBottom="80dp"
+
             android:alpha="0"
             android:scaleType="fitXY"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -73,7 +72,6 @@
             android:id="@+id/img_cover_background"
             android:layout_width="match_parent"
             android:layout_height="71dp"
-            android:layout_marginBottom="80dp"
             android:scaleType="fitXY"
             android:src="@drawable/cover_background_expand"
             app:altSrc="@drawable/cover_background_collapsed"

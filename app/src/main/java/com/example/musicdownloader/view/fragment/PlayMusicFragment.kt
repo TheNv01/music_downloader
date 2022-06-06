@@ -2,19 +2,15 @@ package com.example.musicdownloader.view.fragment
 
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.*
-import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.animation.LinearInterpolator
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.constraintlayout.motion.widget.MotionLayout
-import androidx.core.app.ActivityCompat
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.fragment.app.FragmentManager
@@ -96,13 +92,19 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
                 binding.icPlayOrPause.setImageResource(R.drawable.ic_pause_not_background)
             }
             MusicService.ACTION_CLOSE ->{
-
+                (activity as MainActivity).playMusicFragment = null
+                (activity as MainActivity).binding.bottomView.visibility = View.VISIBLE
+                (activity as MainActivity).binding.viewPlaceHolder.visibility = View.GONE
+                activity?.supportFragmentManager!!.popBackStack("playFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE)
             }
         }
     }
 
     override fun initViews() {
-        music = MusicManager.getCurrentMusic()!!
+        (activity as MainActivity).binding.viewPlaceHolder.visibility = View.VISIBLE
+        MusicManager.getCurrentMusic()?.let {
+            music = it
+        }
         callBack = this
         MediaManager.setProgress(0)
         if(MusicDonwnloadedManager.currentMusicDownloaded == null){
@@ -112,7 +114,6 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
 
         }
         else{
-            binding.icFavorite.setImageResource(R.drawable.ic_add_to_playlist)
             mViewModel.initOption()
             playSong()
         }
@@ -125,9 +126,9 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
             openBottomSheet()
         }
         binding.icClose.setOnClickListener{
-            (activity as MainActivity).playMusicFragment = null
+
             gotoService(MusicService.ACTION_CLOSE)
-            activity?.supportFragmentManager!!.popBackStack("playFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+
         }
         binding.icBack.setOnClickListener {
             binding.layoutPlayMusic.transitionToStart()
@@ -246,6 +247,8 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
         binding.viewmodel = mViewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
+        //binding.icFavorite.setImageResource(R.drawable.ic_add_to_playlist)
+
         mViewModel.isExisted.observe(viewLifecycleOwner){
             isExited = it
         }
@@ -257,9 +260,7 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
                 }
                 else{
                     if((activity as MainActivity).supportFragmentManager.findFragmentById(R.id.activity_main_nav_host_fragment)?.childFragmentManager?.backStackEntryCount == 0){
-                        (activity as MainActivity).playMusicFragment = null
                         gotoService(MusicService.ACTION_CLOSE)
-                        activity?.supportFragmentManager!!.popBackStack("playFragment", FragmentManager.POP_BACK_STACK_INCLUSIVE)
                     }
                     else{
                         activity?.findNavController(R.id.activity_main_nav_host_fragment)?.popBackStack()
@@ -403,7 +404,7 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
             binding.seekBar.maxProgress = MusicDonwnloadedManager.currentMusicDownloaded?.duration!!.toInt()
         }
 
-        (activity as MainActivity).runOnUiThread(object : Runnable {
+        activity?.runOnUiThread(object : Runnable {
             override fun run() {
                 val currentPosition: Int = MediaManager.getProgress()/1000
                 binding.seekBar.progress = currentPosition
@@ -426,6 +427,9 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
         if(MusicDonwnloadedManager.currentMusicDownloaded == null){
             playSong(MusicManager.getCurrentMusic()!!)
             mViewModel.existInFavorite()
+            MusicManager.getCurrentMusic()?.let {
+                music = it
+            }
         }
         else{
             playSong()

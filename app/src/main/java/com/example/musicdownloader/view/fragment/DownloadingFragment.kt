@@ -1,25 +1,20 @@
 package com.example.musicdownloader.view.fragment
 
 import android.content.Intent
-import android.net.Uri
 import android.view.View
-import androidx.core.content.FileProvider
-import com.example.musicdownloader.BuildConfig
 import com.example.musicdownloader.R
 import com.example.musicdownloader.adapter.DownloadingAdapter
 import com.example.musicdownloader.databinding.DownloadingFragmentBinding
 import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
 import com.example.musicdownloader.manager.DownloadingManager
-import com.example.musicdownloader.manager.MusicDonwnloadedManager
 import com.example.musicdownloader.model.MusicDownloading
 import com.example.musicdownloader.view.MainActivity
 import com.example.musicdownloader.view.dialog.BottomDialog
 import com.example.musicdownloader.viewmodel.DownloadingViewModel
-import java.io.File
 
 class DownloadingFragment : BaseFragment<DownloadingFragmentBinding, DownloadingViewModel>(){
 
-    var bottomSheetDialog: BottomDialog ?= null
+    private var bottomSheetDialog: BottomDialog ?= null
 
     override fun initBinding(mRootView: View): DownloadingFragmentBinding {
         return DownloadingFragmentBinding.bind(mRootView)

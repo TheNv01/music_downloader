@@ -283,7 +283,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view_genres"
                 android:layout_width="match_parent"
-                android:layout_height="85dp"
+                android:layout_height="100dp"
                 android:layout_marginStart="18dp"
                 android:layout_marginTop="21dp"
                 android:orientation="horizontal"

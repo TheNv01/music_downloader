@@ -5,6 +5,7 @@ import androidx.databinding.ViewDataBinding
 import com.example.musicdownloader.databinding.ItemDownloadingBinding
 import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
 import com.example.musicdownloader.manager.DownloadingManager
+import com.example.musicdownloader.manager.MusicDonwnloadedManager
 import com.example.musicdownloader.model.MusicDownloading
 import com.tonyodev.fetch2.Download
 import com.tonyodev.fetch2.Error

@@ -9,10 +9,10 @@ import com.example.musicdownloader.model.Music
 
 class TrendingAdapter(
     layoutID: Int,
-    var musics: ArrayList<Music>,
+    var musics: ArrayList<Music>?,
     private val viewPager: ViewPager2,
     itemClickListener: ItemClickListener<Music>
-): BaseAdapter<Music, ItemTrendingBinding>(layoutID, musics, itemClickListener) {
+): BaseAdapter<Music, ItemTrendingBinding>(layoutID, musics!!, itemClickListener) {
 
     override fun setViewHolder(binding: ViewDataBinding): BaseViewHolder<Music, ItemTrendingBinding> {
         return TrendingViewHolder(binding as ItemTrendingBinding)
@@ -21,7 +21,7 @@ class TrendingAdapter(
     inner class TrendingViewHolder(private val binding: ItemTrendingBinding) : BaseViewHolder<Music, ItemTrendingBinding>(binding) {
         override fun bindData(data: Music) {
             binding.music = data
-            if(adapterPosition == musics.size - 2){
+            if(adapterPosition == musics!!.size - 2){
                 viewPager.post(runnable)
             }
         }
@@ -29,13 +29,13 @@ class TrendingAdapter(
         override fun clickListener(data: Music, itemClickListener: ItemClickListener<Music>) {
             binding.layoutTrending.setOnClickListener {
                 itemClickListener.onClickListener(data)
-                MusicManager.setListMusic(musics)
+                MusicManager.setListMusic(musics!!)
             }
             binding.executePendingBindings()
         }
     }
     private val runnable = Runnable {
-        musics.addAll(musics)
+        musics!!.addAll(musics!!)
         notifyDataSetChanged()
     }
 

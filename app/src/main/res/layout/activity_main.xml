@@ -20,7 +20,7 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/bottom_view"
+            app:layout_constraintBottom_toTopOf="@id/view_place_holder"
             app:navGraph="@navigation/nav_graph" />
 
         <FrameLayout
@@ -31,7 +31,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:translationZ="2dp"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintBottom_toTopOf="@id/bottom_view">
 
             <View
                 android:id="@+id/backgroundDim"
@@ -40,6 +40,14 @@
 
         </FrameLayout>
 
+        <View
+            android:id="@+id/view_place_holder"
+            android:layout_width="match_parent"
+            android:layout_height="71dp"
+            android:background="@color/black"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@id/activity_main_nav_host_fragment"
+            app:layout_constraintBottom_toTopOf="@id/bottom_view"/>
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottom_view"

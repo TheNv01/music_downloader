@@ -49,6 +49,14 @@ class BottomDialog (private val options: List<Option>) : BottomSheetDialogFragme
         for (option in options) {
             val v: View = initView(option)
             v.setOnClickListener {
+                if(option.icon == R.drawable.ic_pause_download){
+                    option.icon = R.drawable.ic_play_not_background
+                    option.name = "Resume Download"
+                }
+                else if(option.icon == R.drawable.ic_play_not_background){
+                    option.icon = R.drawable.ic_pause_download
+                    option.name = "Pause Download"
+                }
                 itemClickListener.onClickListener(option.icon)
                 dismiss()
             }

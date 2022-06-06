@@ -31,7 +31,9 @@ class MainActivity : AppCompatActivity() {
                 R.id.homeFragment, R.id.playListFragment, R.id.downloadFragment, R.id.settingFragment->{
                     binding.bottomView.visibility = View.VISIBLE
                 }
-                else -> binding.bottomView.visibility = View.GONE
+                else -> {
+                    binding.bottomView.visibility = View.GONE
+                }
             }
         }
     }
