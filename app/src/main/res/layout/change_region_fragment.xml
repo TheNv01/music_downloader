@@ -5,7 +5,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/black">
+        android:background="@drawable/cover_background_expand">
 
         <ImageView
             android:id="@+id/ic_region"
@@ -29,37 +29,29 @@
             android:textSize="20dp"
             android:textStyle="bold"/>
 
-        <EditText
-            android:id="@+id/edt_search"
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/search_country"
             android:layout_width="match_parent"
-            android:layout_height="46dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_search"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_change_region"
             app:layout_constraintEnd_toEndOf="parent"
-            android:hint="search country"
-            android:paddingLeft="55dp"
-            android:textSize="14sp"
-            android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            app:searchIcon="@drawable/ic_search"
+            app:closeIcon="@null"
             android:layout_marginEnd="16dp"
-            android:background="@drawable/background_search"/>
-
-        <ImageView
-            android:id="@+id/ic_search"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_search"
-            android:layout_marginStart="20dp"
-            app:layout_constraintStart_toStartOf="@id/edt_search"
-            app:layout_constraintTop_toTopOf="@id/edt_search"
-            app:layout_constraintBottom_toBottomOf="@id/edt_search"/>
+            app:iconifiedByDefault="false"
+            app:queryHint="Search song name"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view_region"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/edt_search"
+            app:layout_constraintTop_toBottomOf="@id/search_country"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="10dp"

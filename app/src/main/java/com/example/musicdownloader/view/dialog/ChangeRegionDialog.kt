@@ -1,10 +1,12 @@
 package com.example.musicdownloader.view.dialog
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.Nullable
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
@@ -35,6 +37,7 @@ class ChangeRegionDialog: DialogFragment(), ItemClickListener<Region> {
         mRootView = inflater.inflate(getLayoutId(), container, false)
         viewModel = ViewModelProvider(requireActivity())[ChangeRegionViewModel::class.java]
         binding = initBinding(mRootView)
+        setTextColorHint()
         return mRootView
     }
 
@@ -57,6 +60,13 @@ class ChangeRegionDialog: DialogFragment(), ItemClickListener<Region> {
             viewModel.regions,
             this
         )
+    }
+
+    private fun setTextColorHint(){
+        val theTextArea = binding!!.searchCountry.findViewById<View>(androidx.appcompat.R.id.search_src_text) as SearchView.SearchAutoComplete
+        theTextArea.setTextColor(Color.WHITE)
+        theTextArea.alpha = 0.6f
+        theTextArea.setHintTextColor(Color.WHITE)
     }
 
     override fun onClickListener(model: Region) {
