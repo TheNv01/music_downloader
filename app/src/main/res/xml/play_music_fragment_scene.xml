@@ -146,8 +146,8 @@
         </Constraint>
         <Constraint
             android:id="@+id/ic_favorite"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="21dp"
+            android:layout_height="21dp"
             app:layout_constraintEnd_toStartOf="@id/ic_share"
             android:alpha="1"
             android:translationZ="2dp"
@@ -157,8 +157,8 @@
         <Constraint
             android:id="@+id/ic_share"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="24dp"
+            android:layout_height="20dp"
             android:layout_marginEnd="16dp"
             android:alpha="1"
             android:translationZ="2dp"

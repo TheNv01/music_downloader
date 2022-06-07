@@ -143,8 +143,8 @@
 
         <ImageView
             android:id="@+id/ic_favorite"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="21dp"
+            android:layout_height="21dp"
             android:visibility="gone"
             setFavorite="@{viewmodel.isExisted()}"
             android:src="@drawable/ic_favorite"
@@ -154,8 +154,8 @@
 
         <ImageView
             android:id="@+id/ic_share"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="24dp"
+            android:layout_height="20dp"
             android:layout_marginEnd="16dp"
             android:visibility="gone"
             android:src="@drawable/ic_share"

@@ -47,7 +47,7 @@
 
         <TextView
             android:id="@+id/tv_music"
-            android:layout_width="280dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@{music.name}"
             android:textSize="14sp"
@@ -56,15 +56,17 @@
             android:layout_marginStart="11dp"
             android:maxLines="1"
             android:ellipsize="end"
+            android:layout_marginEnd="14dp"
             app:layout_constraintStart_toEndOf="@id/card_view"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/popup"
             app:layout_constraintBottom_toTopOf="@+id/tv_artist"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintVertical_chainStyle="packed"/>
 
         <TextView
             android:id="@+id/tv_artist"
-            android:layout_width="280dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@{music.artistName}"
             android:textSize="12sp"
@@ -73,7 +75,9 @@
             android:layout_marginTop="6dp"
             android:maxLines="1"
             android:ellipsize="end"
+            android:layout_marginEnd="14dp"
             app:layout_constraintStart_toEndOf="@id/card_view"
+            app:layout_constraintEnd_toStartOf="@id/popup"
             app:layout_constraintTop_toBottomOf="@+id/tv_music"
             app:layout_constraintVertical_chainStyle="packed"
             app:layout_constraintBottom_toBottomOf="parent"/>
