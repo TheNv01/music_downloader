@@ -21,8 +21,8 @@
 
             <ImageView
                 android:id="@+id/ic_close"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
                 android:background="@drawable/ic_close"
                 app:layout_constraintEnd_toEndOf="@id/search_song"
                 app:layout_constraintTop_toTopOf="parent"

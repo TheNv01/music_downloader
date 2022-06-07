@@ -44,7 +44,7 @@
             app:closeIcon="@null"
             android:layout_marginEnd="16dp"
             app:iconifiedByDefault="false"
-            app:queryHint="Search song name"/>
+            app:queryHint="Search Country"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view_region"
