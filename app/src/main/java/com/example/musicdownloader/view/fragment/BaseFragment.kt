@@ -34,7 +34,7 @@ import java.io.File
 
 abstract class BaseFragment<K: ViewDataBinding, V: ViewModel>: Fragment() {
 
-    private lateinit var mRootView: View
+    protected lateinit var mRootView: View
     protected lateinit var mViewModel: V
     lateinit var binding: K
     protected lateinit var music: Music

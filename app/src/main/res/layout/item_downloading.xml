@@ -85,8 +85,8 @@
 
         <ImageView
             android:id="@+id/popup"
-            android:layout_width="30dp"
-            android:layout_height="wrap_content"
+            android:layout_width="24dp"
+            android:layout_height="17dp"
             android:src="@drawable/kebab_menu_listened"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"

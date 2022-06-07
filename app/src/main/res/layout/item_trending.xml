@@ -11,8 +11,10 @@
     </data>
 
     <androidx.cardview.widget.CardView
+
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:cardBackgroundColor="@android:color/transparent"
         app:cardCornerRadius="10dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -82,13 +84,13 @@
                 app:layout_constraintEnd_toEndOf="@id/img_background_text"/>
 
             <ImageView
-                android:layout_width="47dp"
-                android:layout_height="47dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:src="@drawable/ic_play"
                 app:layout_constraintEnd_toEndOf="@id/img_background_text"
                 app:layout_constraintBottom_toBottomOf="@id/img_background_text"
                 app:layout_constraintTop_toTopOf="@id/view"
-                android:layout_marginEnd="11dp"/>
+                android:layout_marginEnd="5dp"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

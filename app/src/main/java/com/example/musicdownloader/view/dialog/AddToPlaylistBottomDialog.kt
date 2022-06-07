@@ -133,7 +133,7 @@ class AddToPlaylistBottomDialog(music: Music)  : BottomSheetDialogFragment() {
         val edt = dialog.findViewById<EditText>(R.id.edt_playlist)
         val tvCancel = dialog.findViewById<TextView>(R.id.tv_cancel)
         tvCreate.text = "CREATE"
-        dialog.findViewById<TextView>(R.id.tv_title).text = "CREATE Playlist"
+        dialog.findViewById<TextView>(R.id.tv_title).text = "Create new Playlist"
         tvCreate.setOnClickListener{
             viewModel.createPlaylist(Playlist(edt.text.toString(), ArrayList()))
             dialog.dismiss()

@@ -25,7 +25,7 @@
             <ImageView
                 android:id="@+id/ic_back"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="14dp"
                 android:src="@drawable/ic_back"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -40,7 +40,7 @@
                 android:textSize="22sp"
                 android:text="@string/title"
                 android:textStyle="bold"
-                android:layout_marginStart="13dp"
+
                 app:layout_constraintStart_toEndOf="@+id/ic_back"
                 app:layout_constraintTop_toTopOf="@id/ic_back"
                 app:layout_constraintBottom_toBottomOf="@id/ic_back"/>

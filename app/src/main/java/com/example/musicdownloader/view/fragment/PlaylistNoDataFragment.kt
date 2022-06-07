@@ -46,8 +46,7 @@ class PlaylistNoDataFragment: BaseFragment<PlaylistNoDataFragmentBinding, Playli
                             showRenamePlaylistDialog()
                         }
                         R.drawable.ic_delete ->{
-                            mViewModel.deletePlaylist(args.idplaylist)
-                            (activity as MainActivity).findNavController(R.id.activity_main_nav_host_fragment).popBackStack()
+                           showConfirmDialog()
                         }
 
                     }
@@ -59,6 +58,29 @@ class PlaylistNoDataFragment: BaseFragment<PlaylistNoDataFragmentBinding, Playli
                 .actionPlaylistNoDataFragmentToSearchFragment( 1, Playlist(args.nameplaylist, ArrayList(), args.idplaylist))
             requireActivity().findNavController(R.id.activity_main_nav_host_fragment).navigate(action)
         }
+    }
+
+    private fun showConfirmDialog() {
+        val dialog = Dialog(requireActivity(), R.style.Theme_Dialog)
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.setContentView(R.layout.comfirm_dialog)
+        val tvDone = dialog.findViewById<TextView>(R.id.tv_done)
+        tvDone.text = "DELETE"
+        val tvContent = dialog.findViewById<TextView>(R.id.tv_content)
+        val tvCancel = dialog.findViewById<TextView>(R.id.tv_cancel)
+
+        tvContent.text = "Do You Want To Remove Playlist?"
+        dialog.findViewById<TextView>(R.id.tv_title).text = args.nameplaylist
+        tvDone.setOnClickListener{
+            dialog.dismiss()
+            mViewModel.deletePlaylist(args.idplaylist)
+            (activity as MainActivity).findNavController(R.id.activity_main_nav_host_fragment).popBackStack()
+
+        }
+        tvCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.show()
     }
 
     fun showRenamePlaylistDialog() {

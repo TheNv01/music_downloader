@@ -22,6 +22,7 @@
             android:layout_height="216dp"
             app:cardCornerRadius="10dp"
             android:translationZ="1dp"
+            app:cardBackgroundColor="@android:color/transparent"
             android:layout_marginTop="22dp"
             android:layout_marginStart="20dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -88,14 +89,14 @@
             app:layout_constraintStart_toStartOf="@id/card_view"/>
 
         <ImageView
-            android:layout_width="27dp"
-            android:layout_height="27dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:src="@drawable/ic_play"
             android:translationZ="3dp"
             app:layout_constraintEnd_toEndOf="@id/img_background_text"
             app:layout_constraintBottom_toBottomOf="@id/img_background_text"
             app:layout_constraintTop_toTopOf="@id/view"
-            android:layout_marginEnd="11dp"/>
+            android:layout_marginEnd="4dp"/>
 
         <com.maggie.stroketextviewlibrary.StrokeTextView
             android:id="@+id/tv_order"

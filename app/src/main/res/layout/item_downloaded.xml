@@ -21,6 +21,7 @@
             android:layout_width="56dp"
             android:layout_height="56dp"
             app:cardCornerRadius="6dp"
+            app:cardBackgroundColor="@android:color/transparent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -35,7 +36,7 @@
 
         <TextView
             android:id="@+id/tv_music"
-            android:layout_width="280dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@{musicdownloaded.music}"
             android:textSize="14sp"
@@ -48,11 +49,13 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/tv_artist"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/popup"
+            android:layout_marginEnd="12dp"
             app:layout_constraintVertical_chainStyle="packed"/>
 
         <TextView
             android:id="@+id/tv_artist"
-            android:layout_width="280dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@{musicdownloaded.artist}"
             android:textSize="12sp"
@@ -61,6 +64,8 @@
             android:layout_marginTop="6dp"
             android:maxLines="1"
             android:ellipsize="end"
+            app:layout_constraintEnd_toStartOf="@id/popup"
+            android:layout_marginEnd="12dp"
             app:layout_constraintStart_toEndOf="@id/card_view"
             app:layout_constraintTop_toBottomOf="@+id/tv_music"
             app:layout_constraintVertical_chainStyle="packed"
@@ -68,8 +73,9 @@
 
         <ImageView
             android:id="@+id/popup"
-            android:layout_width="30dp"
-            android:layout_height="wrap_content"
+            android:layout_width="24dp"
+            android:layout_height="17dp"
+            android:layout_marginEnd="6dp"
             android:src="@drawable/kebab_menu_listened"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"

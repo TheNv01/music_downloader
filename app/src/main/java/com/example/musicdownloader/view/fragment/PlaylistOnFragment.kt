@@ -17,6 +17,8 @@ import com.example.musicdownloader.viewmodel.PlaylistOnViewModel
 
 class PlaylistOnFragment: BaseFragment<PlaylistOnFragmentBinding, PlaylistOnViewModel>() {
 
+    private var idPlaylist: Int = -1
+
 
     override fun initBinding(mRootView: View): PlaylistOnFragmentBinding {
         return PlaylistOnFragmentBinding.bind(mRootView)
@@ -64,7 +66,7 @@ class PlaylistOnFragment: BaseFragment<PlaylistOnFragmentBinding, PlaylistOnView
             override fun onClickListener(model: Playlist) {
                 val bottomSheetDialog = BottomDialog(mViewModel.optionsDownloaded)
                 bottomSheetDialog.show((activity as MainActivity).supportFragmentManager, null)
-                val id = model.id
+                val playlist = model
                 bottomSheetDialog.itemClickListener = object : ItemClickListener<Int> {
                     override fun onClickListener(model: Int) {
                         when(model){
@@ -72,7 +74,7 @@ class PlaylistOnFragment: BaseFragment<PlaylistOnFragmentBinding, PlaylistOnView
                                 showRenamePlaylistDialog(id)
                             }
                             R.drawable.ic_delete ->{
-                                mViewModel.deletePlaylist(id)
+                                showConfirmDialog(playlist)
                             }
                         }
                     }
@@ -101,6 +103,29 @@ class PlaylistOnFragment: BaseFragment<PlaylistOnFragmentBinding, PlaylistOnView
         dialog.show()
     }
 
+    private fun showConfirmDialog(playlist: Playlist) {
+        val dialog = Dialog(requireActivity(), R.style.Theme_Dialog)
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.setContentView(R.layout.comfirm_dialog)
+        val tvDone = dialog.findViewById<TextView>(R.id.tv_done)
+        tvDone.text = "DELETE"
+        val tvContent = dialog.findViewById<TextView>(R.id.tv_content)
+        val tvCancel = dialog.findViewById<TextView>(R.id.tv_cancel)
+
+        tvContent.text = "Do You Want To Remove Playlist?"
+        dialog.findViewById<TextView>(R.id.tv_title).text = playlist.name
+        tvDone.setOnClickListener{
+            dialog.dismiss()
+            mViewModel.deletePlaylist(playlist.id)
+
+        }
+        tvCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
+
+
     private fun showCreatePlaylistDialog() {
         val dialog = Dialog(requireActivity(), R.style.Theme_Dialog)
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
@@ -109,14 +134,12 @@ class PlaylistOnFragment: BaseFragment<PlaylistOnFragmentBinding, PlaylistOnView
         val edt = dialog.findViewById<EditText>(R.id.edt_playlist)
         val tvCancel = dialog.findViewById<TextView>(R.id.tv_cancel)
         tvCreate.text = "CREATE"
-        dialog.findViewById<TextView>(R.id.tv_title).text = "CREATE Playlist"
+        dialog.findViewById<TextView>(R.id.tv_title).text = "Create new playlist"
         tvCreate.setOnClickListener{
-            mViewModel.createPlaylist(Playlist(edt.text.toString(), ArrayList()))
-            mViewModel.id.observe(viewLifecycleOwner){
-                val action = PlayListFragmentDirections.actionPlayListFragmentToPlaylistNoDataFragment(edt.text.toString(), it.toInt())
-                requireActivity().findNavController(R.id.activity_main_nav_host_fragment).navigate(action)
-                dialog.dismiss()
-            }
+           idPlaylist = mViewModel.createPlaylist(Playlist(edt.text.toString(), ArrayList())).toInt()
+            val action = PlayListFragmentDirections.actionPlayListFragmentToPlaylistNoDataFragment(edt.text.toString(), idPlaylist)
+            requireActivity().findNavController(R.id.activity_main_nav_host_fragment).navigate(action)
+            dialog.dismiss()
         }
         tvCancel.setOnClickListener {
             dialog.dismiss()

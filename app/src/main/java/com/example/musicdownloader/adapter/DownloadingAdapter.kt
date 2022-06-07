@@ -60,6 +60,9 @@ class DownloadingAdapter(
                         downloadedBytesPerSecond: Long
                     ) {
                         if(data.request.id == download.id){
+                            if(download.total <= 0){
+                                DownloadingManager.fetch!!.retry(data.request.id)
+                            }
                             val progress = download.progress
                             binding.tvProgress.text = progress.toString().plus("%")
                             binding.progressHorizontal.progress = progress

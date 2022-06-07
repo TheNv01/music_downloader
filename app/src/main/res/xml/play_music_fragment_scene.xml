@@ -14,7 +14,7 @@
         <Constraint
             android:id="@+id/ic_back"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="21dp"
             android:alpha="1"
             android:layout_marginStart="16dp"
             android:translationZ="2dp"
@@ -28,13 +28,14 @@
             android:layout_height="17dp"
             android:translationZ="2dp"
             app:layout_constraintBottom_toBottomOf="@id/ic_back"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="8dp"
             android:alpha="1"
             app:layout_constraintTop_toTopOf="@id/ic_back" />
         <Constraint
             android:id="@+id/img_cover_background"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            app:layout_constraintHeight_percent="0.6"
             app:layout_constraintTop_toTopOf="parent"
             android:translationZ="1dp"
             android:scaleX="50"
@@ -61,12 +62,14 @@
         <Constraint
             android:id="@+id/tv_single"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_width="315dp"
+            android:layout_width="0dp"
             android:layout_height="24dp"
             android:translationZ="2dp"
             app:layout_constraintBottom_toTopOf="@id/tv_music"
             android:layout_marginStart="16dp"
             android:layout_marginBottom="7dp"
+            app:layout_constraintEnd_toStartOf="@id/ic_favorite"
+            android:layout_marginEnd="12dp"
             android:layout_marginTop="82dp"
             app:layout_constraintVertical_chainStyle="packed"
             app:layout_constraintTop_toTopOf="@id/img_cover_bottom" >
@@ -89,12 +92,11 @@
         <Constraint
             android:id="@+id/ic_play_or_pause"
             app:layout_constraintEnd_toEndOf="@id/layout_control"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="23dp"
+            android:layout_height="28dp"
             android:translationZ="2dp"
-            android:layout_marginTop="-150dp"
-            app:layout_constraintBottom_toBottomOf="@id/layout_control"
-            app:layout_constraintTop_toTopOf="@id/layout_control"
+            app:layout_constraintTop_toTopOf="@id/verGuideline2"
+            app:layout_constraintBottom_toBottomOf="@id/verGuideline2"
             app:layout_constraintStart_toStartOf="@id/layout_control"/>
 
 
@@ -227,6 +229,17 @@
                 app:customDimension="2dp"/>
 
         </Constraint>
+
+        <Constraint
+            android:id="@+id/ic_menu"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="30dp"
+            android:layout_height="17dp"
+            android:translationZ="2dp"
+            app:layout_constraintBottom_toBottomOf="@id/ic_back"
+            android:layout_marginEnd="8dp"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="@id/ic_back" />
         <Constraint
             android:id="@+id/img_cover_background"
             android:layout_width="match_parent"
@@ -244,11 +257,13 @@
         <Constraint
             android:id="@+id/tv_single"
             app:layout_constraintStart_toEndOf="@id/img_circle"
-            android:layout_width="200dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
             app:layout_constraintBottom_toTopOf="@id/tv_music"
             android:layout_marginStart="24dp"
+            android:layout_marginEnd="12dp"
+            app:layout_constraintEnd_toStartOf="@id/ic_play_or_pause"
             app:layout_constraintVertical_chainStyle="packed"
             app:layout_constraintTop_toTopOf="@id/img_cover_background">
 

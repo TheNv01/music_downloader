@@ -1,6 +1,8 @@
 package com.example.musicdownloader.view.fragment
 
 import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
@@ -26,6 +28,8 @@ import com.example.musicdownloader.viewmodel.HomeViewModel
 class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnActionCallBack {
 
     lateinit var callBack: OnActionCallBack
+    private lateinit var tvRegion: TextView
+    private lateinit var imgLanguage: ImageView
     private val musicClickListener =  object : ItemClickListener<Music> {
         override fun onClickListener(model: Music) {
             MusicDonwnloadedManager.currentMusicDownloaded = null
@@ -52,16 +56,20 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
     }
 
     override fun initViews() {
+        tvRegion = mRootView.findViewById(R.id.tv_region)
+        imgLanguage = mRootView.findViewById(R.id.img_language)
         callBack = this
         context?.let { SharedPreferencesManager.with(it) }
 
-        SharedPreferencesManager.get<Region>("country")?.let {
-            binding.imgLanguage.setImageResource(it.regionIcon)
-            binding.tvRegion.text = it.regionName
-        }
+
     }
 
     override fun setUpListener() {
+
+        SharedPreferencesManager.get<Region>("country")?.let {
+            imgLanguage.setImageResource(it.regionIcon)
+            tvRegion.text = it.regionName
+        }
 
         binding.icSearch.setOnClickListener {
             val action = HomeFragmentDirections.actionHomeFragmentToSearchFragment( 0)
@@ -83,7 +91,7 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
         binding.tvSeeAllGenres.setOnClickListener {
             requireActivity().findNavController(R.id.activity_main_nav_host_fragment).navigate(R.id.seeAllGenresFragment)
         }
-        binding.tvRegion.setOnClickListener {
+        binding.layoutCountry.setOnClickListener {
             (activity as MainActivity).findNavController(R.id.activity_main_nav_host_fragment).navigate(R.id.changeRegionDialog)
         }
         setFragmentResultListener("requestKey") { _, bundle ->
@@ -94,8 +102,8 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
                      mViewModel.factoryMusics("ranking", it.regionCode)
                      mViewModel.factoryMusics("listened", it.regionCode)
                      mViewModel.factoryMusics("download", it.regionCode)
-                     binding.tvRegion.text = it.regionName
-                     binding.imgLanguage.setImageResource(it.regionIcon)
+                     tvRegion.text = it.regionName
+                     imgLanguage.setImageResource(it.regionIcon)
                  }
              }
         }

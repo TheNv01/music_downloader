@@ -213,7 +213,6 @@ class MusicService : Service() {
     }
 
     private suspend fun getBitmapFromURL(url: String): Bitmap? {
-
         val loading = ImageLoader(this)
         val request = ImageRequest.Builder(this)
             .data(url)

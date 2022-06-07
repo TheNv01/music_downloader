@@ -30,7 +30,9 @@ class SeeAllGenresFragment : BaseFragment<SeeAllGenresFragmentBinding, SeeAllGen
     }
 
     override fun setUpListener() {
-
+        binding.icBack.setOnClickListener {
+            activity?.onBackPressed()
+        }
     }
 
     override fun setUpObserver() {

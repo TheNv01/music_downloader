@@ -74,6 +74,9 @@ class PlaylistInsideFragment : BaseFragment<PlaylistInsideFragmentBinding, Playl
         binding.icPopup.setOnClickListener {
             openPlaylistBottomSheet()
         }
+        binding.icBack.setOnClickListener {
+            activity?.onBackPressed()
+        }
         binding.tvAddSong.setOnClickListener {
             val action = PlaylistInsideFragmentDirections
                 .actionPlaylistInsideFragmentToSearchFragment( 2, args.playList)
@@ -87,14 +90,35 @@ class PlaylistInsideFragment : BaseFragment<PlaylistInsideFragmentBinding, Playl
         bottomSheetDialog.itemClickListener = object : ItemClickListener<Int>{
             override fun onClickListener(model: Int) {
                 if(model == R.drawable.ic_delete){
-                    mViewModel.deletePlaylist(args.playList.id)
-                    (activity as MainActivity).findNavController(R.id.activity_main_nav_host_fragment).popBackStack()
+                    showConfirmDialog()
                 }
                 else{
                     showRenamePlaylistDialog()
                 }
             }
         }
+    }
+
+    private fun showConfirmDialog() {
+        val dialog = Dialog(requireActivity(), R.style.Theme_Dialog)
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.setContentView(R.layout.comfirm_dialog)
+        val tvDone = dialog.findViewById<TextView>(R.id.tv_done)
+        tvDone.text = "DELETE"
+        val tvContent = dialog.findViewById<TextView>(R.id.tv_content)
+        val tvCancel = dialog.findViewById<TextView>(R.id.tv_cancel)
+
+        tvContent.text = "Do You Want To Remove Playlist?"
+        dialog.findViewById<TextView>(R.id.tv_title).text = args.playList.name
+        tvDone.setOnClickListener{
+            dialog.dismiss()
+            mViewModel.deletePlaylist(args.playList.id)
+            (activity as MainActivity).findNavController(R.id.activity_main_nav_host_fragment).popBackStack()
+        }
+        tvCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.show()
     }
 
     private fun openSongBottomSheet(musicSelected: Music) {

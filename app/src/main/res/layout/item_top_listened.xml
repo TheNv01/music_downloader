@@ -33,6 +33,7 @@
             android:layout_height="56dp"
             app:cardCornerRadius="6dp"
             android:layout_marginStart="12dp"
+            app:cardBackgroundColor="@android:color/transparent"
             app:layout_constraintStart_toEndOf="@+id/tv_id"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -40,8 +41,7 @@
                 android:id="@+id/img_top_listened"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                imageUrl="@{music.image}"
-                android:scaleType="fitCenter" />
+                imageUrl="@{music.image}" />
 
         </androidx.cardview.widget.CardView>
 

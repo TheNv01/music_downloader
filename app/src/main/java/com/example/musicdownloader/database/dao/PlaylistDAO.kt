@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface PlaylistDAO {
     @Insert
-    suspend fun insertPlaylist(playlist: Playlist): Long
+    fun insertPlaylist(playlist: Playlist): Long
 
     @Update
     suspend fun updatePlaylist(playlist: Playlist)

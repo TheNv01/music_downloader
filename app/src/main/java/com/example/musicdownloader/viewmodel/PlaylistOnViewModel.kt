@@ -15,7 +15,6 @@ class PlaylistOnViewModel(application: Application) : BaseViewModel(application)
 
     val existingPlaylist: LiveData<List<Playlist>> = playlistRepository.playlists
     val optionsDownloaded = ArrayList<Option>()
-    var id = MutableLiveData<Long>()
     val musics: LiveData<List<Music>> = favoriteRepository.musics
 
 
@@ -23,10 +22,8 @@ class PlaylistOnViewModel(application: Application) : BaseViewModel(application)
         initOption()
     }
 
-    fun createPlaylist(playlist: Playlist) {
-        viewModelScope.launch(Dispatchers.IO) {
-            id.postValue(playlistRepository.insertPlaylist(playlist))
-        }
+    fun createPlaylist(playlist: Playlist): Long {
+       return playlistRepository.insertPlaylist(playlist)
     }
 
     private fun initOption(){

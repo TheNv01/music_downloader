@@ -219,8 +219,11 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
             override fun onClickListener(model: Int) {
                 when(model){
                     R.drawable.ic_add_to_playlist ->{
-                        val bottomSheetDialog = AddToPlaylistBottomDialog(MusicManager.getCurrentMusic()!!)
-                        bottomSheetDialog.show((activity as MainActivity).supportFragmentManager, null)
+                        if(MusicDonwnloadedManager.currentMusicDownloaded == null){
+                            val bottomSheetDialog = AddToPlaylistBottomDialog(MusicManager.getCurrentMusic()!!)
+                            bottomSheetDialog.show((activity as MainActivity).supportFragmentManager, null)
+                        }
+
                     }
                     R.drawable.ic_favorite ->{
                         if(MusicManager.getCurrentMusic() != null){

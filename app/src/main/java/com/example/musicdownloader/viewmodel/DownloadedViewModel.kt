@@ -10,7 +10,7 @@ import com.example.musicdownloader.model.Option
 import wseemann.media.FFmpegMediaMetadataRetriever
 import java.io.File
 
-class DownloadedViewModel(application: Application) : BaseViewModel(application) {
+class DownloadedViewModel(val applicat: Application) : BaseViewModel(applicat) {
     val optionsDownloaded = ArrayList<Option>()
     val downloadeds =  ArrayList<MusicDownloaded>()
 
@@ -38,14 +38,25 @@ class DownloadedViewModel(application: Application) : BaseViewModel(application)
                         val artist =
                             mediaMetadataRetriever.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_ARTIST)
                         val art = mediaMetadataRetriever.embeddedPicture
-                        val duration = mediaMetadataRetriever.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_DURATION)?.substring(0,3)
-                        val songImage = art?.let {
+                        val duration = mediaMetadataRetriever.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_DURATION)
+                        var songImage = art?.let {
                             BitmapFactory
                                 .decodeByteArray(art, 0, it.size)
                         }
-                        downloadeds.add(MusicDownloaded(
-                            songName, artist, musicFile.path, songImage, duration
-                        ))
+                        if(songImage == null){
+                            songImage = BitmapFactory.decodeResource(applicat.resources, R.drawable.bg_playlist)
+                        }
+                        if(duration.length > 1){
+                            downloadeds.add(MusicDownloaded(
+                                songName, artist, musicFile.path, songImage, duration.substring(0, 3)
+                            ))
+                        }
+                        else{
+                            downloadeds.add(MusicDownloaded(
+                                songName, artist, musicFile.path, songImage, duration
+                            ))
+                        }
+
                     } catch (e: IllegalArgumentException) {
                         e.printStackTrace()
                     } catch (e: SecurityException) {

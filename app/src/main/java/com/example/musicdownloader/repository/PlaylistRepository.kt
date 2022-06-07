@@ -9,7 +9,7 @@ class PlaylistRepository(private val playlistDAO: PlaylistDAO) {
     var playlists = playlistDAO.getAllPlaylist()
 
 
-    suspend fun insertPlaylist(playlist: Playlist): Long {
+    fun insertPlaylist(playlist: Playlist): Long {
         return playlistDAO.insertPlaylist(playlist)
     }
 
