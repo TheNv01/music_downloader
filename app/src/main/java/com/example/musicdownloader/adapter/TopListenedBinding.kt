@@ -28,6 +28,7 @@ object TopListenedBinding : RecyclerBindingInterface<ItemTopListenedBinding, Mus
             2 ->{
                 binder.tvId.setTextColor(Color.parseColor("#FF1C1C"))
             }
+            else ->  binder.tvId.setTextColor(Color.parseColor("#FFFFFF"))
         }
         binder.layoutTopListened.setOnClickListener{
             itemListener.onClickListener(model)

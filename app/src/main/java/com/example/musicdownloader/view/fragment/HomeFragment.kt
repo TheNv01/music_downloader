@@ -26,6 +26,14 @@ import com.example.musicdownloader.viewmodel.HomeViewModel
 class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnActionCallBack {
 
     lateinit var callBack: OnActionCallBack
+    private val musicClickListener =  object : ItemClickListener<Music> {
+        override fun onClickListener(model: Music) {
+            MusicDonwnloadedManager.currentMusicDownloaded = null
+            MusicManager.setCurrentMusic(model)
+            callBack.callBack(KEY_SHOW_PLAY_MUSIC, null)
+
+        }
+    }
 
     companion object{
         const val KEY_SHOW_PLAY_MUSIC = "KEY_SHOW_PLAY_MUSIC"
@@ -125,16 +133,16 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
         binding.recyclerViewTopRating.adapter = GenericAdapter(
             R.layout.item_top_rating,
             TopRatingBinding,
-            setMusicClick(mViewModel.topRatings))
+            musicClickListener)
 
         binding.recyclerViewTopListened.adapter = GenericAdapter(
             R.layout.item_top_listened,
             TopListenedBinding,
-            setMusicClick(mViewModel.topListeneds))
+            musicClickListener)
         binding.recyclerViewTopDownload.adapter = GenericAdapter(
             R.layout.item_top_download,
             TopDownloadBinding,
-            setMusicClick(mViewModel.topDownloads))
+            musicClickListener)
         binding.recyclerViewGenres.adapter = GenericAdapter(
             R.layout.item_genres,
             GenresBinding,
@@ -146,28 +154,15 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
             })
     }
 
-    private fun setMusicClick(musics: LiveData<List<Music>> ?= null): ItemClickListener<Music> =
-         object : ItemClickListener<Music> {
-            override fun onClickListener(model: Music) {
-                MusicDonwnloadedManager.currentMusicDownloaded = null
-                MusicManager.setCurrentMusic(model)
-                callBack.callBack(KEY_SHOW_PLAY_MUSIC, null)
-                musics?.observe(viewLifecycleOwner){
-                    MusicManager.setListMusic(it)
-                }
-
-            }
-        }
-
 
     private fun setupTrendingViewPager(){
         val viewPager = binding.viewPagerTrending
         mViewModel.trends.observe(this){
             if(it.isNotEmpty()){
-                viewPager.adapter = TrendingAdapter(R.layout.item_trending, it as ArrayList<Music>, viewPager, setMusicClick())
+                viewPager.adapter = TrendingAdapter(R.layout.item_trending, it as ArrayList<Music>, viewPager,musicClickListener)
             }
             else{
-                viewPager.adapter =TrendingAdapter(R.layout.item_trending, ArrayList(), viewPager, setMusicClick())
+                viewPager.adapter =TrendingAdapter(R.layout.item_trending, ArrayList(), viewPager, musicClickListener)
             }
 
         }

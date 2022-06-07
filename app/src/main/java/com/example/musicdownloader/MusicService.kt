@@ -200,7 +200,7 @@ class MusicService : Service() {
             else{
                 builder.setContentTitle(music.name)
                     .setContentText(music.artistName)
-                    .setLargeIcon(getBitmapFromURL(music.image!!))
+                    .setLargeIcon(music.image?.let { getBitmapFromURL(it) })
             }
 
             startForeground(1, builder.build())

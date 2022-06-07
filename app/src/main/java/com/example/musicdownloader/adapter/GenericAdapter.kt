@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
 import com.example.musicdownloader.interfaces.recyclerbindinginterface.RecyclerBindingInterface
+import com.example.musicdownloader.manager.MusicManager
+import com.example.musicdownloader.model.Music
 
 class GenericAdapter<T: Any, V: ViewDataBinding>(
     @LayoutRes val layoutID: Int,
@@ -44,6 +46,12 @@ class GenericAdapter<T: Any, V: ViewDataBinding>(
 
     override fun onBindViewHolder(holder: GenericViewHolder, position: Int) {
         holder.bind(getItem(position), bindingInterface, itemListener)
+        if(currentList[0] is Music){
+            MusicManager.setListMusic(currentList as List<Music>)
+        }
+        else{
+            MusicManager.setListMusic(ArrayList())
+        }
 
     }
 

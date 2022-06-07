@@ -44,7 +44,6 @@ class PlaylistInsideFragment : BaseFragment<PlaylistInsideFragmentBinding, Playl
         override fun onClickListener(model: Music) {
             MusicDonwnloadedManager.currentMusicDownloaded = null
             MusicManager.setCurrentMusic(model)
-            mViewModel.musics.value?.let { MusicManager.setListMusic(it) }
             callBack.callBack(null, null)
         }
     }
