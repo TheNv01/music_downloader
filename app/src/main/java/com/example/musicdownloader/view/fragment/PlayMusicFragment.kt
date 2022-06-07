@@ -287,8 +287,10 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
             binding.tvMusic.text = musicDownloaded?.music
             binding.tvSingle.text = musicDownloaded?.artist
             binding.tvProgressMax.text = formattedTime(musicDownloaded?.duration!!.toInt())
-            binding.imgBackgroundRectangle.setImageBitmap(musicDownloaded.bitmap)
-            binding.imgCircle.setImageBitmap(musicDownloaded.bitmap)
+            if(musicDownloaded.bitmap != null){
+                binding.imgBackgroundRectangle.setImageBitmap(musicDownloaded.bitmap)
+                binding.imgCircle.setImageBitmap(musicDownloaded.bitmap)
+            }
         }
         initSeekBar()
         gotoService(MusicService.ACTION_START)
@@ -367,7 +369,7 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
                     .animate()
                     .rotationBy(360f)
                     .withEndAction(this)
-                    .setDuration(5000)
+                    .setDuration(7000)
                     .setInterpolator(LinearInterpolator()).start()
             }
         }

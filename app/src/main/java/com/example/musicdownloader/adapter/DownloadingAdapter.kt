@@ -33,6 +33,7 @@ class DownloadingAdapter(
                         if(data.request.id == download.id){
                             musicdownloadings.remove(data)
                             notifyDataSetChanged()
+                            MusicDonwnloadedManager.getMusicFromExternal()
                         }
                     }
                     override fun onDeleted(download: Download) {

@@ -29,6 +29,7 @@
                 android:id="@+id/img_top_listened"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:src="@drawable/bg_playlist"
                 imageBitmap="@{musicdownloaded.bitmap}"
                 android:scaleType="fitCenter" />
 

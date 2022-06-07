@@ -10,9 +10,10 @@ import com.example.musicdownloader.manager.DownloadingManager
 import com.example.musicdownloader.model.MusicDownloading
 import com.example.musicdownloader.view.MainActivity
 import com.example.musicdownloader.view.dialog.BottomDialog
+import com.example.musicdownloader.viewmodel.DownloadViewModel
 import com.example.musicdownloader.viewmodel.DownloadingViewModel
 
-class DownloadingFragment : BaseFragment<DownloadingFragmentBinding, DownloadingViewModel>(){
+class DownloadingFragment : BaseFragment<DownloadingFragmentBinding, DownloadViewModel>(){
 
     private var bottomSheetDialog: BottomDialog ?= null
 
@@ -20,8 +21,8 @@ class DownloadingFragment : BaseFragment<DownloadingFragmentBinding, Downloading
         return DownloadingFragmentBinding.bind(mRootView)
     }
 
-    override fun getViewModelClass(): Class<DownloadingViewModel> {
-        return DownloadingViewModel::class.java
+    override fun getViewModelClass(): Class<DownloadViewModel> {
+        return DownloadViewModel::class.java
     }
 
     override fun getLayoutId(): Int {

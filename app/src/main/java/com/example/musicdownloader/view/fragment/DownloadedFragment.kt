@@ -20,16 +20,18 @@ import com.example.musicdownloader.adapter.DownloadedAdapter
 import com.example.musicdownloader.databinding.DownloadedFragmentBinding
 import com.example.musicdownloader.interfaces.OnActionCallBack
 import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
+import com.example.musicdownloader.manager.DownloadingManager
 import com.example.musicdownloader.manager.MusicDonwnloadedManager
 import com.example.musicdownloader.manager.MusicManager
 import com.example.musicdownloader.model.MusicDownloaded
 import com.example.musicdownloader.view.MainActivity
 import com.example.musicdownloader.view.dialog.BottomDialog
+import com.example.musicdownloader.viewmodel.DownloadViewModel
 import com.example.musicdownloader.viewmodel.DownloadedViewModel
 import java.io.File
 
 
-class DownloadedFragment: BaseFragment<DownloadedFragmentBinding, DownloadedViewModel>(), OnActionCallBack {
+class DownloadedFragment: BaseFragment<DownloadedFragmentBinding, DownloadViewModel>(), OnActionCallBack {
 
     private lateinit var adapter: DownloadedAdapter
     private lateinit var callback: OnActionCallBack
@@ -54,8 +56,8 @@ class DownloadedFragment: BaseFragment<DownloadedFragmentBinding, DownloadedView
         return DownloadedFragmentBinding.bind(mRootView)
     }
 
-    override fun getViewModelClass(): Class<DownloadedViewModel> {
-        return DownloadedViewModel::class.java
+    override fun getViewModelClass(): Class<DownloadViewModel> {
+        return DownloadViewModel::class.java
     }
 
     override fun getLayoutId(): Int {
@@ -64,10 +66,12 @@ class DownloadedFragment: BaseFragment<DownloadedFragmentBinding, DownloadedView
 
     override fun onResume() {
         super.onResume()
-        mViewModel.getMusicFromExternal()
+        if(DownloadingManager.fetch == null){
+            MusicDonwnloadedManager.getMusicFromExternal()
+        }
         adapter= DownloadedAdapter(
             R.layout.item_downloaded,
-            mViewModel.downloadeds,
+            MusicDonwnloadedManager.musicsDownloaded,
             itemClickListener,
             menuClickListener
         )
@@ -94,7 +98,7 @@ class DownloadedFragment: BaseFragment<DownloadedFragmentBinding, DownloadedView
                 when(model){
                     R.drawable.ic_delete ->{
                         musicDownloaded.uri?.let { File(it).delete() }
-                        mViewModel.getMusicFromExternal()
+                        MusicDonwnloadedManager.getMusicFromExternal()
                         adapter.musicsDownloaded = mViewModel.downloadeds
                         adapter.notifyDataSetChanged()
                     }
