@@ -72,7 +72,7 @@
             android:layout_height="wrap_content"
             android:textSize="10sp"
             android:textColor="@color/white"
-            android:text="@{music.artistName}"
+            setText="@{music.artistName}"
             android:maxLines="1"
             android:ellipsize="end"
             android:translationZ="3dp"

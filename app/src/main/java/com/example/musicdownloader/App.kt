@@ -7,6 +7,7 @@ import android.app.NotificationChannel
 import android.content.Context
 import androidx.room.Room
 import com.example.musicdownloader.database.MusicRoomDatabase
+import com.google.gson.annotations.Until
 
 
 class App : Application() {
@@ -18,6 +19,7 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         createNotificationChannel()
+        Utils.initPath(this)
     }
 
     private fun createNotificationChannel() {

@@ -1,12 +1,7 @@
 package com.example.musicdownloader.manager
 
-import android.content.ContentResolver
-import android.database.Cursor
 import android.graphics.BitmapFactory
-import android.media.MediaMetadataRetriever
-import android.os.Environment
-import android.provider.MediaStore
-import com.example.musicdownloader.R
+import com.example.musicdownloader.Utils
 import com.example.musicdownloader.model.MusicDownloaded
 import wseemann.media.FFmpegMediaMetadataRetriever
 import java.io.File
@@ -19,7 +14,7 @@ object MusicDonwnloadedManager {
 
 
     fun getMusicFromExternal(){
-        val file = File(Environment.getExternalStorageDirectory().toString().plus("/music downloader"))
+        val file = File(Utils.PATH)
         if (file.listFiles()?.isNotEmpty() == true) {
             musicsDownloaded.clear()
             val mediaMetadataRetriever = FFmpegMediaMetadataRetriever()

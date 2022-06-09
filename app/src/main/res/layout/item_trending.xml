@@ -25,7 +25,8 @@
             <ImageView
                 android:id="@+id/background_trending"
                 android:layout_width="match_parent"
-                android:layout_height="334dp"
+                android:layout_height="0dp"
+                app:layout_constraintDimensionRatio="222:334"
                 imageUrl="@{music.image}"
                 android:scaleType="fitXY"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -46,30 +47,34 @@
 
             <TextView
                 android:id="@+id/tv_music"
-                android:layout_width="150dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
                 android:textColor="@color/white"
-                android:text="@{music.name}"
+                setText="@{music.name}"
                 app:layout_constraintStart_toStartOf="@id/img_background_text"
                 app:layout_constraintTop_toTopOf="@id/img_background_text"
                 app:layout_constraintBottom_toTopOf="@+id/tv_artist"
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:layout_marginStart="11dp"
+                app:layout_constraintEnd_toStartOf="@id/ic_play"
+                android:layout_marginEnd="6dp"
                 app:layout_constraintVertical_chainStyle="packed"
                 android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/tv_artist"
-                android:layout_width="150dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:textSize="12sp"
                 android:textColor="@color/white"
-                android:text="@{music.artistName}"
+                setText="@{music.artistName}"
                 android:layout_marginTop="3dp"
                 android:maxLines="1"
                 android:ellipsize="end"
+                app:layout_constraintEnd_toStartOf="@id/ic_play"
+                android:layout_marginEnd="6dp"
                 app:layout_constraintStart_toStartOf="@id/img_background_text"
                 app:layout_constraintTop_toBottomOf="@id/tv_music"
                 app:layout_constraintBottom_toBottomOf="@id/img_background_text"
@@ -84,8 +89,9 @@
                 app:layout_constraintEnd_toEndOf="@id/img_background_text"/>
 
             <ImageView
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:id="@+id/ic_play"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:src="@drawable/ic_play"
                 app:layout_constraintEnd_toEndOf="@id/img_background_text"
                 app:layout_constraintBottom_toBottomOf="@id/img_background_text"

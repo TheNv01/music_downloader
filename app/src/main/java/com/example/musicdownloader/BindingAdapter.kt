@@ -11,6 +11,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.musicdownloader.adapter.GenericAdapter
+import com.example.musicdownloader.manager.MusicManager
 import com.example.musicdownloader.model.Music
 import com.example.musicdownloader.viewmodel.ApiStatus
 
@@ -19,6 +20,18 @@ fun <T: Any, V: ViewDataBinding> bindRecyclerView(recyclerView: RecyclerView, da
     if(data != null){
         val adapter = recyclerView.adapter as GenericAdapter<T, V>
         adapter.submitList(data)
+    }
+
+}
+
+@BindingAdapter("setText")
+fun <T: Any, V: ViewDataBinding> bindTextView(textView: TextView, data: String?) {
+    if(data == null || data == ""){
+        textView.text = "UNKNOW"
+    }
+    else{
+
+        textView.text = data
     }
 
 }

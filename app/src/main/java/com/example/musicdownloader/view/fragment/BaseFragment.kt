@@ -20,8 +20,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.musicdownloader.R
+import com.example.musicdownloader.Utils
 import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
-import com.example.musicdownloader.manager.MusicManager
 import com.example.musicdownloader.model.Music
 import com.example.musicdownloader.networking.Services
 import com.example.musicdownloader.view.MainActivity
@@ -58,6 +58,7 @@ abstract class BaseFragment<K: ViewDataBinding, V: ViewModel>: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         setUpListener()
         setUpObserver()
     }
@@ -98,12 +99,13 @@ abstract class BaseFragment<K: ViewDataBinding, V: ViewModel>: Fragment() {
     }
 
     protected fun download(music: Music){
-        file = File(Environment.getExternalStorageDirectory().toString().plus("/music downloader"))
+
+        file = File(Utils.PATH)
         if (!file.exists()){
             file.mkdirs()
         }
         if(music.audioDownload != null){
-            checkPermissions()
+            (mViewModel as BaseViewModel).startDownload(music, file)
         }
         else{
             val toast = Toast.makeText(context, "Can't download", Toast.LENGTH_SHORT)
@@ -144,36 +146,6 @@ abstract class BaseFragment<K: ViewDataBinding, V: ViewModel>: Fragment() {
         } else{
             music.audio!!
         }
-    }
-
-    private val permReqLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
-            val granted = permissions.entries.all {
-                it.value == true
-            }
-            if (granted) {
-                (mViewModel as BaseViewModel).startDownload(music, file)
-            }
-        }
-
-    private fun checkPermissions() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            (mViewModel as BaseViewModel).startDownload(music, file)
-        }
-        val permission = arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        activity?.let {
-            if (hasPermissions(activity as Context, permission)) {
-                (mViewModel as BaseViewModel).startDownload(music, file)
-            } else {
-                permReqLauncher.launch(
-                    permission
-                )
-            }
-        }
-    }
-
-    private fun hasPermissions(context: Context, permissions: Array<String>): Boolean = permissions.all {
-        ActivityCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
     }
 
     protected abstract fun initBinding(mRootView: View): K

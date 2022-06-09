@@ -10,6 +10,7 @@ import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import android.provider.Settings
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.EditText
@@ -140,7 +141,9 @@ class PlaylistInsideFragment : BaseFragment<PlaylistInsideFragmentBinding, Playl
                     R.drawable.ic_bell -> {
                         if(musicSelected.audioDownload != null){
                             musicInSidePlaylist = musicSelected
-                            checkPermissions()
+                            mViewModel.startDownloadss(musicInSidePlaylist)
+                                //checkPermissions()
+
                             loadingDialog()
                         }
                         else{
@@ -148,17 +151,16 @@ class PlaylistInsideFragment : BaseFragment<PlaylistInsideFragmentBinding, Playl
                             toast.setGravity(Gravity.CENTER, 0, 0)
                             toast.show()
                         }
-
                         mViewModel.isDownloadComplete.observe(viewLifecycleOwner){
                             if(it){
                                 dialog.dismiss()
                                 checkSystemWritePermission(musicSelected)
                             }
                             else{
-                                checkSystemWritePermission(musicSelected)
-                                dialog.dismiss()
+                                Log.d("adfasdfa", "asdfasdf")
                             }
                         }
+
 
                     }
                     R.drawable.ic_favorite -> {
@@ -208,35 +210,35 @@ class PlaylistInsideFragment : BaseFragment<PlaylistInsideFragmentBinding, Playl
         }
     }
 
-    private val permReqLauncher =
-        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
-            val granted = permissions.entries.all {
-                it.value == true
-            }
-            if (granted) {
-                mViewModel.startDownload(musicInSidePlaylist)
-            }
-        }
-
-    private fun checkPermissions() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            mViewModel.startDownload(musicInSidePlaylist)
-        }
-        val permission = arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        activity?.let {
-            if (hasPermissions(activity as Context, permission)) {
-                mViewModel.startDownload(musicInSidePlaylist)
-            } else {
-                permReqLauncher.launch(
-                    permission
-                )
-            }
-        }
-    }
-
-    private fun hasPermissions(context: Context, permissions: Array<String>): Boolean = permissions.all {
-        ActivityCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
-    }
+//    private val permReqLauncher =
+//        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+//            val granted = permissions.entries.all {
+//                it.value == true
+//            }
+//            if (granted) {
+//                mViewModel.startDownload(musicInSidePlaylist)
+//            }
+//        }
+//
+//    private fun checkPermissions() {
+//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+//            mViewModel.startDownload(musicInSidePlaylist)
+//        }
+//        val permission = arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+//        activity?.let {
+//            if (hasPermissions(activity as Context, permission)) {
+//                mViewModel.startDownload(musicInSidePlaylist)
+//            } else {
+//                permReqLauncher.launch(
+//                    permission
+//                )
+//            }
+//        }
+//    }
+//
+//    private fun hasPermissions(context: Context, permissions: Array<String>): Boolean = permissions.all {
+//        ActivityCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
+//    }
 
 
     private fun setAsRingtone(music: Music){
@@ -299,9 +301,17 @@ class PlaylistInsideFragment : BaseFragment<PlaylistInsideFragmentBinding, Playl
         tvCreate.text = "DONE"
         dialog.findViewById<TextView>(R.id.tv_title).text = "Name Playlist"
         tvCreate.setOnClickListener{
-            mViewModel.renamePlaylist(edt.text.toString(), args.playList.id)
-            dialog.dismiss()
-            binding.tvNamePlaylist.text = edt.text.toString()
+
+            if(edt.text.toString() != ""){
+                mViewModel.renamePlaylist(edt.text.toString(), args.playList.id)
+                dialog.dismiss()
+                binding.tvNamePlaylist.text = edt.text.toString()
+            }
+            else{
+                val toast = Toast.makeText(context, "Enter name playlist, Please", Toast.LENGTH_SHORT)
+                toast.setGravity(Gravity.CENTER, 0, 0)
+                toast.show()
+            }
         }
         tvCancel.setOnClickListener {
             dialog.dismiss()

@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.*
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.animation.LinearInterpolator
@@ -72,6 +73,10 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onEvent(messageEvent: MessageEvent) {
         when (messageEvent.message) {
+            MusicService.ACTION_START ->{
+                binding.icPlayOrPause.setImageResource(R.drawable.ic_pause_not_background)
+                MediaManager.isPause = false
+            }
             MusicService.ACTION_PAUSE -> {
                 binding.icPlayOrPause.setImageResource(R.drawable.ic_play_not_background)
                 binding.imgCircle.animate().cancel()
@@ -89,6 +94,7 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
                     playSong()
                 }
                 rotateImageView()
+
                 binding.icPlayOrPause.setImageResource(R.drawable.ic_pause_not_background)
             }
             MusicService.ACTION_CLOSE ->{
@@ -106,11 +112,9 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
             music = it
         }
         callBack = this
-        MediaManager.setProgress(0)
         if(MusicDonwnloadedManager.currentMusicDownloaded == null){
             mViewModel.initOption(false)
             playSong(MusicManager.getCurrentMusic()!!)
-            mViewModel.existInFavorite()
 
         }
         else{
@@ -126,9 +130,7 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
             openBottomSheet()
         }
         binding.icClose.setOnClickListener{
-
             gotoService(MusicService.ACTION_CLOSE)
-
         }
         binding.icBack.setOnClickListener {
             binding.layoutPlayMusic.transitionToStart()
@@ -137,9 +139,16 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
             handlePauseResumeMusic()
         }
         binding.imgNext.setOnClickListener {
+            if(MediaManager.mediaPlayer!!.isPlaying){
+                MediaManager.mediaPlayer?.stop()
+            }
             gotoService(MusicService.ACTION_NEXT)
         }
         binding.imgPrevious.setOnClickListener {
+            if(MediaManager.mediaPlayer!!.isPlaying){
+                MediaManager.mediaPlayer?.stop()
+            }
+
             gotoService(MusicService.ACTION_PREVIOUS)
         }
         binding.imgRepeat.setOnClickListener {
@@ -160,6 +169,11 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
                     deleteMusicFromFavorite()
                 }
                 mViewModel.existInFavorite()
+            }
+            else{
+                val toast = Toast.makeText(context, "Comming soon", Toast.LENGTH_SHORT)
+                toast.setGravity(Gravity.CENTER, 0, 0)
+                toast.show()
             }
         }
     }
@@ -275,8 +289,17 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
 
     private fun playSong(music: Music? = null) {
         rotateImageView()
+        binding.seekBar.progress = 0
+        binding.tvProgress.text = formattedTime(0)
         if(music != null){
-            binding.tvMusic.text = music.artistName
+            mViewModel.existInFavorite()
+            if(music.artistName == null || music.artistName == ""){
+                binding.tvMusic.text = "UNKNOW"
+            }
+            else{
+                binding.tvMusic.text = music.artistName
+            }
+
             binding.tvSingle.text = music.name
             binding.tvProgressMax.text = formattedTime(music.duration!!)
             bindImage(binding.imgBackgroundRectangle, music.image)
@@ -291,15 +314,22 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
                 binding.imgBackgroundRectangle.setImageBitmap(musicDownloaded.bitmap)
                 binding.imgCircle.setImageBitmap(musicDownloaded.bitmap)
             }
+            else{
+                binding.imgBackgroundRectangle.setImageResource(R.drawable.bg_playlist)
+                binding.imgCircle.setImageResource(R.drawable.bg_playlist)
+            }
         }
-        initSeekBar()
+        MediaManager.mediaPlayer?.setOnPreparedListener {
+            MediaManager.mediaPlayer?.start()
+            initSeekBar()
+        }
         gotoService(MusicService.ACTION_START)
 
     }
 
     private fun bindImage(imgView: ImageView, imgUrl: String?) {
         if(imgUrl == null){
-            imgView.setImageResource(R.drawable.ic_broken_image)
+            imgView.setImageResource(R.drawable.bg_playlist)
         }
         else{
             val reallyImgUrl: String = if(imgUrl.length < 15){
@@ -312,7 +342,7 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
                 val imgUri = reallyImgUrl.toUri().buildUpon().scheme("http").build()
                 imgView.load(imgUri){
                     placeholder(R.drawable.loading_animation)
-                    error(R.drawable.ic_broken_image)
+                    error(R.drawable.bg_playlist)
                 }
             }
         }
@@ -351,14 +381,10 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
     }
 
     private fun handlePauseResumeMusic() {
-        if (MediaManager.isPause()) {
-            binding.icPlayOrPause.setImageResource(R.drawable.ic_play_not_background)
+        if (MediaManager.isPause) {
             gotoService(MusicService.ACTION_RESUME)
-            rotateImageView()
         } else {
-            binding.icPlayOrPause.setImageResource(R.drawable.ic_pause_not_background)
             gotoService(MusicService.ACTION_PAUSE)
-            binding.imgCircle.animate().cancel()
         }
     }
 
@@ -374,7 +400,7 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
             }
         }
 
-        binding.imgCircle.animate().rotationBy(360f).withEndAction(runnable).setDuration(4000)
+        binding.imgCircle.animate().rotationBy(360f).withEndAction(runnable).setDuration(7000)
             .setInterpolator(LinearInterpolator()).start()
     }
 
@@ -409,14 +435,16 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
             binding.seekBar.maxProgress = MusicDonwnloadedManager.currentMusicDownloaded?.duration!!.toInt()
         }
 
-        activity?.runOnUiThread(object : Runnable {
-            override fun run() {
-                val currentPosition: Int = MediaManager.getProgress()/1000
-                binding.seekBar.progress = currentPosition
-                binding.tvProgress.text = formattedTime(currentPosition)
-                Handler(Looper.getMainLooper()).postDelayed(this, 1000)
-            }
-        })
+            activity?.runOnUiThread(object : Runnable {
+                override fun run() {
+                    if(MediaManager.mediaPlayer?.isPlaying == true){
+                        val currentPosition: Int = MediaManager.getProgress()/1000
+                        binding.seekBar.progress = currentPosition
+                        binding.tvProgress.text = formattedTime(currentPosition)
+                        Handler(Looper.getMainLooper()).postDelayed(this, 1000)
+                    }
+                }
+            })
 
         binding.seekBar.onProgressChangedListener = object : ProgressListener {
             override fun invoke(progress: Int, fromUser: Boolean) {
@@ -437,6 +465,9 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
             }
         }
         else{
+            if (MediaManager.mediaPlayer!!.isPlaying){
+                MediaManager.mediaPlayer?.stop()
+            }
             playSong()
         }
 

@@ -68,7 +68,7 @@
             android:id="@+id/tv_artist"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@{music.artistName}"
+            setText="@{music.artistName}"
             android:textSize="12sp"
             android:layout_marginStart="11dp"
             android:textColor="@color/white"

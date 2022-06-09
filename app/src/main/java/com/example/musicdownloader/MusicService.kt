@@ -6,6 +6,7 @@ import android.app.TaskStackBuilder
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
+import android.media.MediaPlayer
 import android.os.Build
 import android.os.IBinder
 import android.util.Log
@@ -33,12 +34,14 @@ class MusicService : Service() {
         const val ACTION_CLOSE = 6
     }
 
+
     override fun onBind(intent: Intent): IBinder? {
         return null
     }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
 
+        //MediaManager.createMediaPlayer()
         val action: Int = intent.getIntExtra("action", 0)
         if (action != 0) {
             when (action) {
@@ -80,7 +83,6 @@ class MusicService : Service() {
                             MusicManager.nextMusic()
                         }
                         else {
-                            Log.d("downloaded", MusicDonwnloadedManager.musicsDownloaded.size.toString())
                             MusicDonwnloadedManager.nextMusic()
                         }
                     }
@@ -101,7 +103,7 @@ class MusicService : Service() {
     }
 
     private fun startMusicDownloaded(musicDownloaded: MusicDownloaded){
-        MediaManager.resetMedia()
+        //MediaManager.resetMedia()
             MediaManager.playMusic(musicDownloaded.uri.toString()){
                 when(MusicManager.getRepeatStatus()){
                     RepeatStatus.NoRepeat ->{
@@ -128,8 +130,8 @@ class MusicService : Service() {
 
 
     private fun startMusic(music: Music) {
-        MediaManager.resetMedia()
-        GlobalScope.launch {
+        //MediaManager.resetMedia()
+        GlobalScope.launch(Dispatchers.IO) {
             MediaManager.playMusic(getLinkAudio(music)){
                 when(MusicManager.getRepeatStatus()){
                     RepeatStatus.NoRepeat ->{
@@ -183,9 +185,9 @@ class MusicService : Service() {
                 .setContentIntent(resultPendingIntent)
                 .addAction(R.drawable.ic_previous_notification, "Previous", getIntent(ACTION_PREVIOUS))
                 .addAction(
-                    if (MediaManager.isPause()) R.drawable.ic_play_notification else R.drawable.ic_pause_notification,
-                    if (MediaManager.isPause()) "Resume" else "Pause",
-                    if (MediaManager.isPause()) getIntent(ACTION_RESUME) else getIntent(ACTION_PAUSE)
+                    if (MediaManager.isPause) R.drawable.ic_play_notification else R.drawable.ic_pause_notification,
+                    if (MediaManager.isPause) "Resume" else "Pause",
+                    if (MediaManager.isPause) getIntent(ACTION_RESUME) else getIntent(ACTION_PAUSE)
                 )
                 .addAction(R.drawable.ic_next_notification, "Next", getIntent(ACTION_NEXT))
                 .addAction(R.drawable.ic_close_notification, "Close", getIntent(ACTION_CLOSE))
@@ -209,7 +211,7 @@ class MusicService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
-        MediaManager.resetMedia()
+        MediaManager.mediaPlayer!!.stop()
     }
 
     private suspend fun getBitmapFromURL(url: String): Bitmap? {

@@ -2,9 +2,11 @@ package com.example.musicdownloader.view.fragment
 
 import android.app.Dialog
 import android.util.Log
+import android.view.Gravity
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.musicdownloader.R
@@ -93,9 +95,19 @@ class PlaylistNoDataFragment: BaseFragment<PlaylistNoDataFragmentBinding, Playli
         tvCreate.text = "DONE"
         dialog.findViewById<TextView>(R.id.tv_title).text = "Name Playlist"
         tvCreate.setOnClickListener{
-            mViewModel.renamePlaylist(edt.text.toString(), args.idplaylist)
-            dialog.dismiss()
-            binding.tvNamePlaylist.text = edt.text.toString()
+
+            if(edt.text.toString() != ""){
+                mViewModel.renamePlaylist(edt.text.toString(), args.idplaylist)
+                dialog.dismiss()
+                binding.tvNamePlaylist.text = edt.text.toString()
+            }
+            else{
+                val toast = Toast.makeText(context, "Enter name playlist, Please", Toast.LENGTH_SHORT)
+                toast.setGravity(Gravity.CENTER, 0, 0)
+                toast.show()
+            }
+
+
         }
         tvCancel.setOnClickListener {
             dialog.dismiss()

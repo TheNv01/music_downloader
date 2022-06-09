@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.musicdownloader.R
+import com.example.musicdownloader.Utils
 import com.example.musicdownloader.manager.DownloadingManager
 import com.example.musicdownloader.model.Music
 import com.example.musicdownloader.model.Option
@@ -45,8 +46,8 @@ class PlaylistInsideViewModel(application: Application) : BaseViewModel(applicat
 
     }
 
-    fun startDownload(music: Music){
-        val path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).toString()
+    fun startDownloadss(music: Music){
+        val path = Utils.pathRingtone
             .plus("/${music.name}").plus(".mp3")
         request = Request(music.audioDownload!!, path)
         request.priority = Priority.HIGH

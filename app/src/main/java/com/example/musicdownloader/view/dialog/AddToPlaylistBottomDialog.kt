@@ -135,8 +135,16 @@ class AddToPlaylistBottomDialog(music: Music)  : BottomSheetDialogFragment() {
         tvCreate.text = "CREATE"
         dialog.findViewById<TextView>(R.id.tv_title).text = "Create new Playlist"
         tvCreate.setOnClickListener{
-            viewModel.createPlaylist(Playlist(edt.text.toString(), ArrayList()))
-            dialog.dismiss()
+            if(edt.text.toString() != ""){
+                viewModel.createPlaylist(Playlist(edt.text.toString(), ArrayList()))
+                dialog.dismiss()
+            }
+            else{
+                val toast = Toast.makeText(context, "Enter name playlist, Please", Toast.LENGTH_SHORT)
+                toast.setGravity(Gravity.CENTER, 0, 0)
+                toast.show()
+            }
+
         }
         tvCancel.setOnClickListener {
             dialog.dismiss()

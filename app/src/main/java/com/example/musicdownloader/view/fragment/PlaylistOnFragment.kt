@@ -1,9 +1,11 @@
 package com.example.musicdownloader.view.fragment
 
 import android.app.Dialog
+import android.view.Gravity
 import android.view.View
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.navigation.findNavController
 import com.example.musicdownloader.R
 import com.example.musicdownloader.adapter.GenericAdapter
@@ -71,7 +73,7 @@ class PlaylistOnFragment: BaseFragment<PlaylistOnFragmentBinding, PlaylistOnView
                     override fun onClickListener(model: Int) {
                         when(model){
                             R.drawable.ic_rename ->{
-                                showRenamePlaylistDialog(id)
+                                showRenamePlaylistDialog(playlist)
                             }
                             R.drawable.ic_delete ->{
                                 showConfirmDialog(playlist)
@@ -83,7 +85,7 @@ class PlaylistOnFragment: BaseFragment<PlaylistOnFragmentBinding, PlaylistOnView
         }
     }
 
-    fun showRenamePlaylistDialog(id : Int) {
+    fun showRenamePlaylistDialog(model : Playlist) {
         val dialog = Dialog(requireActivity(), R.style.Theme_Dialog)
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         dialog.setContentView(R.layout.create_playlist_fragment)
@@ -91,11 +93,21 @@ class PlaylistOnFragment: BaseFragment<PlaylistOnFragmentBinding, PlaylistOnView
         val edt = dialog.findViewById<EditText>(R.id.edt_playlist)
         val tvCancel = dialog.findViewById<TextView>(R.id.tv_cancel)
         tvCreate.text = "DONE"
+        edt.setText(model.name)
         dialog.findViewById<TextView>(R.id.tv_title).text = "Name Playlist"
         tvCreate.setOnClickListener{
-            mViewModel.renamePlaylist(edt.text.toString(), id)
-            dialog.dismiss()
-            binding.tvNamePlaylist.text = edt.text.toString()
+
+            if(edt.text.toString() != ""){
+                mViewModel.renamePlaylist(edt.text.toString(), model.id)
+                dialog.dismiss()
+                binding.tvNamePlaylist.text = edt.text.toString()
+            }
+            else{
+                val toast = Toast.makeText(context, "Enter name playlist, Please", Toast.LENGTH_SHORT)
+                toast.setGravity(Gravity.CENTER, 0, 0)
+                toast.show()
+            }
+
         }
         tvCancel.setOnClickListener {
             dialog.dismiss()
@@ -136,10 +148,19 @@ class PlaylistOnFragment: BaseFragment<PlaylistOnFragmentBinding, PlaylistOnView
         tvCreate.text = "CREATE"
         dialog.findViewById<TextView>(R.id.tv_title).text = "Create new playlist"
         tvCreate.setOnClickListener{
-           idPlaylist = mViewModel.createPlaylist(Playlist(edt.text.toString(), ArrayList())).toInt()
-            val action = PlayListFragmentDirections.actionPlayListFragmentToPlaylistNoDataFragment(edt.text.toString(), idPlaylist)
-            requireActivity().findNavController(R.id.activity_main_nav_host_fragment).navigate(action)
-            dialog.dismiss()
+
+            if(edt.text.toString() != ""){
+                idPlaylist = mViewModel.createPlaylist(Playlist(edt.text.toString(), ArrayList())).toInt()
+                val action = PlayListFragmentDirections.actionPlayListFragmentToPlaylistNoDataFragment(edt.text.toString(), idPlaylist)
+                requireActivity().findNavController(R.id.activity_main_nav_host_fragment).navigate(action)
+                dialog.dismiss()
+            }
+            else{
+                val toast = Toast.makeText(context, "Enter name playlist, Please", Toast.LENGTH_SHORT)
+                toast.setGravity(Gravity.CENTER, 0, 0)
+                toast.show()
+            }
+
         }
         tvCancel.setOnClickListener {
             dialog.dismiss()

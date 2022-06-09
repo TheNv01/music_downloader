@@ -26,7 +26,7 @@ class UltraDepthScaleTransformer : ViewPager2.PageTransformer {
     }
 
     companion object {
-        private const val MIN_SCALE = 0.9f
+        private const val MIN_SCALE = 0.8f
         private const val MAX_ROTATION = 10f
     }
 }

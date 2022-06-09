@@ -5,16 +5,13 @@ import android.media.MediaPlayer
 import java.io.IOException
 
 object MediaManager {
-    private var mediaPlayer: MediaPlayer? = null
-    private var isPause  = false
+    var mediaPlayer: MediaPlayer? = MediaPlayer()
+    var isPause  = false
 
-    fun isPause(): Boolean{
-        return isPause
-    }
 
     fun playMusic(url: String, completionListener: MediaPlayer.OnCompletionListener ) {
         isPause = false
-        mediaPlayer = MediaPlayer()
+        mediaPlayer?.reset()
         mediaPlayer?.setAudioAttributes(
             AudioAttributes.Builder()
                 .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
@@ -22,8 +19,8 @@ object MediaManager {
         )
         try {
             mediaPlayer?.setDataSource(url)
-            mediaPlayer?.setOnPreparedListener(MediaPlayer::start)
             mediaPlayer?.prepareAsync()
+
             mediaPlayer?.setOnCompletionListener(completionListener)
 
         }catch (e: IllegalArgumentException){
@@ -32,14 +29,6 @@ object MediaManager {
             e.printStackTrace()
         }catch (e: IOException) {
             e.printStackTrace()
-        }
-    }
-
-    fun resetMedia() {
-        if (mediaPlayer != null) {
-            mediaPlayer!!.stop()
-            mediaPlayer!!.release()
-            mediaPlayer = null
         }
     }
 

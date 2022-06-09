@@ -3,10 +3,12 @@ package com.example.musicdownloader.view.fragment
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import com.example.musicdownloader.R
 import com.example.musicdownloader.databinding.SettingFragmentBinding
 import com.example.musicdownloader.model.Option
@@ -53,15 +55,23 @@ class SettingFragment: BaseFragment<SettingFragmentBinding, SettingViewModel>() 
         for (option in mViewModel.optionSettings) {
             val v: View = initTopicView(option)
             v.setOnClickListener {
-                if(option.icon == R.drawable.ic_feedback){
-                    val intent = Intent(Intent.ACTION_SENDTO)
-                    intent.data = Uri.parse("mailto:")
-                    intent.putExtra(Intent.EXTRA_EMAIL, arrayOf("lionelvanthe@gmail.com"))
-                    intent.putExtra(Intent.EXTRA_SUBJECT, "Feedback: MUSIC DOWNLOADER")
-                    if (intent.resolveActivity(requireContext().packageManager) != null) {
-                        startActivity(intent)
+                when(option.icon){
+                    R.drawable.ic_feedback ->{
+                        val intent = Intent(Intent.ACTION_SENDTO)
+                        intent.data = Uri.parse("mailto:")
+                        intent.putExtra(Intent.EXTRA_EMAIL, arrayOf("lionelvanthe@gmail.com"))
+                        intent.putExtra(Intent.EXTRA_SUBJECT, "Feedback: MUSIC DOWNLOADER")
+                        if (intent.resolveActivity(requireContext().packageManager) != null) {
+                            startActivity(intent)
+                        }
+                    }
+                    else ->{
+                        val toast = Toast.makeText(context, "Comming soon", Toast.LENGTH_SHORT)
+                        toast.setGravity(Gravity.CENTER, 0, 0)
+                        toast.show()
                     }
                 }
+
             }
             binding.layoutBottom.addView(v)
         }
