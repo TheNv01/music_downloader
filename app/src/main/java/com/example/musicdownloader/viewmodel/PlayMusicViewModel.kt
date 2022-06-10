@@ -28,7 +28,7 @@ class PlayMusicViewModel(application: Application) : BaseViewModel(application) 
     private var _isExisted = MutableLiveData<Boolean>()
     val isExisted: LiveData<Boolean> = _isExisted
 
-
+    var isPrepared = MutableLiveData(false)
     init {
 
         MusicManager.getCurrentMusic()?.let {

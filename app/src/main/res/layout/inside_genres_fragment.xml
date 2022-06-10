@@ -39,7 +39,6 @@
                 android:textColor="@color/white"
                 android:textSize="22sp"
                 android:textStyle="bold"
-                android:layout_marginStart="13dp"
                 app:layout_constraintStart_toEndOf="@+id/ic_back"
                 app:layout_constraintTop_toTopOf="@id/ic_back"
                 app:layout_constraintBottom_toBottomOf="@id/ic_back"/>

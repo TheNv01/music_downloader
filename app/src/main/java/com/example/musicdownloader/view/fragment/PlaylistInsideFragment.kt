@@ -91,7 +91,7 @@ class PlaylistInsideFragment : BaseFragment<PlaylistInsideFragmentBinding, Playl
         bottomSheetDialog.itemClickListener = object : ItemClickListener<Int>{
             override fun onClickListener(model: Int) {
                 if(model == R.drawable.ic_delete){
-                    showConfirmDialog()
+                    showConfirmRemovePlaylistDialog()
                 }
                 else{
                     showRenamePlaylistDialog()
@@ -100,7 +100,28 @@ class PlaylistInsideFragment : BaseFragment<PlaylistInsideFragmentBinding, Playl
         }
     }
 
-    private fun showConfirmDialog() {
+    private fun showConfirmRemoveSongDialog(music: Music) {
+        val dialog = Dialog(requireActivity(), R.style.Theme_Dialog)
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.setContentView(R.layout.comfirm_dialog)
+        val tvDone = dialog.findViewById<TextView>(R.id.tv_done)
+        tvDone.text = "DELETE"
+        val tvContent = dialog.findViewById<TextView>(R.id.tv_content)
+        val tvCancel = dialog.findViewById<TextView>(R.id.tv_cancel)
+
+        tvContent.text = "Do You Want To Remove this song from this Playlist?"
+        dialog.findViewById<TextView>(R.id.tv_title).text = args.playList.name
+        tvDone.setOnClickListener{
+            dialog.dismiss()
+            mViewModel.removeMusic(args.playList.name, args.playList.id, music)
+        }
+        tvCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
+
+    private fun showConfirmRemovePlaylistDialog() {
         val dialog = Dialog(requireActivity(), R.style.Theme_Dialog)
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         dialog.setContentView(R.layout.comfirm_dialog)
@@ -129,7 +150,7 @@ class PlaylistInsideFragment : BaseFragment<PlaylistInsideFragmentBinding, Playl
             override fun onClickListener(model: Int) {
                 when(model){
                     R.drawable.ic_delete -> {
-                        mViewModel.removeMusic(args.playList.name, args.playList.id, musicSelected)
+                        showConfirmRemoveSongDialog(musicSelected)
                     }
                     R.drawable.ic_share -> {
                         val intent = Intent(Intent.ACTION_SEND)

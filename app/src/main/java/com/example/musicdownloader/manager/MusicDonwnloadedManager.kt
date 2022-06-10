@@ -15,7 +15,7 @@ object MusicDonwnloadedManager {
 
     fun getMusicFromExternal(){
         val file = File(Utils.PATH)
-        if (file.listFiles()?.isNotEmpty() == true) {
+        //if (file.listFiles()?.isNotEmpty() == true) {
             musicsDownloaded.clear()
             val mediaMetadataRetriever = FFmpegMediaMetadataRetriever()
             file.listFiles()?.forEach { musicFile ->
@@ -51,7 +51,7 @@ object MusicDonwnloadedManager {
                     }
                 }
             }
-        }
+        //}
     }
 
     fun getIndexOfCurrentMusic(): Int {

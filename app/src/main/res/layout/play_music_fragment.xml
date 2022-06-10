@@ -70,6 +70,17 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:translationZ="10dp"
+            android:clickable="false"
+            app:layout_constraintStart_toStartOf="@id/img_circle"
+            app:layout_constraintEnd_toEndOf="@id/img_circle"
+            app:layout_constraintTop_toTopOf="@id/img_circle"
+            app:layout_constraintBottom_toBottomOf="@id/img_circle"/>
+
         <androidx.constraintlayout.utils.widget.ImageFilterView
             android:id="@+id/img_cover_background"
             android:layout_width="match_parent"
@@ -220,7 +231,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_constraintGuide_percent="0.25" />
+                app:layout_constraintGuide_percent="0.33" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/verGuideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.8" />
 
             <ImageView
                 android:id="@+id/img_random"
@@ -231,7 +249,9 @@
                 app:layout_constraintTop_toBottomOf="@id/verGuideline1"
                 app:layout_constraintEnd_toStartOf="@id/img_previous"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintHorizontal_chainStyle="spread_inside"/>
+                app:layout_constraintBottom_toTopOf="@id/layout_lyrics"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintVertical_chainStyle="spread_inside"/>
 
             <ImageView
                 android:id="@+id/img_previous"
@@ -278,32 +298,35 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_chainStyle="spread_inside"/>
 
-            <TextView
-                android:id="@+id/tv_lyrics"
+            <LinearLayout
+                android:id="@+id/layout_lyrics"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:orientation="vertical"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:text="Lyrics"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@id/img_background_play_or_pause"
-                app:layout_constraintBottom_toTopOf="@+id/img_expand"
-                app:layout_constraintVertical_chainStyle="packed"
-                android:textColor="@color/white"/>
+                app:layout_constraintTop_toBottomOf="@id/img_random"
+                app:layout_constraintBottom_toBottomOf="@id/verGuideline"
+                app:layout_constraintVertical_chainStyle="spread_inside">
 
-            <ImageView
-                android:id="@+id/img_expand"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_expand"
-                android:layout_marginTop="12dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_lyrics"
-                app:layout_constraintVertical_chainStyle="packed"/>
+                <TextView
+                    android:id="@+id/tv_lyrics"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Lyrics"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/white"/>
 
+                <ImageView
+                    android:id="@+id/img_expand"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_expand"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="12dp"/>
+
+            </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -312,7 +335,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.711" />
+            app:layout_constraintGuide_percent="0.7423" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/horGuideline1"

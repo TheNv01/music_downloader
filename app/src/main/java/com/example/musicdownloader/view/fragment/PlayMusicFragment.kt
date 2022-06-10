@@ -74,7 +74,7 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
     fun onEvent(messageEvent: MessageEvent) {
         when (messageEvent.message) {
             MusicService.ACTION_START ->{
-                binding.icPlayOrPause.setImageResource(R.drawable.ic_pause_not_background)
+                //binding.icPlayOrPause.setImageResource(R.drawable.ic_pause_not_background)
                 MediaManager.isPause = false
             }
             MusicService.ACTION_PAUSE -> {
@@ -89,13 +89,16 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
             MusicService.ACTION_PREVIOUS ->{
                 if(MusicDonwnloadedManager.currentMusicDownloaded == null){
                     MusicManager.getCurrentMusic()?.let { playSong(it) }
+                    if(MediaManager.mediaPlayer!!.isPlaying){
+                        MediaManager.mediaPlayer?.stop()
+                    }
                 }
                 else{
                     playSong()
                 }
                 rotateImageView()
 
-                binding.icPlayOrPause.setImageResource(R.drawable.ic_pause_not_background)
+                //binding.icPlayOrPause.setImageResource(R.drawable.ic_pause_not_background)
             }
             MusicService.ACTION_CLOSE ->{
                 (activity as MainActivity).playMusicFragment = null
@@ -139,15 +142,14 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
             handlePauseResumeMusic()
         }
         binding.imgNext.setOnClickListener {
+            mViewModel.isPrepared.postValue( false)
             if(MediaManager.mediaPlayer!!.isPlaying){
                 MediaManager.mediaPlayer?.stop()
             }
             gotoService(MusicService.ACTION_NEXT)
         }
         binding.imgPrevious.setOnClickListener {
-            if(MediaManager.mediaPlayer!!.isPlaying){
-                MediaManager.mediaPlayer?.stop()
-            }
+            mViewModel.isPrepared.postValue( false)
 
             gotoService(MusicService.ACTION_PREVIOUS)
         }
@@ -266,6 +268,21 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
 
         //binding.icFavorite.setImageResource(R.drawable.ic_add_to_playlist)
 
+        mViewModel.isPrepared.observe(viewLifecycleOwner){
+            if(it){
+                binding.progressBar.alpha = 0f
+                binding.icPlayOrPause.setImageResource(R.drawable.ic_pause_not_background)
+                binding.icPlayOrPause.isClickable = true
+                binding.seekBar.isEnabled = true
+            }
+            else{
+                binding.progressBar.alpha = 1f
+                binding.icPlayOrPause.setImageResource(R.drawable.ic_play_not_background)
+                binding.icPlayOrPause.isClickable = false
+                binding.seekBar.isEnabled = false
+            }
+        }
+
         mViewModel.isExisted.observe(viewLifecycleOwner){
             isExited = it
         }
@@ -322,6 +339,7 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
         MediaManager.mediaPlayer?.setOnPreparedListener {
             MediaManager.mediaPlayer?.start()
             initSeekBar()
+            mViewModel.isPrepared.postValue( true)
         }
         gotoService(MusicService.ACTION_START)
 
@@ -437,11 +455,14 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
 
             activity?.runOnUiThread(object : Runnable {
                 override fun run() {
-                    if(MediaManager.mediaPlayer?.isPlaying == true){
-                        val currentPosition: Int = MediaManager.getProgress()/1000
-                        binding.seekBar.progress = currentPosition
-                        binding.tvProgress.text = formattedTime(currentPosition)
-                        Handler(Looper.getMainLooper()).postDelayed(this, 1000)
+                    mViewModel.isPrepared.observe(viewLifecycleOwner){
+                        if(it){
+                            val currentPosition: Int = MediaManager.getProgress()/1000
+                            binding.seekBar.progress = currentPosition
+                            binding.tvProgress.text = formattedTime(currentPosition)
+                            Handler(Looper.getMainLooper()).postDelayed(this, 1000)
+                        }
+
                     }
                 }
             })

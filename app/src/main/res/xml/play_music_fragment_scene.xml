@@ -63,7 +63,7 @@
             android:id="@+id/tv_single"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_width="0dp"
-            android:layout_height="24dp"
+            android:layout_height="26dp"
             android:translationZ="2dp"
             app:layout_constraintBottom_toTopOf="@id/tv_music"
             android:layout_marginStart="16dp"

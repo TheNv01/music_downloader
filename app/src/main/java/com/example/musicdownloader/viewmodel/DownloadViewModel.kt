@@ -9,11 +9,10 @@ import com.example.musicdownloader.model.Option
 import wseemann.media.FFmpegMediaMetadataRetriever
 import java.io.File
 
-class DownloadViewModel(private val app: Application) : BaseViewModel(app) {
+class DownloadViewModel(app: Application) : BaseViewModel(app) {
     val optionsDownloading = ArrayList<Option>()
     val optionsDownloaded = ArrayList<Option>()
 
-    val downloadeds =  ArrayList<MusicDownloaded>()
 
     init {
         initOptionDownloading()

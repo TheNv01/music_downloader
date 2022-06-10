@@ -1,5 +1,6 @@
 package com.example.musicdownloader.view.fragment
 
+import android.app.Dialog
 import android.content.ContentValues
 import android.content.Intent
 import android.media.RingtoneManager
@@ -12,6 +13,7 @@ import android.provider.Settings
 import android.util.Log
 import android.view.Gravity
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.FileProvider
 import com.example.musicdownloader.BuildConfig
@@ -23,6 +25,7 @@ import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListen
 import com.example.musicdownloader.manager.DownloadingManager
 import com.example.musicdownloader.manager.MusicDonwnloadedManager
 import com.example.musicdownloader.manager.MusicManager
+import com.example.musicdownloader.model.Music
 import com.example.musicdownloader.model.MusicDownloaded
 import com.example.musicdownloader.view.MainActivity
 import com.example.musicdownloader.view.dialog.BottomDialog
@@ -97,10 +100,7 @@ class DownloadedFragment: BaseFragment<DownloadedFragmentBinding, DownloadViewMo
             override fun onClickListener(model: Int) {
                 when(model){
                     R.drawable.ic_delete ->{
-                        musicDownloaded.uri?.let { File(it).delete() }
-                        MusicDonwnloadedManager.getMusicFromExternal()
-                        adapter.musicsDownloaded = mViewModel.downloadeds
-                        adapter.notifyDataSetChanged()
+                        showConfirmRemoveSongDialog(musicDownloaded)
                     }
                     R.drawable.ic_bell ->{
                         checkSystemWritePermission(musicDownloaded)
@@ -111,6 +111,31 @@ class DownloadedFragment: BaseFragment<DownloadedFragmentBinding, DownloadViewMo
                 }
             }
         }
+    }
+
+    private fun showConfirmRemoveSongDialog(musicDownloaded: MusicDownloaded) {
+        val dialog = Dialog(requireActivity(), R.style.Theme_Dialog)
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.setContentView(R.layout.comfirm_dialog)
+        val tvDone = dialog.findViewById<TextView>(R.id.tv_done)
+        tvDone.text = "DELETE"
+        val tvContent = dialog.findViewById<TextView>(R.id.tv_content)
+        val tvCancel = dialog.findViewById<TextView>(R.id.tv_cancel)
+
+        tvContent.text = "Do You Want To Remove this song from downloaded?"
+        dialog.findViewById<TextView>(R.id.tv_title).text = "Confirm"
+        tvDone.setOnClickListener{
+            musicDownloaded.uri?.let { File(it).delete() }
+            MusicDonwnloadedManager.getMusicFromExternal()
+            adapter.musicsDownloaded = MusicDonwnloadedManager.musicsDownloaded
+            adapter.notifyDataSetChanged()
+            dialog.dismiss()
+        }
+
+        tvCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.show()
     }
 
     private fun shareMusic(musicDownloaded: MusicDownloaded){
@@ -149,6 +174,7 @@ class DownloadedFragment: BaseFragment<DownloadedFragmentBinding, DownloadViewMo
 
     private fun setAsRingtone(musicDownloaded: MusicDownloaded){
         val k = File(musicDownloaded.uri!!)
+        Log.d("àdasdfas", k.path)
         val values = ContentValues()
         values.put(MediaStore.MediaColumns.DATA, k.absolutePath)
         values.put(MediaStore.MediaColumns.TITLE, musicDownloaded.music)

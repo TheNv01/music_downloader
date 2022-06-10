@@ -26,7 +26,7 @@
                 android:id="@+id/background_trending"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                app:layout_constraintDimensionRatio="222:334"
+                app:layout_constraintDimensionRatio="222:300"
                 imageUrl="@{music.image}"
                 android:scaleType="fitXY"
                 app:layout_constraintEnd_toEndOf="parent"
