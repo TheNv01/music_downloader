@@ -100,7 +100,6 @@ class PlaylistOnFragment: BaseFragment<PlaylistOnFragmentBinding, PlaylistOnView
             if(edt.text.toString() != ""){
                 mViewModel.renamePlaylist(edt.text.toString(), model.id)
                 dialog.dismiss()
-                binding.tvNamePlaylist.text = edt.text.toString()
             }
             else{
                 val toast = Toast.makeText(context, "Enter name playlist, Please", Toast.LENGTH_SHORT)

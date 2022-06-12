@@ -131,7 +131,7 @@ class PlaylistInsideFragment : BaseFragment<PlaylistInsideFragmentBinding, Playl
         val tvCancel = dialog.findViewById<TextView>(R.id.tv_cancel)
 
         tvContent.text = "Do You Want To Remove Playlist?"
-        dialog.findViewById<TextView>(R.id.tv_title).text = args.playList.name
+        dialog.findViewById<TextView>(R.id.tv_title).text = binding.tvNamePlaylist.text
         tvDone.setOnClickListener{
             dialog.dismiss()
             mViewModel.deletePlaylist(args.playList.id)
@@ -320,7 +320,7 @@ class PlaylistInsideFragment : BaseFragment<PlaylistInsideFragmentBinding, Playl
         val edt = dialog.findViewById<EditText>(R.id.edt_playlist)
         val tvCancel = dialog.findViewById<TextView>(R.id.tv_cancel)
         tvCreate.text = "DONE"
-        edt.setText(args.playList.name)
+        edt.setText(binding.tvNamePlaylist.text)
         dialog.findViewById<TextView>(R.id.tv_title).text = "Name Playlist"
         tvCreate.setOnClickListener{
 

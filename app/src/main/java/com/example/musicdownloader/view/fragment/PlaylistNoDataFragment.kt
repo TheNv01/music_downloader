@@ -72,7 +72,7 @@ class PlaylistNoDataFragment: BaseFragment<PlaylistNoDataFragmentBinding, Playli
         val tvCancel = dialog.findViewById<TextView>(R.id.tv_cancel)
 
         tvContent.text = "Do You Want To Remove Playlist?"
-        dialog.findViewById<TextView>(R.id.tv_title).text = args.nameplaylist
+        dialog.findViewById<TextView>(R.id.tv_title).text = binding.tvNamePlaylist.text
         tvDone.setOnClickListener{
             dialog.dismiss()
             mViewModel.deletePlaylist(args.idplaylist)
@@ -93,7 +93,7 @@ class PlaylistNoDataFragment: BaseFragment<PlaylistNoDataFragmentBinding, Playli
         val edt = dialog.findViewById<EditText>(R.id.edt_playlist)
         val tvCancel = dialog.findViewById<TextView>(R.id.tv_cancel)
         tvCreate.text = "DONE"
-        edt.setText(args.nameplaylist)
+        edt.setText(binding.tvNamePlaylist.text)
         dialog.findViewById<TextView>(R.id.tv_title).text = "Name Playlist"
         tvCreate.setOnClickListener{
 
