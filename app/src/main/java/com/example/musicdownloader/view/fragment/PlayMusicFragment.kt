@@ -3,7 +3,8 @@ package com.example.musicdownloader.view.fragment
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.*
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.Gravity
 import android.view.View
@@ -24,14 +25,16 @@ import com.example.musicdownloader.cusomseekbar.ProgressListener
 import com.example.musicdownloader.databinding.PlayMusicFragmentBinding
 import com.example.musicdownloader.interfaces.OnActionCallBack
 import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
-import com.example.musicdownloader.manager.*
+import com.example.musicdownloader.manager.MediaManager
+import com.example.musicdownloader.manager.MusicDonwnloadedManager
+import com.example.musicdownloader.manager.MusicManager
+import com.example.musicdownloader.manager.RepeatStatus
 import com.example.musicdownloader.model.MessageEvent
 import com.example.musicdownloader.model.Music
 import com.example.musicdownloader.view.MainActivity
 import com.example.musicdownloader.view.dialog.AddToPlaylistBottomDialog
 import com.example.musicdownloader.view.dialog.BottomDialog
 import com.example.musicdownloader.viewmodel.PlayMusicViewModel
-
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -40,7 +43,30 @@ import java.io.File
 class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewModel>(), OnActionCallBack {
 
     lateinit var callBack: OnActionCallBack
-    private var bottomSheetDialog: BottomDialog ?= null
+    private val handler by lazy { Handler(Looper.getMainLooper()) }
+    private val runnableForSeekBar: Runnable by lazy{
+        object : Runnable {
+            override fun run() {
+                val currentPosition: Int = MediaManager.getProgress()/1000
+                binding.seekBar.progress = currentPosition
+                binding.tvProgress.text = formattedTime(currentPosition)
+                handler.postDelayed(this, 1000)
+            }
+        }
+    }
+
+    private val runnableForRotateImage by lazy {
+        object : Runnable {
+            override fun run() {
+                binding.imgCircle
+                    .animate()
+                    .rotationBy(360f)
+                    .withEndAction(this)
+                    .setDuration(7000)
+                    .setInterpolator(LinearInterpolator()).start()
+            }
+        }
+    }
 
     private var isExited: Boolean = false
 
@@ -88,17 +114,20 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
             MusicService.ACTION_NEXT,
             MusicService.ACTION_PREVIOUS ->{
                 if(MusicDonwnloadedManager.currentMusicDownloaded == null){
-                    MusicManager.getCurrentMusic()?.let { playSong(it) }
+                    handler.removeCallbacks(runnableForSeekBar)
+                    binding.imgCircle.animate().cancel()
+                    mViewModel.isPrepared.postValue( false)
                     if(MediaManager.mediaPlayer!!.isPlaying){
                         MediaManager.mediaPlayer?.stop()
                     }
+                    else{
+                        MediaManager.mediaPlayer?.setOnPreparedListener(null)
+                    }
+                    MusicManager.getCurrentMusic()?.let { playSong(it) }
                 }
                 else{
                     playSong()
                 }
-                rotateImageView()
-
-                //binding.icPlayOrPause.setImageResource(R.drawable.ic_pause_not_background)
             }
             MusicService.ACTION_CLOSE ->{
                 (activity as MainActivity).playMusicFragment = null
@@ -116,12 +145,11 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
         }
         callBack = this
         if(MusicDonwnloadedManager.currentMusicDownloaded == null){
-            mViewModel.initOption(false)
+            mViewModel.initOption(true)
             playSong(MusicManager.getCurrentMusic()!!)
-
         }
         else{
-            mViewModel.initOption()
+            mViewModel.initOption(false)
             playSong()
         }
     }
@@ -142,15 +170,9 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
             handlePauseResumeMusic()
         }
         binding.imgNext.setOnClickListener {
-            mViewModel.isPrepared.postValue( false)
-            if(MediaManager.mediaPlayer!!.isPlaying){
-                MediaManager.mediaPlayer?.stop()
-            }
             gotoService(MusicService.ACTION_NEXT)
         }
         binding.imgPrevious.setOnClickListener {
-            mViewModel.isPrepared.postValue( false)
-
             gotoService(MusicService.ACTION_PREVIOUS)
         }
         binding.imgRepeat.setOnClickListener {
@@ -227,17 +249,15 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
 
 
     private fun openBottomSheet() {
-        if(bottomSheetDialog == null){
-            bottomSheetDialog = BottomDialog(mViewModel.optionsDownloaded)
-        }
-        bottomSheetDialog!!.show((activity as MainActivity).supportFragmentManager, null)
-        bottomSheetDialog!!.itemClickListener = object : ItemClickListener<Int> {
+        val bottomSheetDialog = BottomDialog(mViewModel.optionsDownloaded)
+        bottomSheetDialog.show((activity as MainActivity).supportFragmentManager, null)
+        bottomSheetDialog.itemClickListener = object : ItemClickListener<Int> {
             override fun onClickListener(model: Int) {
                 when(model){
                     R.drawable.ic_add_to_playlist ->{
                         if(MusicDonwnloadedManager.currentMusicDownloaded == null){
-                            val bottomSheetDialog = AddToPlaylistBottomDialog(MusicManager.getCurrentMusic()!!)
-                            bottomSheetDialog.show((activity as MainActivity).supportFragmentManager, null)
+                            val bottomSheetDialogAdd = AddToPlaylistBottomDialog(MusicManager.getCurrentMusic()!!)
+                            bottomSheetDialogAdd.show((activity as MainActivity).supportFragmentManager, null)
                         }
 
                     }
@@ -305,7 +325,7 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
     }
 
     private fun playSong(music: Music? = null) {
-        rotateImageView()
+
         binding.seekBar.progress = 0
         binding.tvProgress.text = formattedTime(0)
         if(music != null){
@@ -336,8 +356,10 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
                 binding.imgCircle.setImageResource(R.drawable.bg_playlist)
             }
         }
+        Log.d("currr", MusicManager.getIndexOfCurrentMusic().toString())
         MediaManager.mediaPlayer?.setOnPreparedListener {
             MediaManager.mediaPlayer?.start()
+            rotateImageView()
             initSeekBar()
             mViewModel.isPrepared.postValue( true)
         }
@@ -350,18 +372,9 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
             imgView.setImageResource(R.drawable.bg_playlist)
         }
         else{
-            val reallyImgUrl: String = if(imgUrl.length < 15){
-                "http://marstechstudio.com/img-msd/$imgUrl"
-            }
-            else{
-                imgUrl
-            }
-            reallyImgUrl.let {
-                val imgUri = reallyImgUrl.toUri().buildUpon().scheme("http").build()
-                imgView.load(imgUri){
-                    placeholder(R.drawable.loading_animation)
-                    error(R.drawable.bg_playlist)
-                }
+            imgUrl.let {
+                val imgUri = imgUrl.toUri().buildUpon().scheme("http").build()
+                imgView.load(imgUri)
             }
         }
     }
@@ -400,25 +413,17 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
 
     private fun handlePauseResumeMusic() {
         if (MediaManager.isPause) {
+            handler.post(runnableForSeekBar)
             gotoService(MusicService.ACTION_RESUME)
         } else {
+            handler.removeCallbacks(runnableForSeekBar)
             gotoService(MusicService.ACTION_PAUSE)
         }
     }
 
     private fun rotateImageView(){
-        val runnable: Runnable = object : Runnable {
-            override fun run() {
-                binding.imgCircle
-                    .animate()
-                    .rotationBy(360f)
-                    .withEndAction(this)
-                    .setDuration(7000)
-                    .setInterpolator(LinearInterpolator()).start()
-            }
-        }
 
-        binding.imgCircle.animate().rotationBy(360f).withEndAction(runnable).setDuration(7000)
+        binding.imgCircle.animate().rotationBy(360f).withEndAction(runnableForRotateImage).setDuration(7000)
             .setInterpolator(LinearInterpolator()).start()
     }
 
@@ -452,21 +457,8 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
         else{
             binding.seekBar.maxProgress = MusicDonwnloadedManager.currentMusicDownloaded?.duration!!.toInt()
         }
-
-            activity?.runOnUiThread(object : Runnable {
-                override fun run() {
-                    mViewModel.isPrepared.observe(viewLifecycleOwner){
-                        if(it){
-                            val currentPosition: Int = MediaManager.getProgress()/1000
-                            binding.seekBar.progress = currentPosition
-                            binding.tvProgress.text = formattedTime(currentPosition)
-                            Handler(Looper.getMainLooper()).postDelayed(this, 1000)
-                        }
-
-                    }
-                }
-            })
-
+        //handler.removeCallbacks(runnable)
+        handler.post(runnableForSeekBar)
         binding.seekBar.onProgressChangedListener = object : ProgressListener {
             override fun invoke(progress: Int, fromUser: Boolean) {
                 if(fromUser){
@@ -479,16 +471,21 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
 
     fun updateSong() {
         if(MusicDonwnloadedManager.currentMusicDownloaded == null){
+            handler.removeCallbacks(runnableForSeekBar)
+            binding.imgCircle.animate().cancel()
             playSong(MusicManager.getCurrentMusic()!!)
             mViewModel.existInFavorite()
+            mViewModel.initOption(true)
             MusicManager.getCurrentMusic()?.let {
                 music = it
             }
-        }
-        else{
-            if (MediaManager.mediaPlayer!!.isPlaying){
+            mViewModel.isPrepared.postValue( false)
+            if(MediaManager.mediaPlayer!!.isPlaying){
                 MediaManager.mediaPlayer?.stop()
             }
+        }
+        else{
+            mViewModel.initOption(false)
             playSong()
         }
 

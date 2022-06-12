@@ -1,6 +1,8 @@
 package com.example.musicdownloader.manager
 
+
 import android.media.AudioAttributes
+import android.media.AudioManager
 import android.media.MediaPlayer
 import java.io.IOException
 
@@ -12,13 +14,13 @@ object MediaManager {
     fun playMusic(url: String, completionListener: MediaPlayer.OnCompletionListener ) {
         isPause = false
         mediaPlayer?.reset()
-        mediaPlayer?.setAudioAttributes(
+        try {
+            mediaPlayer?.setAudioAttributes(
             AudioAttributes.Builder()
                 .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                .build()
-        )
-        try {
+                .build())
             mediaPlayer?.setDataSource(url)
+
             mediaPlayer?.prepareAsync()
 
             mediaPlayer?.setOnCompletionListener(completionListener)

@@ -93,6 +93,7 @@ class PlaylistNoDataFragment: BaseFragment<PlaylistNoDataFragmentBinding, Playli
         val edt = dialog.findViewById<EditText>(R.id.edt_playlist)
         val tvCancel = dialog.findViewById<TextView>(R.id.tv_cancel)
         tvCreate.text = "DONE"
+        edt.setText(args.nameplaylist)
         dialog.findViewById<TextView>(R.id.tv_title).text = "Name Playlist"
         tvCreate.setOnClickListener{
 

@@ -1,5 +1,6 @@
 package com.example.musicdownloader.view.fragment
 
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -30,10 +31,17 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
     lateinit var callBack: OnActionCallBack
     private lateinit var tvRegion: TextView
     private lateinit var imgLanguage: ImageView
-    private val musicClickListener =  object : ItemClickListener<Music> {
+    private fun setMusicClickListener(listMusicLiveData: LiveData<List<Music>> ?= null) =  object : ItemClickListener<Music> {
         override fun onClickListener(model: Music) {
             MusicDonwnloadedManager.currentMusicDownloaded = null
             MusicManager.setCurrentMusic(model)
+            listMusicLiveData?.observe(viewLifecycleOwner){
+                if(it != null){
+                    MusicManager.setListMusic(it)
+                }
+
+            }
+            Log.d("sizeee", MusicManager.getSizeMusicList().toString())
             callBack.callBack(KEY_SHOW_PLAY_MUSIC, null)
 
         }
@@ -141,16 +149,16 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
         binding.recyclerViewTopRating.adapter = GenericAdapter(
             R.layout.item_top_rating,
             TopRatingBinding,
-            musicClickListener)
+            setMusicClickListener(mViewModel.topRatings))
 
         binding.recyclerViewTopListened.adapter = GenericAdapter(
             R.layout.item_top_listened,
             TopListenedBinding,
-            musicClickListener)
+            setMusicClickListener(mViewModel.topListeneds))
         binding.recyclerViewTopDownload.adapter = GenericAdapter(
             R.layout.item_top_download,
             TopDownloadBinding,
-            musicClickListener)
+            setMusicClickListener(mViewModel.topDownloads))
         binding.recyclerViewGenres.adapter = GenericAdapter(
             R.layout.item_genres,
             GenresBinding,
@@ -167,10 +175,10 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
         val viewPager = binding.viewPagerTrending
         mViewModel.trends.observe(this){
             if(it.isNotEmpty()){
-                viewPager.adapter = TrendingAdapter(R.layout.item_trending, it as ArrayList<Music>, viewPager,musicClickListener)
+                viewPager.adapter = TrendingAdapter(R.layout.item_trending, it as ArrayList<Music>, viewPager,setMusicClickListener())
             }
             else{
-                viewPager.adapter =TrendingAdapter(R.layout.item_trending, ArrayList(), viewPager, musicClickListener)
+                viewPager.adapter =TrendingAdapter(R.layout.item_trending, ArrayList(), viewPager, setMusicClickListener())
             }
 
         }

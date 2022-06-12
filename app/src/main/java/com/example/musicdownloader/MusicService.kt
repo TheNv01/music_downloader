@@ -15,6 +15,7 @@ import coil.ImageLoader
 import coil.request.ImageRequest
 import coil.request.SuccessResult
 import com.example.musicdownloader.manager.*
+import com.example.musicdownloader.model.General
 import com.example.musicdownloader.model.MessageEvent
 import com.example.musicdownloader.model.Music
 import com.example.musicdownloader.model.MusicDownloaded
@@ -22,6 +23,9 @@ import com.example.musicdownloader.networking.Services
 import com.example.musicdownloader.view.MainActivity
 import kotlinx.coroutines.*
 import org.greenrobot.eventbus.EventBus
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MusicService : Service() {
 
@@ -47,7 +51,8 @@ class MusicService : Service() {
             when (action) {
                 ACTION_START ->{
                     if(MusicDonwnloadedManager.currentMusicDownloaded == null) {
-                        MusicManager.getCurrentMusic()?.let { startMusic(it) }
+
+                        MusicManager.getCurrentMusic()?.let { getLinkAudio(it) }
                     }
                     else {
                         MusicDonwnloadedManager.currentMusicDownloaded?.let { startMusicDownloaded(it) }
@@ -129,39 +134,42 @@ class MusicService : Service() {
         }
 
 
-    private fun startMusic(music: Music) {
-        //MediaManager.resetMedia()
-        GlobalScope.launch(Dispatchers.IO) {
-            MediaManager.playMusic(getLinkAudio(music)){
-                when(MusicManager.getRepeatStatus()){
-                    RepeatStatus.NoRepeat ->{
-                        if(MusicManager.getIndexOfCurrentMusic() == MusicManager.getSizeMusicList() -1){
-                            EventBus.getDefault().post(MessageEvent(ACTION_PAUSE))
-                            MediaManager.pauseMedia()
-                        }
-                        else{
-                            MusicManager.nextMusic()
-                            EventBus.getDefault().post(MessageEvent(ACTION_NEXT))
-                        }
-                    }
-                    RepeatStatus.RepeatListMusic ->{
+    private fun startMusic(url: String) {
+        MediaManager.playMusic(url){
+            when(MusicManager.getRepeatStatus()){
+                RepeatStatus.NoRepeat ->{
+                    if(MusicManager.getIndexOfCurrentMusic() == MusicManager.getSizeMusicList() -1){
+                        EventBus.getDefault().post(MessageEvent(ACTION_PAUSE))
+                        MediaManager.pauseMedia()
+                    } else{
                         MusicManager.nextMusic()
                         EventBus.getDefault().post(MessageEvent(ACTION_NEXT))
                     }
-                    RepeatStatus.RepeatOneMusic ->{
-                        EventBus.getDefault().post(MessageEvent(ACTION_NEXT))
-                    }
                 }
-                MusicManager.getCurrentMusic()?.let { it1 -> pushNotification(it1) }
+                RepeatStatus.RepeatListMusic ->{
+                    MusicManager.nextMusic()
+                    EventBus.getDefault().post(MessageEvent(ACTION_NEXT))
+                }
+                RepeatStatus.RepeatOneMusic ->{
+                    EventBus.getDefault().post(MessageEvent(ACTION_NEXT))
+                }
             }
+            MusicManager.getCurrentMusic()?.let { it1 -> pushNotification(it1) }
         }
     }
 
-    private suspend fun getLinkAudio(music: Music): String{
-        return if(music.source.equals("SC")){
-            Services.retrofitService.getLinkSourceSc(music.id).data
+    private fun getLinkAudio(music: Music){
+        if(music.source.equals("SC")){
+            Services.retrofitService.getLinkSourceSc(music.id).enqueue(object : Callback<General<String>> {
+                override fun onResponse(call: Call<General<String>>, response: Response<General<String>>) {
+                    if (response.isSuccessful) {
+                        response.body()?.data?.let { startMusic(it) }
+                    }
+                }
+                override fun onFailure(call: Call<General<String>>, t: Throwable) {}
+            })
         } else{
-            music.audio!!
+            startMusic(music.audio!!)
         }
     }
 

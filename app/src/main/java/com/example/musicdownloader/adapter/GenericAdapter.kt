@@ -46,12 +46,6 @@ class GenericAdapter<T: Any, V: ViewDataBinding>(
 
     override fun onBindViewHolder(holder: GenericViewHolder, position: Int) {
         holder.bind(getItem(position), bindingInterface, itemListener)
-        if(currentList[0] is Music){
-            MusicManager.setListMusic(currentList as List<Music>)
-        }
-        else{
-            MusicManager.setListMusic(ArrayList())
-        }
 
     }
 

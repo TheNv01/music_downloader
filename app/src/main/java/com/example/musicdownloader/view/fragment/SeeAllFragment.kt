@@ -25,6 +25,7 @@ class SeeAllFragment: BaseFragment<SeeAllFragmentBinding, SeeAllViewModel>(), On
     private val musicItemClickListener = object : ItemClickListener<Music> {
         override fun onClickListener(model: Music) {
             MusicDonwnloadedManager.currentMusicDownloaded = null
+            mViewModel.musics.value?.let { MusicManager.setListMusic(it) }
             MusicManager.setCurrentMusic(model)
             callBack.callBack(null, null)
         }

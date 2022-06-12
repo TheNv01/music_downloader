@@ -320,6 +320,7 @@ class PlaylistInsideFragment : BaseFragment<PlaylistInsideFragmentBinding, Playl
         val edt = dialog.findViewById<EditText>(R.id.edt_playlist)
         val tvCancel = dialog.findViewById<TextView>(R.id.tv_cancel)
         tvCreate.text = "DONE"
+        edt.setText(args.playList.name)
         dialog.findViewById<TextView>(R.id.tv_title).text = "Name Playlist"
         tvCreate.setOnClickListener{
 

@@ -22,6 +22,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.musicdownloader.R
 import com.example.musicdownloader.Utils
 import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
+import com.example.musicdownloader.model.General
 import com.example.musicdownloader.model.Music
 import com.example.musicdownloader.networking.Services
 import com.example.musicdownloader.view.MainActivity
@@ -30,6 +31,9 @@ import com.example.musicdownloader.view.dialog.BottomDialog
 import com.example.musicdownloader.viewmodel.BaseViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.File
 
 abstract class BaseFragment<K: ViewDataBinding, V: ViewModel>: Fragment() {
@@ -131,22 +135,27 @@ abstract class BaseFragment<K: ViewDataBinding, V: ViewModel>: Fragment() {
     private fun shareMusic(){
 
         val intent = Intent(Intent.ACTION_SEND)
+        intent.type = "text/plain"
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Subject Here")
 
-        mViewModel.viewModelScope.launch (Dispatchers.IO){
-            intent.type = "text/plain"
-            intent.putExtra(Intent.EXTRA_SUBJECT, "Subject Here")
-            intent.putExtra(Intent.EXTRA_TEXT,getLinkAudio(music))
+        if(music.source.equals("SC")){
+            Services.retrofitService.getLinkSourceSc(music.id).enqueue(object :
+                Callback<General<String>> {
+                override fun onResponse(call: Call<General<String>>, response: Response<General<String>>) {
+                    if (response.isSuccessful) {
+                        intent.putExtra(Intent.EXTRA_TEXT, response.body()?.data)
+                        startActivity(Intent.createChooser(intent, "Share link"))
+                    }
+                }
+                override fun onFailure(call: Call<General<String>>, t: Throwable) {}
+            })
+        } else{
+            intent.putExtra(Intent.EXTRA_TEXT, music.audio!!)
             startActivity(Intent.createChooser(intent, "Share link"))
         }
+
     }
 
-    private suspend fun getLinkAudio(music: Music): String{
-        return if(music.source.equals("SC")){
-            Services.retrofitService.getLinkSourceSc(music.id).data
-        } else{
-            music.audio!!
-        }
-    }
 
     protected abstract fun initBinding(mRootView: View): K
 

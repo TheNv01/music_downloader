@@ -17,8 +17,8 @@ interface Api {
         @Query("country") country: String = "vn"): General<List<Music>>
 
     @GET("url?")
-    suspend fun getLinkSourceSc(
-        @Query("id") id: String): General<String>
+    fun getLinkSourceSc(
+        @Query("id") id: String): Call<General<String>>
 
     @GET("genre")
     suspend fun getGenres(): General<List<Genres>>
