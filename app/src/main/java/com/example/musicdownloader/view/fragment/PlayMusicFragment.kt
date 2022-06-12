@@ -200,6 +200,12 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
                 toast.show()
             }
         }
+        binding.imgExpand.setOnClickListener {
+            Toast.makeText(context, "Comming soon", Toast.LENGTH_SHORT).show()
+        }
+        binding.tvLyrics.setOnClickListener {
+            Toast.makeText(context, "Comming soon", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun insertMusicToFavorite(){

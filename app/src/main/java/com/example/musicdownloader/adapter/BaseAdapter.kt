@@ -12,7 +12,7 @@ import com.example.musicdownloader.model.Music
 
 abstract class BaseAdapter<T: Any, V: ViewDataBinding>(
     @LayoutRes protected val layoutID: Int,
-    private val list: List<T>,
+    protected var list: List<T>,
     private val itemClickListener: ItemClickListener<T>
 ):
     RecyclerView.Adapter<BaseAdapter.BaseViewHolder<T, V>>() {

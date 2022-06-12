@@ -22,6 +22,8 @@ class ChangeRegionDialog: DialogFragment(), ItemClickListener<Region> {
     private var mRootView: View ?= null
     private var binding: ChangeRegionFragmentBinding ?= null
     private lateinit var viewModel: ChangeRegionViewModel
+    private lateinit var adapter: ChangeRegionAdapter
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,12 +56,27 @@ class ChangeRegionDialog: DialogFragment(), ItemClickListener<Region> {
         return R.layout.change_region_fragment
     }
 
-    private fun setUpObserver(){
-        binding?.recyclerViewRegion?.adapter = ChangeRegionAdapter(
+    private fun setUpObserver() {
+        adapter = ChangeRegionAdapter(
             R.layout.item_region,
             viewModel.regions,
             this
         )
+        binding?.recyclerViewRegion?.adapter = adapter
+        setupSearchView()
+    }
+
+    private fun setupSearchView(){
+        binding!!.searchCountry.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                adapter.filter.filter(query)
+                return false
+            }
+            override fun onQueryTextChange(newText: String?): Boolean {
+                adapter.filter.filter(newText)
+                return false
+            }
+        })
     }
 
     private fun setTextColorHint(){

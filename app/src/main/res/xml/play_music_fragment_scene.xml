@@ -239,10 +239,10 @@
         <Constraint
             android:id="@+id/seek_bar"
             app:layout_constraintEnd_toEndOf="@id/img_cover_background"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="19dp"
             android:rotationY="180"
-            android:layout_marginBottom="-11dp"
+            android:layout_marginBottom="-10dp"
             app:layout_constraintBottom_toTopOf="@id/img_cover_background"
             android:rotation="180"
             app:layout_constraintStart_toStartOf="@+id/img_cover_background" >
