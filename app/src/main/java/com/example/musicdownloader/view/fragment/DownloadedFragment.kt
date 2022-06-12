@@ -69,9 +69,9 @@ class DownloadedFragment: BaseFragment<DownloadedFragmentBinding, DownloadViewMo
 
     override fun onResume() {
         super.onResume()
-        if(DownloadingManager.fetch == null){
+        //if(DownloadingManager.fetch == null){
             MusicDonwnloadedManager.getMusicFromExternal()
-        }
+       // }
         adapter= DownloadedAdapter(
             R.layout.item_downloaded,
             MusicDonwnloadedManager.musicsDownloaded,

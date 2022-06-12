@@ -1,12 +1,14 @@
 package com.example.musicdownloader.viewmodel
 
 import android.app.Application
+import android.view.Gravity
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.musicdownloader.R
 import com.example.musicdownloader.database.MusicRoomDatabase
 import com.example.musicdownloader.manager.DownloadingManager
+import com.example.musicdownloader.manager.MusicDonwnloadedManager
 import com.example.musicdownloader.model.Music
 import com.example.musicdownloader.model.MusicDownloading
 import com.example.musicdownloader.model.Option
@@ -60,47 +62,53 @@ abstract class BaseViewModel(application: Application): AndroidViewModel(applica
 
     fun startDownload(music: Music,file: File){
         val path = file.toString() +"/"+ music.name.plus(".mp3")
-        val request = Request(music.audioDownload!!, path)
-        request.priority = Priority.HIGH
-        request.networkType = NetworkType.ALL
+        if(File(path).exists()){
+            Toast.makeText(getApplication(), "Can't download because it was downloaded or downloading", Toast.LENGTH_SHORT).show()
+        }
+        else{
+            val request = Request(music.audioDownload!!, path)
+            request.priority = Priority.HIGH
+            request.networkType = NetworkType.ALL
 
-        val musicDownloading = MusicDownloading(
-            music.name!!,
-            music.artistName!!,
-            music.image!!,
-            request)
+            val musicDownloading = MusicDownloading(
+                music.name!!,
+                music.artistName!!,
+                music.image!!,
+                request)
 
-        DownloadingManager.listDownloading().add(musicDownloading)
+            DownloadingManager.listDownloading().add(musicDownloading)
 
-        viewModelScope.launch(Dispatchers.IO) {
-            DownloadingManager.getFetch(getApplication()).enqueue(request,
-                { Toast.makeText(getApplication(), "Downloading...", Toast.LENGTH_SHORT).show()},
-                { Toast.makeText(getApplication(), "Something wrong!...", Toast.LENGTH_SHORT).show() })
-            DownloadingManager.fetch!!.addListener(
-                object : FetchListener {
-                    override fun onQueued(download: Download, waitingOnNetwork: Boolean) {}
-                    override fun onRemoved(download: Download) {}
-                    override fun onCompleted(download: Download) {
-                        DownloadingManager.listDownloading().remove(musicDownloading)
-                    }
-                    override fun onDeleted(download: Download) {}
-                    override fun onDownloadBlockUpdated(download: Download, downloadBlock: DownloadBlock, totalBlocks: Int) {}
-                    override fun onError(download: Download, error: Error, throwable: Throwable?) {
-                        DownloadingManager.fetch!!.retry(request.id)
-                    }
-                    override fun onPaused(download: Download) {}
-                    override fun onResumed(download: Download) {}
-                    override fun onStarted(download: Download, downloadBlocks: List<DownloadBlock>, totalBlocks: Int) {}
-                    override fun onWaitingNetwork(download: Download) {}
-                    override fun onAdded(download: Download) {}
-                    override fun onCancelled(download: Download) {}
-                    override fun onProgress(
-                        download: Download,
-                        etaInMilliSeconds: Long,
-                        downloadedBytesPerSecond: Long
-                    ) {}
+            viewModelScope.launch(Dispatchers.IO) {
+                DownloadingManager.getFetch(getApplication()).enqueue(request,
+                    { Toast.makeText(getApplication(), "Downloading...", Toast.LENGTH_SHORT).show()},
+                    { Toast.makeText(getApplication(), "Something wrong!...", Toast.LENGTH_SHORT).show() })
+                DownloadingManager.fetch!!.addListener(
+                    object : FetchListener {
+                        override fun onQueued(download: Download, waitingOnNetwork: Boolean) {}
+                        override fun onRemoved(download: Download) {}
+                        override fun onCompleted(download: Download) {
+                            DownloadingManager.listDownloading().remove(musicDownloading)
+                            MusicDonwnloadedManager.getMusicFromExternal()
+                        }
+                        override fun onDeleted(download: Download) {}
+                        override fun onDownloadBlockUpdated(download: Download, downloadBlock: DownloadBlock, totalBlocks: Int) {}
+                        override fun onError(download: Download, error: Error, throwable: Throwable?) {
+                            DownloadingManager.fetch!!.retry(request.id)
+                        }
+                        override fun onPaused(download: Download) {}
+                        override fun onResumed(download: Download) {}
+                        override fun onStarted(download: Download, downloadBlocks: List<DownloadBlock>, totalBlocks: Int) {}
+                        override fun onWaitingNetwork(download: Download) {}
+                        override fun onAdded(download: Download) {}
+                        override fun onCancelled(download: Download) {}
+                        override fun onProgress(
+                            download: Download,
+                            etaInMilliSeconds: Long,
+                            downloadedBytesPerSecond: Long
+                        ) {}
 
-                })
+                    })
+            }
         }
     }
 }

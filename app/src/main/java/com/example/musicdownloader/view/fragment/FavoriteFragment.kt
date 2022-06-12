@@ -22,6 +22,7 @@ class FavoriteFragment: BaseFragment<FavoriteFragmentBinding, FavoriteViewModel>
         override fun onClickListener(model: Music) {
             MusicDonwnloadedManager.currentMusicDownloaded = null
             MusicManager.setCurrentMusic(model)
+            mViewModel.musics.value?.let { MusicManager.setListMusic(it) }
             callback.callBack(null, null)
         }
     }

@@ -1,6 +1,7 @@
 package com.example.musicdownloader.manager
 
 import android.graphics.BitmapFactory
+import android.util.Log
 import com.example.musicdownloader.Utils
 import com.example.musicdownloader.model.MusicDownloaded
 import wseemann.media.FFmpegMediaMetadataRetriever
@@ -15,11 +16,10 @@ object MusicDonwnloadedManager {
 
     fun getMusicFromExternal(){
         val file = File(Utils.PATH)
-        //if (file.listFiles()?.isNotEmpty() == true) {
             musicsDownloaded.clear()
             val mediaMetadataRetriever = FFmpegMediaMetadataRetriever()
             file.listFiles()?.forEach { musicFile ->
-                if(musicFile.length() != 0L){
+                if(musicFile.length() != 0L && !comparePaths(musicFile.path)){
                     try {
                         mediaMetadataRetriever.setDataSource(musicFile.path)
                         val songName =
@@ -51,7 +51,21 @@ object MusicDonwnloadedManager {
                     }
                 }
             }
-        //}
+    }
+
+    private fun comparePaths (path: String): Boolean {
+        if(DownloadingManager.listDownloading().isEmpty()){
+            return false
+        }
+        else{
+            DownloadingManager.listDownloading().forEach {
+                if(path == it.request.file){
+                    return true
+                }
+            }
+        }
+
+        return false
     }
 
     fun getIndexOfCurrentMusic(): Int {

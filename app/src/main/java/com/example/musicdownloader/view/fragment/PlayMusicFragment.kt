@@ -344,8 +344,8 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
         }
         else{
             val musicDownloaded = MusicDonwnloadedManager.currentMusicDownloaded
-            binding.tvMusic.text = musicDownloaded?.music
-            binding.tvSingle.text = musicDownloaded?.artist
+            binding.tvMusic.text = musicDownloaded?.artist
+            binding.tvSingle.text = musicDownloaded?.music
             binding.tvProgressMax.text = formattedTime(musicDownloaded?.duration!!.toInt())
             if(musicDownloaded.bitmap != null){
                 binding.imgBackgroundRectangle.setImageBitmap(musicDownloaded.bitmap)
@@ -356,7 +356,6 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
                 binding.imgCircle.setImageResource(R.drawable.bg_playlist)
             }
         }
-        Log.d("currr", MusicManager.getIndexOfCurrentMusic().toString())
         MediaManager.mediaPlayer?.setOnPreparedListener {
             MediaManager.mediaPlayer?.start()
             rotateImageView()

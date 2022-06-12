@@ -37,6 +37,7 @@ class SearchFragment : BaseFragment<SearchFragmentBinding, SearchViewModel>(), O
             if(args.fromdestination == 0){
                 MusicDonwnloadedManager.currentMusicDownloaded = null
                 MusicManager.setCurrentMusic(model)
+                mViewModel.musics.value?.let { MusicManager.setListMusic(it) }
                 callBack.callBack(null, null)
             }
             else{
