@@ -300,12 +300,16 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
                 binding.icPlayOrPause.setImageResource(R.drawable.ic_pause_not_background)
                 binding.icPlayOrPause.isClickable = true
                 binding.seekBar.isEnabled = true
+                binding.imgNext.isClickable = true
+                binding.imgPrevious.isClickable = true
             }
             else{
                 binding.progressBar.alpha = 1f
                 binding.icPlayOrPause.setImageResource(R.drawable.ic_play_not_background)
                 binding.icPlayOrPause.isClickable = false
                 binding.seekBar.isEnabled = false
+                binding.imgNext.isClickable = false
+                binding.imgPrevious.isClickable = false
             }
         }
 

@@ -61,9 +61,7 @@ class SettingFragment: BaseFragment<SettingFragmentBinding, SettingViewModel>() 
                         intent.data = Uri.parse("mailto:")
                         intent.putExtra(Intent.EXTRA_EMAIL, arrayOf("lionelvanthe@gmail.com"))
                         intent.putExtra(Intent.EXTRA_SUBJECT, "Feedback: MUSIC DOWNLOADER")
-                        if (intent.resolveActivity(requireContext().packageManager) != null) {
-                            startActivity(intent)
-                        }
+                        startActivity(intent)
                     }
                     else ->{
                         val toast = Toast.makeText(context, "Comming soon", Toast.LENGTH_SHORT)
@@ -71,7 +69,6 @@ class SettingFragment: BaseFragment<SettingFragmentBinding, SettingViewModel>() 
                         toast.show()
                     }
                 }
-
             }
             binding.layoutBottom.addView(v)
         }

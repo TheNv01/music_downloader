@@ -24,7 +24,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:searchIcon="@drawable/ic_search_view"
-            app:closeIcon="@null"
+            app:closeIcon="@drawable/ic_close_search"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="20dp"
             android:layout_marginStart="16dp"

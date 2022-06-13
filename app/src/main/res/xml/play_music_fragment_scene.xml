@@ -91,13 +91,13 @@
             app:layout_constraintVertical_chainStyle="packed" />
         <Constraint
             android:id="@+id/ic_play_or_pause"
-            app:layout_constraintEnd_toEndOf="@id/horGuideline1"
+            app:layout_constraintEnd_toEndOf="@id/layout_control"
             android:layout_width="23dp"
             android:layout_height="28dp"
             android:translationZ="2dp"
             app:layout_constraintTop_toTopOf="@id/verGuideline2"
             app:layout_constraintBottom_toBottomOf="@id/verGuideline2"
-            app:layout_constraintStart_toStartOf="@id/horGuideline1"/>
+            app:layout_constraintStart_toStartOf="@id/layout_control"/>
 
 
         <Constraint
@@ -242,6 +242,8 @@
             android:layout_width="0dp"
             android:layout_height="19dp"
             android:rotationY="180"
+            android:layout_marginStart="-10dp"
+            android:layout_marginEnd="-10dp"
             android:layout_marginBottom="-10dp"
             app:layout_constraintBottom_toTopOf="@id/img_cover_background"
             android:rotation="180"
@@ -351,10 +353,14 @@
                 app:framePosition="95"
                 android:alpha="0" />
 
-
             <KeyAttribute
                 app:motionTarget="@+id/ic_play_or_pause"
                 app:framePosition="5"
+                android:alpha="0"/>
+
+            <KeyAttribute
+                app:motionTarget="@+id/ic_play_or_pause"
+                app:framePosition="95"
                 android:alpha="0"/>
 
             <KeyAttribute
@@ -364,7 +370,7 @@
 
             <KeyAttribute
                 app:motionTarget="@+id/layout_control"
-                app:framePosition="5"
+                app:framePosition="95"
                 android:alpha="0"/>
 
             <KeyAttribute

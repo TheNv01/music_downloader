@@ -337,12 +337,6 @@
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.7423" />
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/horGuideline1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.497" />
 
         <ImageView
             android:id="@+id/img_cover_bottom"
