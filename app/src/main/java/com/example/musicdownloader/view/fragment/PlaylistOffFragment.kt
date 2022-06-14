@@ -1,6 +1,8 @@
 package com.example.musicdownloader.view.fragment
 
+import android.view.Gravity
 import android.view.View
+import android.widget.Toast
 import com.example.musicdownloader.R
 import com.example.musicdownloader.adapter.GenericAdapter
 import com.example.musicdownloader.adapter.PlaylistExistBinding
@@ -27,7 +29,18 @@ class PlaylistOffFragment: BaseFragment<PlaylistOnFragmentBinding, PlaylistOffVi
     override fun initViews() {
     }
 
-    override fun setUpListener() {}
+    override fun setUpListener() {
+        binding.imgBackgroundFavorite.setOnClickListener {
+            val toast = Toast.makeText(context, "Comming soon", Toast.LENGTH_SHORT)
+            toast.setGravity(Gravity.CENTER, 0, 0)
+            toast.show()
+        }
+        binding.imgBackgroundCreate.setOnClickListener {
+            val toast = Toast.makeText(context, "Comming soon", Toast.LENGTH_SHORT)
+            toast.setGravity(Gravity.CENTER, 0, 0)
+            toast.show()
+        }
+    }
 
     override fun setUpObserver() {
 

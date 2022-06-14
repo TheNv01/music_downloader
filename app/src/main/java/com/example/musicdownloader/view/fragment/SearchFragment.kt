@@ -91,6 +91,7 @@ class SearchFragment : BaseFragment<SearchFragmentBinding, SearchViewModel>(), O
             }
         }
         else{
+            SearchBinding.menuClickListener = null
             SearchBinding.isIconMenu = false
             mViewModel.getMusics(ArrayList(), "")
         }

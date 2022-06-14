@@ -242,7 +242,7 @@
             android:layout_width="0dp"
             android:layout_height="19dp"
             android:rotationY="180"
-            android:layout_marginStart="-10dp"
+            android:layout_marginStart="-9dp"
             android:layout_marginEnd="-10dp"
             android:layout_marginBottom="-10dp"
             app:layout_constraintBottom_toTopOf="@id/img_cover_background"

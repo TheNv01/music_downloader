@@ -11,7 +11,6 @@ import com.example.musicdownloader.adapter.GenericAdapter
 import com.example.musicdownloader.adapter.SearchBinding
 import com.example.musicdownloader.adapter.SeeAllBinding
 import com.example.musicdownloader.databinding.InsideGenresFragmentBinding
-import com.example.musicdownloader.databinding.SplashFragmentBinding
 import com.example.musicdownloader.interfaces.OnActionCallBack
 import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
 import com.example.musicdownloader.manager.MusicDonwnloadedManager
