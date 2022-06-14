@@ -29,10 +29,14 @@ import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListen
 import com.example.musicdownloader.manager.MusicDonwnloadedManager
 import com.example.musicdownloader.manager.MusicManager
 import com.example.musicdownloader.model.Music
+import com.example.musicdownloader.model.MusicDownloaded
 import com.example.musicdownloader.view.MainActivity
 import com.example.musicdownloader.view.dialog.BottomDialog
 import com.example.musicdownloader.viewmodel.PlaylistInsideViewModel
+import java.io.BufferedInputStream
 import java.io.File
+import java.io.FileInputStream
+import java.io.IOException
 
 class PlaylistInsideFragment : BaseFragment<PlaylistInsideFragmentBinding, PlaylistInsideViewModel>(), OnActionCallBack {
 
@@ -262,37 +266,48 @@ class PlaylistInsideFragment : BaseFragment<PlaylistInsideFragmentBinding, Playl
 //        ActivityCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
 //    }
 
-
-    private fun setAsRingtone(music: Music){
-        val k = File(mViewModel.request.file)
+    private fun setAsRingtone(music: Music): Boolean {
         val values = ContentValues()
-        values.put(MediaStore.MediaColumns.DATA, k.absolutePath)
+        val file = File(mViewModel.request.file)
         values.put(MediaStore.MediaColumns.TITLE, music.name)
-
-        values.put(MediaStore.MediaColumns.SIZE, k.length())
-        values.put(MediaStore.MediaColumns.MIME_TYPE, "audio/mp3")
-        values.put(MediaStore.Audio.Media.ARTIST, music.artistName)
-
-        values.put(MediaStore.Audio.Media.DURATION, music.duration!!)
+        values.put(MediaStore.MediaColumns.MIME_TYPE, "audio/mpeg")
         values.put(MediaStore.Audio.Media.IS_RINGTONE, true)
-        values.put(MediaStore.Audio.Media.IS_NOTIFICATION, false)
-        values.put(MediaStore.Audio.Media.IS_ALARM, false)
-        values.put(MediaStore.Audio.Media.IS_MUSIC, false)
 
-        val uri = MediaStore.Audio.Media.getContentUriForPath(k.absolutePath)
-        if (uri != null) {
-            requireContext().contentResolver.delete(
-                uri,
-                MediaStore.MediaColumns.DATA + "=\""
-                        + k.absolutePath + "\"", null)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            val newUri: Uri? = requireContext().contentResolver
+                .insert(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, values)
+            try {
+                requireContext().contentResolver.openOutputStream(newUri!!).use { os ->
+                    val size = file.length().toInt()
+                    val bytes = ByteArray(size)
+                    try {
+                        val buf = BufferedInputStream(FileInputStream(file))
+                        buf.read(bytes, 0, bytes.size)
+                        buf.close()
+                        os?.write(bytes)
+                        os?.close()
+                        os?.flush()
+                    } catch (e: IOException) {
+                        return false
+                    }
+                }
+            } catch (ignored: Exception) {
+                return false
+            }
+            RingtoneManager.setActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE, newUri)
+        } else {
+            values.put(MediaStore.MediaColumns.DATA, file.absolutePath)
+            val uri = MediaStore.Audio.Media.getContentUriForPath(file.absolutePath)
+            requireContext().contentResolver
+                .delete(uri!!, MediaStore.MediaColumns.DATA + "=\"" + file.absolutePath + "\"", null)
+            val newUri: Uri? = requireContext().contentResolver.insert(uri, values)
+            RingtoneManager.setActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE, newUri)
+            MediaStore.Audio.Media.getContentUriForPath(file.absolutePath)?.let {
+                requireContext().contentResolver
+                    .insert(it, values)
+            }
         }
-        val newUri = context?.contentResolver!!.insert(uri!!, values)
-
-        RingtoneManager.setActualDefaultRingtoneUri(
-            context,
-            RingtoneManager.TYPE_RINGTONE,
-            newUri
-        )
+        return true
     }
 
     override fun setUpObserver() {

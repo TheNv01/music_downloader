@@ -33,6 +33,7 @@
                 android:id="@+id/search_song"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:queryBackground="@android:color/transparent"
                 android:background="@drawable/bg_tab_indicator"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

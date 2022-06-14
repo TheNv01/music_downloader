@@ -61,7 +61,13 @@ abstract class BaseViewModel(application: Application): AndroidViewModel(applica
     }
 
     fun startDownload(music: Music,file: File){
-        val path = file.toString() +"/"+ music.name.plus(".mp3")
+
+        val path = if(music.name!!.contains("/")){
+            file.toString() +"/" + music.name.split("")[0].plus(".mp3")
+        } else{
+            file.toString() +"/"+ music.name.plus(".mp3")
+        }
+
         if(File(path).exists()){
             Toast.makeText(getApplication(), "Can't download because it was downloaded or downloading", Toast.LENGTH_SHORT).show()
         }

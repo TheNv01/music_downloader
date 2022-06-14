@@ -15,12 +15,9 @@ object MediaManager {
         isPause = false
         mediaPlayer?.reset()
         try {
-            mediaPlayer?.setAudioAttributes(
-            AudioAttributes.Builder()
-                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                .build())
-            mediaPlayer?.setDataSource(url)
 
+            mediaPlayer?.setDataSource(url)
+            mediaPlayer?.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mediaPlayer?.prepareAsync()
 
             mediaPlayer?.setOnCompletionListener(completionListener)

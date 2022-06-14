@@ -19,6 +19,7 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         createNotificationChannel()
+        applicationContext?.let { SharedPreferencesManager.with(it) }
         Utils.initPath(this)
     }
 

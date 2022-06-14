@@ -1,5 +1,6 @@
 package com.example.musicdownloader.view.dialog
 
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,6 +17,8 @@ import com.example.musicdownloader.databinding.ChangeRegionFragmentBinding
 import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
 import com.example.musicdownloader.model.Region
 import com.example.musicdownloader.viewmodel.ChangeRegionViewModel
+import eightbitlab.com.blurview.RenderScriptBlur
+
 
 class ChangeRegionDialog: DialogFragment(), ItemClickListener<Region> {
 
@@ -23,7 +26,6 @@ class ChangeRegionDialog: DialogFragment(), ItemClickListener<Region> {
     private var binding: ChangeRegionFragmentBinding ?= null
     private lateinit var viewModel: ChangeRegionViewModel
     private lateinit var adapter: ChangeRegionAdapter
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +48,25 @@ class ChangeRegionDialog: DialogFragment(), ItemClickListener<Region> {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpObserver()
+
+        val radius = 25f
+
+        val decorView = dialog?.window?.decorView
+        //ViewGroup you want to start blur from. Choose root as close to BlurView in hierarchy as possible.
+        val rootView = decorView?.findViewById<ViewGroup>(android.R.id.content)
+        //Set drawable to draw in the beginning of each blurred frame (Optional).
+        //Can be used in case your layout has a lot of transparent space and your content
+        //gets kinda lost after after blur is applied.
+        val windowBackground = decorView?.background
+
+        binding!!.blurView.setupWith(rootView!!)
+            .setFrameClearDrawable(windowBackground)
+            .setBlurAlgorithm(RenderScriptBlur(context))
+            .setBlurRadius(radius)
+
+        //binding!!.blurringView.setBlurredView(binding!!.recyclerViewRegion);
+        //GaussianBlur.with(context).radius(25).put(R.drawable.cover_background_expand, binding!!.imageView);
+
     }
 
     private fun initBinding(mRootView: View?): ChangeRegionFragmentBinding? {
@@ -64,6 +85,7 @@ class ChangeRegionDialog: DialogFragment(), ItemClickListener<Region> {
         )
         binding?.recyclerViewRegion?.adapter = adapter
         setupSearchView()
+        dialog!!.window?.setBackgroundDrawableResource(android.R.color.transparent)
     }
 
     private fun setupSearchView(){
@@ -92,4 +114,5 @@ class ChangeRegionDialog: DialogFragment(), ItemClickListener<Region> {
         setFragmentResult("requestKey", bundle)
         dialog?.dismiss()
     }
+
 }

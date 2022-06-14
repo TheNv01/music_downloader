@@ -67,7 +67,6 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
         tvRegion = mRootView.findViewById(R.id.tv_region)
         imgLanguage = mRootView.findViewById(R.id.img_language)
         callBack = this
-        context?.let { SharedPreferencesManager.with(it) }
 
 
     }
@@ -119,24 +118,13 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
 
     override fun setUpObserver() {
 
-        SharedPreferencesManager.get<Region>("country").let {
-            if(it == null){
-                mViewModel.factoryMusics("popular", null)
-                mViewModel.factoryMusics("ranking", null)
-                mViewModel.factoryMusics("listened", null)
-                mViewModel.factoryMusics("download", null)
-            }
-            else{
-                mViewModel.factoryMusics("popular", it.regionCode)
-                mViewModel.factoryMusics("ranking", it.regionCode)
-                mViewModel.factoryMusics("listened", it.regionCode)
-                mViewModel.factoryMusics("download", it.regionCode)
-            }
-        }
+
+        Log.d("thenv", mViewModel.trends.value.toString())
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewmodel = mViewModel
         setupTrendingViewPager()
         setupRecyclerview()
+        Log.d("Thevn", "view created")
     }
 
     private fun setupRecyclerview(){

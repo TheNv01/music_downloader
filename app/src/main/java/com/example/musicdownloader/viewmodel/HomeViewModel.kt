@@ -4,8 +4,10 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.musicdownloader.SharedPreferencesManager
 import com.example.musicdownloader.model.Genres
 import com.example.musicdownloader.model.Music
+import com.example.musicdownloader.model.Region
 import com.example.musicdownloader.networking.Services
 import kotlinx.coroutines.launch
 
@@ -15,7 +17,7 @@ class HomeViewModel(application: Application): BaseViewModel(application) {
 
     private var _statusTrending = MutableLiveData<ApiStatus>()
     val statusTrending: LiveData<ApiStatus> = _statusTrending
-    private var _trends = MutableLiveData<List<Music>>()
+    private val _trends = MutableLiveData<List<Music>>()
     val trends: LiveData<List<Music>> = _trends
 
     private var _statusRating = MutableLiveData<ApiStatus>()
@@ -40,25 +42,40 @@ class HomeViewModel(application: Application): BaseViewModel(application) {
 
     init {
         getGenresData()
+        SharedPreferencesManager.get<Region>("country").let {
+            if(it == null){
+                factoryMusics("popular", null)
+                factoryMusics("ranking", null)
+                factoryMusics("listened", null)
+                factoryMusics("download", null)
+            } else {
+                factoryMusics("popular", it.regionCode)
+                factoryMusics("ranking", it.regionCode)
+                factoryMusics("listened", it.regionCode)
+                factoryMusics("download", it.regionCode)
+                //Log.d("thenv", mViewModel.trends.value.toString())
+            }
+        }
     }
 
     fun factoryMusics(option: String, country: String?, offset: Int = 0){
-        _statusTrending.value = ApiStatus.LOADING
-        _statusRating.value = ApiStatus.LOADING
-        _statusDownload.value = ApiStatus.LOADING
-        _statusListened.value = ApiStatus.LOADING
+
         viewModelScope.launch {
             when(option){
                 "popular" ->{
+                    _statusTrending.value = ApiStatus.LOADING
                     getMusics(_statusTrending, _trends, option, offset, country)
                 }
                 "listened" ->{
+                    _statusListened.value = ApiStatus.LOADING
                     getMusics(_statusListened, _topListeneds, option, offset, country)
                 }
                 "ranking" ->{
+                    _statusRating.value = ApiStatus.LOADING
                     getMusics(_statusRating, _topRatings, option, offset, country)
                 }
                 "download" ->{
+                    _statusDownload.value = ApiStatus.LOADING
                     getMusics(_statusDownload, _topDownloads, option, offset, country)
                 }
             }

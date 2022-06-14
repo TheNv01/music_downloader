@@ -2,12 +2,11 @@ package com.example.musicdownloader.view.fragment
 
 import android.app.Dialog
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
-import android.os.Environment
-import android.os.FileObserver
 import android.provider.MediaStore
 import android.provider.Settings
 import android.util.Log
@@ -22,16 +21,16 @@ import com.example.musicdownloader.adapter.DownloadedAdapter
 import com.example.musicdownloader.databinding.DownloadedFragmentBinding
 import com.example.musicdownloader.interfaces.OnActionCallBack
 import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
-import com.example.musicdownloader.manager.DownloadingManager
 import com.example.musicdownloader.manager.MusicDonwnloadedManager
 import com.example.musicdownloader.manager.MusicManager
-import com.example.musicdownloader.model.Music
 import com.example.musicdownloader.model.MusicDownloaded
 import com.example.musicdownloader.view.MainActivity
 import com.example.musicdownloader.view.dialog.BottomDialog
 import com.example.musicdownloader.viewmodel.DownloadViewModel
-import com.example.musicdownloader.viewmodel.DownloadedViewModel
+import java.io.BufferedInputStream
 import java.io.File
+import java.io.FileInputStream
+import java.io.IOException
 
 
 class DownloadedFragment: BaseFragment<DownloadedFragmentBinding, DownloadViewModel>(), OnActionCallBack {
@@ -172,39 +171,49 @@ class DownloadedFragment: BaseFragment<DownloadedFragmentBinding, DownloadViewMo
         }
     }
 
-    private fun setAsRingtone(musicDownloaded: MusicDownloaded){
-        val k = File(musicDownloaded.uri!!)
-        Log.d("àdasdfas", k.path)
+    private fun setAsRingtone(musicDownloaded: MusicDownloaded): Boolean {
         val values = ContentValues()
-        values.put(MediaStore.MediaColumns.DATA, k.absolutePath)
+        val file = File(musicDownloaded.uri!!)
         values.put(MediaStore.MediaColumns.TITLE, musicDownloaded.music)
-
-        values.put(MediaStore.MediaColumns.SIZE, k.length())
-        values.put(MediaStore.MediaColumns.MIME_TYPE, "audio/mp3")
-        values.put(MediaStore.Audio.Media.ARTIST, musicDownloaded.artist)
-
-        values.put(MediaStore.Audio.Media.DURATION, musicDownloaded.duration!!.toInt())
+        values.put(MediaStore.MediaColumns.MIME_TYPE, "audio/mpeg")
         values.put(MediaStore.Audio.Media.IS_RINGTONE, true)
-        values.put(MediaStore.Audio.Media.IS_NOTIFICATION, false)
-        values.put(MediaStore.Audio.Media.IS_ALARM, false)
-        values.put(MediaStore.Audio.Media.IS_MUSIC, false)
 
-        val uri = MediaStore.Audio.Media.getContentUriForPath(k.absolutePath)
-        if (uri != null) {
-            requireContext().contentResolver.delete(
-                uri,
-                MediaStore.MediaColumns.DATA + "=\""
-                        + k.absolutePath + "\"", null)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            val newUri: Uri? = requireContext().contentResolver
+                .insert(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, values)
+            try {
+                requireContext().contentResolver.openOutputStream(newUri!!).use { os ->
+                    val size = file.length().toInt()
+                    val bytes = ByteArray(size)
+                    try {
+                        val buf = BufferedInputStream(FileInputStream(file))
+                        buf.read(bytes, 0, bytes.size)
+                        buf.close()
+                        os?.write(bytes)
+                        os?.close()
+                        os?.flush()
+                    } catch (e: IOException) {
+                        return false
+                    }
+                }
+            } catch (ignored: Exception) {
+                return false
+            }
+            RingtoneManager.setActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE, newUri)
+        } else {
+            values.put(MediaStore.MediaColumns.DATA, file.absolutePath)
+            val uri = MediaStore.Audio.Media.getContentUriForPath(file.absolutePath)
+            requireContext().contentResolver
+                .delete(uri!!, MediaStore.MediaColumns.DATA + "=\"" + file.absolutePath + "\"", null)
+            val newUri: Uri? = requireContext().contentResolver.insert(uri, values)
+            RingtoneManager.setActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE, newUri)
+            MediaStore.Audio.Media.getContentUriForPath(file.absolutePath)?.let {
+                requireContext().contentResolver
+                    .insert(it, values)
+            }
         }
-        val newUri = context?.contentResolver!!.insert(uri!!, values)
-
-        RingtoneManager.setActualDefaultRingtoneUri(
-            context,
-            RingtoneManager.TYPE_RINGTONE,
-            newUri
-        )
+        return true
     }
-
 
     override fun callBack(key: String?, data: Any?) {
         val tran = (activity as MainActivity).supportFragmentManager.beginTransaction()

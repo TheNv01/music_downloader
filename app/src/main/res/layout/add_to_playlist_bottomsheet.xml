@@ -26,6 +26,7 @@
                 android:id="@+id/search_playlist"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
+                app:queryBackground="@android:color/transparent"
                 android:background="@drawable/background_search"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

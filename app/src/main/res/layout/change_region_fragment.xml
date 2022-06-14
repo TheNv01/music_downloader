@@ -1,66 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:blurkit="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/cover_background_expand">
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/ic_region"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="40dp"
-            android:layout_marginStart="16dp"
-            android:src="@drawable/ic_language"/>
-
-        <TextView
-            android:id="@+id/tv_change_region"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Change Region"
-            app:layout_constraintStart_toStartOf="@id/ic_region"
-            app:layout_constraintTop_toBottomOf="@id/ic_region"
-            android:layout_marginTop="23dp"
-            android:textColor="@color/white"
-            android:textSize="20dp"
-            android:textStyle="bold"/>
-
-
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/search_country"
+        <eightbitlab.com.blurview.BlurView
+            android:id="@+id/blurView"
+            android:elevation="4dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/background_search"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_change_region"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="16dp"
-            app:searchIcon="@drawable/ic_search"
-            app:closeIcon="@drawable/ic_close"
-            android:layout_marginEnd="16dp"
-            app:iconifiedByDefault="false"
-            app:queryHint="Search Country"/>
+            android:layout_height="match_parent"
+            app:blurOverlayColor="#78ffffff">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view_region"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/search_country"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            android:orientation="vertical"/>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#C4000000">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <ImageView
+                    android:id="@+id/ic_region"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginTop="40dp"
+                    android:layout_marginStart="16dp"
+                    android:src="@drawable/ic_language"/>
+
+                <TextView
+                    android:id="@+id/tv_change_region"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Change Region"
+                    app:layout_constraintStart_toStartOf="@id/ic_region"
+                    app:layout_constraintTop_toBottomOf="@id/ic_region"
+                    android:layout_marginTop="23dp"
+                    android:textColor="@color/white"
+                    android:textSize="20dp"
+                    android:textStyle="bold"/>
+
+
+                <androidx.appcompat.widget.SearchView
+                    android:id="@+id/search_country"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:queryBackground="@android:color/transparent"
+                    android:background="@drawable/background_search"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_change_region"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginStart="16dp"
+                    app:searchIcon="@drawable/ic_search"
+                    app:closeIcon="@drawable/ic_close"
+                    android:layout_marginEnd="16dp"
+                    app:iconifiedByDefault="false"
+                    app:queryHint="Search Country"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recycler_view_region"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/search_country"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    android:orientation="vertical"/>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </eightbitlab.com.blurview.BlurView>
+
+    </FrameLayout>
+
+
 
 </layout>
 
