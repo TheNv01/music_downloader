@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/playlist"
+    app:startDestination="@id/playListFragment">
+
+    <fragment
+        android:id="@+id/playListFragment"
+        android:name="com.example.musicdownloader.view.fragment.PlayListFragment"
+        android:label="PlayListFragment"
+        tools:layout="@layout/play_list_fragment">
+        <action
+            android:id="@+id/action_playListFragment_to_playlistInsideFragment"
+            app:destination="@id/playlistInsideFragment" />
+        <action
+            android:id="@+id/action_playListFragment_to_playlistNoDataFragment"
+            app:destination="@id/playlistNoDataFragment" />
+        <action
+            android:id="@+id/action_playListFragment_to_favoriteFragment"
+            app:destination="@id/favoriteFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/playlistInsideFragment"
+        android:name="com.example.musicdownloader.view.fragment.PlaylistInsideFragment"
+        android:label="PlaylistInsideFragment" >
+
+        <argument
+            android:name="playList"
+            app:argType="com.example.musicdownloader.model.Playlist" />
+        <action
+            android:id="@+id/action_playlistInsideFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.musicdownloader.view.fragment.SearchFragment"
+        android:label="SearchFragment" >
+        <action
+            android:id="@+id/action_searchFragment_to_playListFragment"
+            app:destination="@id/playListFragment"
+            app:popUpTo="@id/playListFragment"
+            app:popUpToInclusive="true" />
+
+        <argument
+            android:name="fromdestination"
+            app:argType="integer"
+            android:defaultValue="-1" />
+        <argument
+            android:name="playlist"
+            app:argType="com.example.musicdownloader.model.Playlist"
+            android:defaultValue="@null"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_searchFragment_to_playlistInsideFragment"
+            app:destination="@id/playlistInsideFragment"
+            app:popUpTo="@id/playlistInsideFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/playlistNoDataFragment"
+        android:name="com.example.musicdownloader.view.fragment.PlaylistNoDataFragment"
+        android:label="PlaylistNoDataFragment" >
+        <action
+            android:id="@+id/action_playlistNoDataFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+        <argument
+            android:name="nameplaylist"
+            app:argType="string" />
+        <argument
+            android:name="idplaylist"
+            app:argType="integer"
+            android:defaultValue="-1" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/favoriteFragment"
+        android:name="com.example.musicdownloader.view.fragment.FavoriteFragment"
+        android:label="FavoriteFragment" />
+
+</navigation>

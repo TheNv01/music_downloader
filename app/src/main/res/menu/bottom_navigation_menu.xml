@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/homeFragment"
+        android:id="@+id/home"
         android:enabled="true"
         android:icon="@drawable/tab_home"
         android:title="" />
     <item
-        android:id="@+id/downloadFragment"
+        android:id="@+id/download"
         android:enabled="true"
         android:icon="@drawable/tab_download"
         android:title=""/>
 
     <item
-        android:id="@+id/playListFragment"
+        android:id="@+id/playlist"
         android:enabled="true"
         android:icon="@drawable/tab_play_list"
         android:title=""/>
 
     <item
-        android:id="@+id/settingFragment"
+        android:id="@+id/setting"
         android:enabled="true"
         android:icon="@drawable/tab_setting"
         android:title=""/>

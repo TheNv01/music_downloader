@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/home"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.example.musicdownloader.view.fragment.HomeFragment"
+        android:label="HomeFragment"
+        tools:layout="@layout/home_fragment">
+        <action
+            android:id="@+id/action_homeFragment_to_seeAllFragment"
+            app:destination="@id/seeAllFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_changeRegionDialog"
+            app:destination="@id/changeRegionDialog" />
+        <action
+            android:id="@+id/action_homeFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_seeAllGenresFragment"
+            app:destination="@id/seeAllGenresFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_insideGenresFragment"
+            app:destination="@id/insideGenresFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/seeAllFragment"
+        android:name="com.example.musicdownloader.view.fragment.SeeAllFragment"
+        android:label="SeeAllFragment" >
+        <argument
+            android:name="option"
+            app:argType="string"
+            app:nullable="true" />
+
+    </fragment>
+
+    <dialog
+        android:id="@+id/changeRegionDialog"
+        android:name="com.example.musicdownloader.view.dialog.ChangeRegionDialog"
+        android:label="ChangeRegionDialog" />
+
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.example.musicdownloader.view.fragment.SearchFragment"
+        android:label="SearchFragment" >
+
+        <argument
+            android:name="fromdestination"
+            app:argType="integer"
+            android:defaultValue="-1" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/seeAllGenresFragment"
+        android:name="com.example.musicdownloader.view.fragment.SeeAllGenresFragment"
+        android:label="SeeAllGenresFragment" >
+        <action
+            android:id="@+id/action_seeAllGenresFragment_to_insideGenresFragment"
+            app:destination="@id/insideGenresFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/insideGenresFragment"
+        android:name="com.example.musicdownloader.view.fragment.InsideGenresFragment"
+        android:label="InsideGenresFragment" >
+        <argument
+            android:name="genres"
+            app:argType="string" />
+    </fragment>
+
+</navigation>
