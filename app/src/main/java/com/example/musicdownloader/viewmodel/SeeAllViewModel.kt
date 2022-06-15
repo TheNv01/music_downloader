@@ -17,6 +17,8 @@ class SeeAllViewModel(application: Application) : BaseViewModel(application){
 
 
     fun  getMusics(option: String, country: String?, offset: Int = 0){
+        _musics.postValue(listOf())
+        _status.postValue(ApiStatus.LOADING)
         viewModelScope.launch {
             try{
                 if(country == null){

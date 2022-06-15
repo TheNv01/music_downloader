@@ -52,9 +52,9 @@ class SeeAllFragment: BaseFragment<SeeAllFragmentBinding, SeeAllViewModel>(), On
 
     override fun initViews() {
         callBack = this
-        var option = args.option?.uppercase()
-        if(option == "RANKING"){
-            option = "RATING"
+        var option = args.option?.substring(0, 1)?.uppercase() + args.option?.substring(1)
+        if(option == "Ranking"){
+            option = "Rating"
         }
         binding.tvTitle.text = getString(R.string.title, option)
 

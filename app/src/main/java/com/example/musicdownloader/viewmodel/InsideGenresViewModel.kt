@@ -16,6 +16,8 @@ class InsideGenresViewModel(application: Application) : BaseViewModel(applicatio
     val musics: LiveData<List<Music>> = _musics
 
     fun  getMusics(genres: String, country: String?, offset: Int = 0){
+        _musics.postValue(listOf())
+        _status.postValue(ApiStatus.LOADING)
         viewModelScope.launch {
             try{
                 if(country == null){

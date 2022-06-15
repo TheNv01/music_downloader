@@ -60,6 +60,10 @@ class PlaylistNoDataFragment: BaseFragment<PlaylistNoDataFragmentBinding, Playli
                 .actionPlaylistNoDataFragmentToSearchFragment( 1, Playlist(args.nameplaylist, ArrayList(), args.idplaylist))
             requireActivity().findNavController(R.id.activity_main_nav_host_fragment).navigate(action)
         }
+
+        binding.icBack.setOnClickListener {
+            (activity as MainActivity).onBackPressed()
+        }
     }
 
     private fun showConfirmDialog() {

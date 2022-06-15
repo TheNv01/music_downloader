@@ -26,6 +26,7 @@ import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListen
 import com.example.musicdownloader.manager.MusicDonwnloadedManager
 import com.example.musicdownloader.manager.MusicManager
 import com.example.musicdownloader.model.Music
+import com.example.musicdownloader.model.Playlist
 
 import com.example.musicdownloader.view.MainActivity
 import com.example.musicdownloader.view.dialog.BottomDialog
@@ -83,7 +84,8 @@ class PlaylistInsideFragment : BaseFragment<PlaylistInsideFragmentBinding, Playl
         }
         binding.tvAddSong.setOnClickListener {
             val action = PlaylistInsideFragmentDirections
-                .actionPlaylistInsideFragmentToSearchFragment( 2, args.playList)
+                .actionPlaylistInsideFragmentToSearchFragment( 2,
+                    Playlist(binding.tvNamePlaylist.text.toString(), ArrayList(), args.playList.id))
             requireActivity().findNavController(R.id.activity_main_nav_host_fragment).navigate(action)
         }
     }

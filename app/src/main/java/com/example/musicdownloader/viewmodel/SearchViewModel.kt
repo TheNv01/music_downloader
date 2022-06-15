@@ -46,12 +46,13 @@ class SearchViewModel(application: Application) : BaseViewModel(application)  {
 
 
     fun  getMusics(musics: List<Music>, keyword: String?, offset: Int = 0){
-        _status.value = ApiStatus.LOADING
+        _musics.postValue(listOf())
+        _status.postValue(ApiStatus.LOADING)
         viewModelScope.launch {
             try{
                 val musicsFromApi = ArrayList<Music>()
-                if(keyword == null){
-                    Services.retrofitService.searchMusic( offset).let {
+                if(keyword == null || keyword == ""){
+                    Services.retrofitService.searchMusic(offset).let {
                         _musics.value = it.data
                     }
                     _status.value = ApiStatus.DONE

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Music Downloader</string>
     <string name="vn">Việt Nam</string>
-    <string name="title">TOP %1$s</string>
+    <string name="title">Top %1$s</string>
     <string name="number_music">%1$s songs</string>
     <string name="text_in_confirm_dialog">%1$s will be added to the playlist soon</string>
 </resources>
