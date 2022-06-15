@@ -46,9 +46,8 @@ class PlaylistInsideViewModel(application: Application) : BaseViewModel(applicat
 
     }
 
-    fun startDownloadss(music: Music){
-        val path = Utils.pathRingtone
-            .plus("/${music.name}").plus(".mp3")
+    fun startDownloadss(music: Music, path: String){
+
         request = Request(music.audioDownload!!, path)
         request.priority = Priority.HIGH
         request.networkType = NetworkType.ALL

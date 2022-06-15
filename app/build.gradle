@@ -98,7 +98,4 @@ dependencies {
     implementation 'com.github.wseemann:FFmpegMediaMetadataRetriever-core:1.0.16'
     implementation 'com.github.wseemann:FFmpegMediaMetadataRetriever-native:1.0.16'
 
-    implementation 'com.github.Dimezis:BlurView:version-2.0.0'
-
-
 }

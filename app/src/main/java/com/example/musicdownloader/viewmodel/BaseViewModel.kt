@@ -63,7 +63,7 @@ abstract class BaseViewModel(application: Application): AndroidViewModel(applica
     fun startDownload(music: Music,file: File){
 
         val path = if(music.name!!.contains("/")){
-            file.toString() +"/" + music.name.split("")[0].plus(".mp3")
+            file.toString() +"/" + music.name.split("/")[0].plus(".mp3")
         } else{
             file.toString() +"/"+ music.name.plus(".mp3")
         }

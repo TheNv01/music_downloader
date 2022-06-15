@@ -26,30 +26,30 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupBottomNavigation(){
         binding.bottomView.itemIconTintList = null
-//        binding.bottomView.setOnItemSelectedListener {
-//            when(it.itemId){
-//                R.id.homeFragment ->{
-//                    findNavController(R.id.activity_main_nav_host_fragment).navigate(R.id.homeFragment)
-//                    true
-//                }
-//                R.id.downloadFragment ->{
-//                    findNavController(R.id.activity_main_nav_host_fragment).navigate(R.id.downloadFragment)
-//                    true
-//                }
-//                R.id.playListFragment ->{
-//                    findNavController(R.id.activity_main_nav_host_fragment).navigate(R.id.playListFragment)
-//                    true
-//                }
-//                R.id.settingFragment ->{
-//                    findNavController(R.id.activity_main_nav_host_fragment).navigate(R.id.settingFragment)
-//                    true
-//                }
-//                else -> false
-//            }
-//
-//        }
-        val navController: NavController = findNavController( R.id.activity_main_nav_host_fragment)
-        setupWithNavController(binding.bottomView, navController)
+        binding.bottomView.setOnItemSelectedListener {
+            when(it.itemId){
+                R.id.homeFragment ->{
+                    findNavController(R.id.activity_main_nav_host_fragment).navigate(R.id.homeFragment)
+                    true
+                }
+                R.id.downloadFragment ->{
+                    findNavController(R.id.activity_main_nav_host_fragment).navigate(R.id.downloadFragment)
+                    true
+                }
+                R.id.playListFragment ->{
+                    findNavController(R.id.activity_main_nav_host_fragment).navigate(R.id.playListFragment)
+                    true
+                }
+                R.id.settingFragment ->{
+                    findNavController(R.id.activity_main_nav_host_fragment).navigate(R.id.settingFragment)
+                    true
+                }
+                else -> false
+            }
+
+        }
+//        val navController: NavController = findNavController( R.id.activity_main_nav_host_fragment)
+//        setupWithNavController(binding.bottomView, navController)
     }
 
 

@@ -6,9 +6,10 @@ import android.app.TaskStackBuilder
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
-import android.media.MediaPlayer
 import android.os.Build
 import android.os.IBinder
+import android.telephony.PhoneStateListener
+import android.telephony.TelephonyManager
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import coil.ImageLoader
@@ -45,7 +46,6 @@ class MusicService : Service() {
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
 
-        //MediaManager.createMediaPlayer()
         val action: Int = intent.getIntExtra("action", 0)
         if (action != 0) {
             when (action) {
@@ -239,6 +239,18 @@ class MusicService : Service() {
             PendingIntent.getService(this, action, intent, PendingIntent.FLAG_IMMUTABLE)
         } else {
             PendingIntent.getService(this, action, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        }
+    }
+
+    fun pauseStream() {
+        if (MediaManager.mediaPlayer!!.isPlaying) {
+            getIntent(ACTION_PAUSE)
+        }
+    }
+
+    fun resumeStream() {
+        if (! MediaManager.mediaPlayer!!.isPlaying) {
+            getIntent(ACTION_RESUME)
         }
     }
 }

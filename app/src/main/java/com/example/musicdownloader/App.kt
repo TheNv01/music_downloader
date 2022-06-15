@@ -4,11 +4,6 @@ import android.app.Application
 import android.os.Build
 import android.app.NotificationManager
 import android.app.NotificationChannel
-import android.content.Context
-import androidx.room.Room
-import com.example.musicdownloader.database.MusicRoomDatabase
-import com.google.gson.annotations.Until
-
 
 class App : Application() {
 

@@ -2,9 +2,7 @@ package com.example.musicdownloader.view.fragment
 
 import android.app.Dialog
 import android.content.ContentValues
-import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
@@ -16,11 +14,10 @@ import android.view.View
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.musicdownloader.R
+import com.example.musicdownloader.Utils
 import com.example.musicdownloader.adapter.GenericAdapter
 import com.example.musicdownloader.adapter.PlaylistInsideBinding
 import com.example.musicdownloader.databinding.PlaylistInsideFragmentBinding
@@ -29,7 +26,7 @@ import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListen
 import com.example.musicdownloader.manager.MusicDonwnloadedManager
 import com.example.musicdownloader.manager.MusicManager
 import com.example.musicdownloader.model.Music
-import com.example.musicdownloader.model.MusicDownloaded
+
 import com.example.musicdownloader.view.MainActivity
 import com.example.musicdownloader.view.dialog.BottomDialog
 import com.example.musicdownloader.viewmodel.PlaylistInsideViewModel
@@ -42,8 +39,9 @@ class PlaylistInsideFragment : BaseFragment<PlaylistInsideFragmentBinding, Playl
 
     lateinit var callBack: OnActionCallBack
     private val args: PlaylistInsideFragmentArgs by navArgs()
-    private lateinit var dialog: Dialog
+    private var dialog: Dialog ?= null
     private lateinit var musicInSidePlaylist: Music
+    private var path = ""
 
     private val musicItemClickListener = object : ItemClickListener<Music> {
         override fun onClickListener(model: Music) {
@@ -167,10 +165,21 @@ class PlaylistInsideFragment : BaseFragment<PlaylistInsideFragmentBinding, Playl
                     R.drawable.ic_bell -> {
                         if(musicSelected.audioDownload != null){
                             musicInSidePlaylist = musicSelected
-                            mViewModel.startDownloadss(musicInSidePlaylist)
-                                //checkPermissions()
+                            path = if(musicSelected.name!!.contains("/")){
+                                Utils.pathRingtone +"/" + musicSelected.name.split("/")[0].plus(".mp3")
+                            } else{
+                                Utils.pathRingtone +"/"+ musicSelected.name.plus(".mp3")
+                            }
 
-                            loadingDialog()
+                                //checkPermissions()
+                            if (!File(path).exists()) {
+                                mViewModel.startDownloadss(musicInSidePlaylist, path)
+                                loadingDialog()
+                            }
+                            else{
+                                checkSystemWritePermission(musicSelected)
+                            }
+
                         }
                         else{
                             val toast = Toast.makeText(context, "Can't set as ringtone", Toast.LENGTH_SHORT)
@@ -179,7 +188,7 @@ class PlaylistInsideFragment : BaseFragment<PlaylistInsideFragmentBinding, Playl
                         }
                         mViewModel.isDownloadComplete.observe(viewLifecycleOwner){
                             if(it){
-                                dialog.dismiss()
+                                dialog?.dismiss()
                                 checkSystemWritePermission(musicSelected)
                             }
                             else{
@@ -209,10 +218,10 @@ class PlaylistInsideFragment : BaseFragment<PlaylistInsideFragmentBinding, Playl
 
     private fun loadingDialog(){
         dialog = Dialog(requireActivity())
-        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
-        dialog.setContentView(R.layout.progress_dialog)
-        dialog.setCancelable(false)
-        dialog.show()
+        dialog!!.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog!!.setContentView(R.layout.progress_dialog)
+        dialog!!.setCancelable(false)
+        dialog!!.show()
     }
 
     private fun checkSystemWritePermission(music: Music) {
@@ -268,7 +277,7 @@ class PlaylistInsideFragment : BaseFragment<PlaylistInsideFragmentBinding, Playl
 
     private fun setAsRingtone(music: Music): Boolean {
         val values = ContentValues()
-        val file = File(mViewModel.request.file)
+        val file = File(path)
         values.put(MediaStore.MediaColumns.TITLE, music.name)
         values.put(MediaStore.MediaColumns.MIME_TYPE, "audio/mpeg")
         values.put(MediaStore.Audio.Media.IS_RINGTONE, true)

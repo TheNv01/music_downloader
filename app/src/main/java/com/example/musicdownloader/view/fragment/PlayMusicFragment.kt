@@ -1,10 +1,13 @@
 package com.example.musicdownloader.view.fragment
 
+import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Handler
 import android.os.Looper
+import android.telephony.PhoneStateListener
+import android.telephony.TelephonyManager
 import android.util.Log
 import android.view.Gravity
 import android.view.View
@@ -44,6 +47,21 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
 
     lateinit var callBack: OnActionCallBack
     private val handler by lazy { Handler(Looper.getMainLooper()) }
+
+    private val mPhoneListener: PhoneStateListener = object : PhoneStateListener() {
+        override fun onCallStateChanged(state: Int, incomingNumber: String) {
+            try {
+                when (state) {
+                    TelephonyManager.CALL_STATE_RINGING -> gotoService(MusicService.ACTION_PAUSE)
+                    TelephonyManager.CALL_STATE_OFFHOOK -> {}
+                    TelephonyManager.CALL_STATE_IDLE -> gotoService(MusicService.ACTION_RESUME)
+                    else -> {}
+                }
+            } catch (e: Exception) {
+                Log.e("TAG", e.message!!)
+            }
+        }
+    }
     private val runnableForSeekBar: Runnable by lazy{
         object : Runnable {
             override fun run() {
@@ -371,6 +389,8 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
             rotateImageView()
             initSeekBar()
             mViewModel.isPrepared.postValue( true)
+            val telephonyManager =  requireContext().getSystemService(Service.TELEPHONY_SERVICE) as TelephonyManager
+            telephonyManager.listen(mPhoneListener, PhoneStateListener.LISTEN_CALL_STATE)
         }
         gotoService(MusicService.ACTION_START)
 
