@@ -87,7 +87,7 @@
             android:background="@drawable/background_bottom_setting"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHeight_percent="0.6"
+            app:layout_constraintHeight_percent="0.67"
             app:layout_constraintTop_toBottomOf="@+id/img_background" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

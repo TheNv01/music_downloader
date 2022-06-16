@@ -15,6 +15,7 @@
         android:id="@+id/layout_genres"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/bg_ripple_black"
         android:layout_marginBottom="12dp"
         android:layout_marginStart="6dp"
         android:layout_marginEnd="6dp">

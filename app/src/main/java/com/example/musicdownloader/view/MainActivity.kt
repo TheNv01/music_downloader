@@ -3,6 +3,8 @@ package com.example.musicdownloader.view
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
+import androidx.navigation.NavOptions
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.musicdownloader.R
@@ -27,6 +29,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupBottomNavigation(){
         binding.bottomView.itemIconTintList = null
 
+
         val navHostFragment = supportFragmentManager.findFragmentById(
             R.id.activity_main_nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
@@ -34,7 +37,6 @@ class MainActivity : AppCompatActivity() {
         // Setup the bottom navigation view with navController
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_view)
         bottomNavigationView.setupWithNavController(navController)
-
 
     }
 

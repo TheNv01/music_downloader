@@ -15,7 +15,7 @@
         android:id="@+id/layout_top_listened"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/selectableItemBackground"
+        android:background="@drawable/bg_ripple_black"
         android:layout_marginBottom="20dp">
 
         <TextView
