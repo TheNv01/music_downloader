@@ -6,14 +6,12 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.Nullable
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
@@ -157,6 +155,11 @@ abstract class BaseFragment<K: ViewDataBinding, V: ViewModel>: Fragment() {
 
     }
 
+    protected fun setStatusBarColor(res: Int){
+        val window: Window = (activity as MainActivity).window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        window.statusBarColor = ContextCompat.getColor(activity as MainActivity, res)
+    }
 
     protected abstract fun initBinding(mRootView: View): K
 

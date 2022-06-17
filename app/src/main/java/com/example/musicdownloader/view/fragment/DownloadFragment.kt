@@ -26,6 +26,7 @@ class DownloadFragment: BaseFragment<DownloadFragmentBinding, DownloadViewModel>
 
     override fun initViews() {
         setUpViewPager()
+        setStatusBarColor(R.color.black)
     }
 
     override fun setUpListener() {

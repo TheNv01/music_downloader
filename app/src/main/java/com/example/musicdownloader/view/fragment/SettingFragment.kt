@@ -29,6 +29,7 @@ class SettingFragment: BaseFragment<SettingFragmentBinding, SettingViewModel>() 
 
     override fun initViews() {
         setUpLayoutTopic()
+        setStatusBarColor(R.color.status_bar_setting)
     }
 
     override fun setUpListener() {

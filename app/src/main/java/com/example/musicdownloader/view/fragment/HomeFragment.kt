@@ -66,7 +66,7 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
         tvRegion = mRootView.findViewById(R.id.tv_region)
         imgLanguage = mRootView.findViewById(R.id.img_language)
         callBack = this
-
+        setStatusBarColor(R.color.black)
 
     }
 

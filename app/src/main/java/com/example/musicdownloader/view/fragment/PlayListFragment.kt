@@ -24,6 +24,7 @@ class PlayListFragment: BaseFragment<PlayListFragmentBinding, PlayListViewModel>
 
     override fun initViews() {
         setUpViewPager()
+        setStatusBarColor(R.color.black)
     }
 
     override fun setUpListener() {

@@ -385,12 +385,16 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
             }
         }
         MediaManager.mediaPlayer?.setOnPreparedListener {
-            MediaManager.mediaPlayer?.start()
+
             rotateImageView()
             initSeekBar()
             mViewModel.isPrepared.postValue( true)
-            val telephonyManager =  requireContext().getSystemService(Service.TELEPHONY_SERVICE) as TelephonyManager
-            telephonyManager.listen(mPhoneListener, PhoneStateListener.LISTEN_CALL_STATE)
+            if(context != null){
+                MediaManager.mediaPlayer?.start()
+                val telephonyManager = context?.getSystemService(Service.TELEPHONY_SERVICE) as TelephonyManager
+                telephonyManager.listen(mPhoneListener, PhoneStateListener.LISTEN_CALL_STATE)
+            }
+
         }
         gotoService(MusicService.ACTION_START)
 
