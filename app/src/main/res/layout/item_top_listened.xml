@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_ripple_black"
-        android:layout_marginBottom="20dp">
+        android:padding="@dimen/small_margin">
 
         <TextView
             android:id="@+id/tv_id"
@@ -87,7 +87,6 @@
             android:id="@+id/popup"
             android:layout_width="23dp"
             android:layout_height="17dp"
-            android:layout_marginEnd="8dp"
             android:src="@drawable/kebab_menu_listened"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"

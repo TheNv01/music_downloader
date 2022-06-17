@@ -158,10 +158,10 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
         val viewPager = binding.viewPagerTrending
         mViewModel.trends.observe(this){
             if(it.isNotEmpty()){
-                viewPager.adapter = TrendingAdapter(R.layout.item_trending, it as ArrayList<Music>, viewPager,setMusicClickListener())
+                viewPager.adapter = TrendingAdapter(R.layout.item_trending, it as ArrayList<Music>,setMusicClickListener())
             }
             else{
-                viewPager.adapter =TrendingAdapter(R.layout.item_trending, ArrayList(), viewPager, setMusicClickListener())
+                viewPager.adapter =TrendingAdapter(R.layout.item_trending, ArrayList(), setMusicClickListener())
             }
 
         }

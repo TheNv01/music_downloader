@@ -40,6 +40,7 @@
         <entry key="..\:/Users/lione/AndroidStudioProjects/music_downloader_ms2/app/src/main/res/drawable/bg_item_downloading.xml" value="0.1745" />
         <entry key="..\:/Users/lione/AndroidStudioProjects/music_downloader_ms2/app/src/main/res/drawable/bg_playlist.xml" value="0.1965" />
         <entry key="..\:/Users/lione/AndroidStudioProjects/music_downloader_ms2/app/src/main/res/drawable/bg_ripple.xml" value="0.154" />
+        <entry key="..\:/Users/lione/AndroidStudioProjects/music_downloader_ms2/app/src/main/res/drawable/bg_ripple_black.xml" value="0.1355" />
         <entry key="..\:/Users/lione/AndroidStudioProjects/music_downloader_ms2/app/src/main/res/drawable/bg_tab_indicator.xml" value="0.2115" />
         <entry key="..\:/Users/lione/AndroidStudioProjects/music_downloader_ms2/app/src/main/res/drawable/bg_tab_indicator_selected.xml" value="0.2115" />
         <entry key="..\:/Users/lione/AndroidStudioProjects/music_downloader_ms2/app/src/main/res/drawable/corner_radius.xml" value="0.126" />
@@ -67,6 +68,7 @@
         <entry key="..\:/Users/lione/AndroidStudioProjects/music_downloader_ms2/app/src/main/res/drawable/loading_animation.xml" value="0.121" />
         <entry key="..\:/Users/lione/AndroidStudioProjects/music_downloader_ms2/app/src/main/res/drawable/loading_img.xml" value="0.121" />
         <entry key="..\:/Users/lione/AndroidStudioProjects/music_downloader_ms2/app/src/main/res/drawable/overlay_background.xml" value="0.1575" />
+        <entry key="..\:/Users/lione/AndroidStudioProjects/music_downloader_ms2/app/src/main/res/drawable/ripple_setting.xml" value="0.1355" />
         <entry key="..\:/Users/lione/AndroidStudioProjects/music_downloader_ms2/app/src/main/res/drawable/stroke_tv_addsong.xml" value="0.1575" />
         <entry key="..\:/Users/lione/AndroidStudioProjects/music_downloader_ms2/app/src/main/res/drawable/tab_download.xml" value="0.126" />
         <entry key="..\:/Users/lione/AndroidStudioProjects/music_downloader_ms2/app/src/main/res/drawable/tab_indicator.xml" value="0.1605" />

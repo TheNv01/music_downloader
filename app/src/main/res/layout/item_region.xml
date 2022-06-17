@@ -14,7 +14,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_change_region"
         android:layout_width="match_parent"
-        android:background="@drawable/bg_ripple_black"
+
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp">
 
