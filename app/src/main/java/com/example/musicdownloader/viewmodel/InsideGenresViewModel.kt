@@ -15,6 +15,8 @@ class InsideGenresViewModel(application: Application) : BaseViewModel(applicatio
     private var _musics = MutableLiveData<List<Music>>()
     val musics: LiveData<List<Music>> = _musics
 
+    val title = MutableLiveData("")
+
     fun  getMusics(genres: String, country: String?, offset: Int = 0){
         _musics.postValue(listOf())
         _status.postValue(ApiStatus.LOADING)

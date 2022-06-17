@@ -15,7 +15,7 @@ class SeeAllViewModel(application: Application) : BaseViewModel(application){
     private var _musics = MutableLiveData<List<Music>>()
     val musics: LiveData<List<Music>> = _musics
 
-
+    val title = MutableLiveData("")
     fun  getMusics(option: String, country: String?, offset: Int = 0){
         _musics.postValue(listOf())
         _status.postValue(ApiStatus.LOADING)

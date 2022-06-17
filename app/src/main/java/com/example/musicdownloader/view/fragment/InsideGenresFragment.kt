@@ -53,8 +53,9 @@ class InsideGenresFragment : BaseFragment<InsideGenresFragmentBinding, InsideGen
         callBack = this
         binding.tvTitle.text = args.genres
 
-        loadData(args.genres)
-
+        if(mViewModel.title.value != null){
+            mViewModel.title.postValue(args.genres)
+        }
     }
 
     override fun setUpListener() {
@@ -76,6 +77,12 @@ class InsideGenresFragment : BaseFragment<InsideGenresFragmentBinding, InsideGen
     override fun setUpObserver() {
         binding.viewmodel = mViewModel
         binding.lifecycleOwner = viewLifecycleOwner
+
+        mViewModel.title.observe(viewLifecycleOwner){
+            if(it != args.genres){
+                loadData(args.genres)
+            }
+        }
 
         SearchBinding.isIconMenu = true
 

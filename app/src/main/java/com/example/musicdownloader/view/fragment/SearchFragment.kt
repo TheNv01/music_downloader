@@ -2,7 +2,6 @@ package com.example.musicdownloader.view.fragment
 
 import android.app.Dialog
 import android.graphics.Color
-import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.TextView
@@ -14,7 +13,6 @@ import androidx.navigation.fragment.navArgs
 import com.example.musicdownloader.R
 import com.example.musicdownloader.adapter.GenericAdapter
 import com.example.musicdownloader.adapter.SearchBinding
-import com.example.musicdownloader.adapter.SeeAllBinding
 import com.example.musicdownloader.databinding.SearchFragmentBinding
 import com.example.musicdownloader.interfaces.OnActionCallBack
 import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener

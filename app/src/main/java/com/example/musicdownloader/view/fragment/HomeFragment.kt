@@ -41,7 +41,6 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
                 }
 
             }
-            Log.d("sizeee", MusicManager.getSizeMusicList().toString())
             callBack.callBack(KEY_SHOW_PLAY_MUSIC, null)
 
         }
@@ -117,14 +116,10 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
     }
 
     override fun setUpObserver() {
-
-
-        Log.d("thenv", mViewModel.trends.value.toString())
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewmodel = mViewModel
         setupTrendingViewPager()
         setupRecyclerview()
-        Log.d("Thevn", "view created")
     }
 
     private fun setupRecyclerview(){
