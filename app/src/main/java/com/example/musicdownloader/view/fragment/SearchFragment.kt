@@ -134,7 +134,6 @@ class SearchFragment : BaseFragment<SearchFragmentBinding, SearchViewModel>(), O
                 return true
             }
             override fun onQueryTextChange(newText: String?): Boolean {
-                mViewModel.getMusics(musics, newText)
                 return true
             }
         })

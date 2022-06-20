@@ -107,11 +107,6 @@ class AddToPlaylistBottomDialog(music: Music)  : BottomSheetDialogFragment() {
                 return true
             }
             override fun onQueryTextChange(newText: String?): Boolean {
-                if(newText != null){
-                    viewModel.getPlaylistFlowName("%$newText%").observe(viewLifecycleOwner) {
-                        adapter.submitList(it)
-                    }
-                }
                 return true
             }
         })
