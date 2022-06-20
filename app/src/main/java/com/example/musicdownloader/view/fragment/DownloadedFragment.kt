@@ -68,9 +68,18 @@ class DownloadedFragment: BaseFragment<DownloadedFragmentBinding, DownloadViewMo
 
     override fun onResume() {
         super.onResume()
-        //if(DownloadingManager.fetch == null){
-            MusicDonwnloadedManager.getMusicFromExternal()
-       // }
+        adapter.musicsDownloaded = MusicDonwnloadedManager.musicsDownloaded
+        adapter.notifyItemChanged(adapter.musicsDownloaded.size + 1)
+    }
+
+    override fun initViews() {
+        callback = this
+    }
+
+    override fun setUpListener() {}
+
+    override fun setUpObserver() {
+        MusicDonwnloadedManager.getMusicFromExternal()
         adapter= DownloadedAdapter(
             R.layout.item_downloaded,
             MusicDonwnloadedManager.musicsDownloaded,
@@ -78,17 +87,6 @@ class DownloadedFragment: BaseFragment<DownloadedFragmentBinding, DownloadViewMo
             menuClickListener
         )
         binding.recyclerViewDownloaded.adapter = adapter
-    }
-
-    override fun initViews() {
-        callback = this
-
-    }
-
-    override fun setUpListener() {
-    }
-    override fun setUpObserver() {
-
     }
 
     private fun openDownloadingBottomSheet(musicDownloaded: MusicDownloaded) {

@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:background="@drawable/bg_ripple_black"
+
     android:paddingTop="@dimen/small_margin"
     android:paddingBottom="@dimen/small_margin"
     android:layout_height="wrap_content">
@@ -12,7 +12,8 @@
         android:id="@+id/view_holder"
         android:layout_width="match_parent"
         android:layout_height="57dp"
-        android:background="@drawable/background_option_add_favorite"
+        android:background="@drawable/bg_ripple_gray"
+
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 

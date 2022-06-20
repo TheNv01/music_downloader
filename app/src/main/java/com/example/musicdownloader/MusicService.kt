@@ -174,23 +174,20 @@ class MusicService : Service() {
     }
 
     private fun pushNotification(music: Music ?= null) {
-        // Create an Intent for the activity you want to start
-        val resultIntent = Intent(this, MainActivity::class.java)
-        resultIntent.putExtra("from notification", 1)
-        val resultPendingIntent: PendingIntent? = TaskStackBuilder.create(this).run {
-            // Add the intent, which inflates the back stack
-            addNextIntentWithParentStack(resultIntent)
-            // Get the PendingIntent containing the entire back stack
-            getPendingIntent(1,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+        val notifyIntent = Intent(this, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
+        val notifyPendingIntent = PendingIntent.getActivity(
+            this, 0, notifyIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
         GlobalScope.launch {
             val builder = NotificationCompat.Builder(this@MusicService, App.CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
 
                 .setSubText("Music Player")
 
-                .setContentIntent(resultPendingIntent)
+                .setContentIntent(notifyPendingIntent)
                 .addAction(R.drawable.ic_previous_notification, "Previous", getIntent(ACTION_PREVIOUS))
                 .addAction(
                     if (MediaManager.isPause) R.drawable.ic_play_notification else R.drawable.ic_pause_notification,

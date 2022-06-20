@@ -87,6 +87,7 @@
             android:id="@+id/popup"
             android:layout_width="23dp"
             android:layout_height="17dp"
+            android:background="?selectableItemBackgroundBorderless"
             android:src="@drawable/kebab_menu_listened"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
