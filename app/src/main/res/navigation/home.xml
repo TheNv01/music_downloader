@@ -17,14 +17,14 @@
             android:id="@+id/action_homeFragment_to_changeRegionDialog"
             app:destination="@id/changeRegionDialog" />
         <action
-            android:id="@+id/action_homeFragment_to_searchFragment"
-            app:destination="@id/searchFragment" />
-        <action
             android:id="@+id/action_homeFragment_to_seeAllGenresFragment"
             app:destination="@id/seeAllGenresFragment" />
         <action
             android:id="@+id/action_homeFragment_to_insideGenresFragment"
             app:destination="@id/insideGenresFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_searchFromHomeFragment"
+            app:destination="@id/searchFromHomeFragment" />
     </fragment>
 
     <fragment
@@ -44,18 +44,6 @@
         android:label="ChangeRegionDialog" />
 
     <fragment
-        android:id="@+id/searchFragment"
-        android:name="com.example.musicdownloader.view.fragment.SearchFragment"
-        android:label="SearchFragment" >
-
-        <argument
-            android:name="fromdestination"
-            app:argType="integer"
-            android:defaultValue="-1" />
-
-    </fragment>
-
-    <fragment
         android:id="@+id/seeAllGenresFragment"
         android:name="com.example.musicdownloader.view.fragment.SeeAllGenresFragment"
         android:label="SeeAllGenresFragment" >
@@ -71,5 +59,9 @@
             android:name="genres"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/searchFromHomeFragment"
+        android:name="com.example.musicdownloader.view.fragment.SearchFromHomeFragment"
+        android:label="SearchFromHomeFragment" />
 
 </navigation>

@@ -6,6 +6,7 @@ import android.view.Gravity
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.SearchView.SearchAutoComplete
 import androidx.navigation.findNavController
@@ -13,36 +14,22 @@ import androidx.navigation.fragment.navArgs
 import com.example.musicdownloader.R
 import com.example.musicdownloader.adapter.GenericAdapter
 import com.example.musicdownloader.adapter.SearchBinding
-import com.example.musicdownloader.databinding.SearchFragmentBinding
-import com.example.musicdownloader.interfaces.OnActionCallBack
+import com.example.musicdownloader.databinding.SearchInPlaylistFragmentBinding
 import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
-import com.example.musicdownloader.manager.MusicDonwnloadedManager
-import com.example.musicdownloader.manager.MusicManager
 import com.example.musicdownloader.model.Music
 import com.example.musicdownloader.view.MainActivity
 import com.example.musicdownloader.viewmodel.SearchViewModel
 
 
-class SearchFragment : BaseFragment<SearchFragmentBinding, SearchViewModel>(), OnActionCallBack {
+class SearchInPlaylistFragment : BaseFragment<SearchInPlaylistFragmentBinding, SearchViewModel>() {
 
-
-    lateinit var callBack: OnActionCallBack
-    private val args: SearchFragmentArgs by navArgs()
+    private val args: SearchInPlaylistFragmentArgs by navArgs()
     private var musics = ArrayList<Music>()
 
     private val musicItemClickListener = object : ItemClickListener<Music> {
         override fun onClickListener(model: Music) {
-            if(args.fromdestination == 0){
-                MusicDonwnloadedManager.currentMusicDownloaded = null
-                MusicManager.setCurrentMusic(model)
-                mViewModel.musics.value?.let { MusicManager.setListMusic(it) }
-                callBack.callBack(null, null)
-            }
-            else{
-                updateListMusicToAddToPlaylist(model)
-                binding.tvQuantitySongAdded.text = "Add(${musics.size})"
-            }
-
+            updateListMusicToAddToPlaylist(model)
+            binding.tvQuantitySongAdded.text = "Add(${musics.size})"
         }
     }
 
@@ -63,8 +50,8 @@ class SearchFragment : BaseFragment<SearchFragmentBinding, SearchViewModel>(), O
         }
     }
 
-    override fun initBinding(mRootView: View): SearchFragmentBinding {
-        return SearchFragmentBinding.bind(mRootView)
+    override fun initBinding(mRootView: View): SearchInPlaylistFragmentBinding {
+        return SearchInPlaylistFragmentBinding.bind(mRootView)
     }
 
     override fun getViewModelClass(): Class<SearchViewModel> {
@@ -72,28 +59,16 @@ class SearchFragment : BaseFragment<SearchFragmentBinding, SearchViewModel>(), O
     }
 
     override fun getLayoutId(): Int {
-        return R.layout.search_fragment
+        return R.layout.search_in_playlist_fragment
     }
 
     override fun initViews() {
-        callBack = this
         setTextColorHint()
-        if(args.fromdestination == 0){
-            binding.tvRecommend.visibility = View.GONE
-            binding.tvQuantitySongAdded.visibility = View.GONE
-            SearchBinding.isIconMenu = true
-            SearchBinding.menuClickListener = object : ItemClickListener<Music> {
-                override fun onClickListener(model: Music) {
-                    optionBottomDialog(model)
-                }
-            }
-        }
-        else{
-            SearchBinding.menuClickListener = null
-            SearchBinding.isIconMenu = false
+        SearchBinding.menuClickListener = null
+        SearchBinding.isIconMenu = false
+        if(mViewModel.musics.value == null || mViewModel.musics.value!!.isEmpty()){
             mViewModel.getMusics(ArrayList(), "")
         }
-
     }
 
     override fun setUpListener() {
@@ -110,6 +85,12 @@ class SearchFragment : BaseFragment<SearchFragmentBinding, SearchViewModel>(), O
         binding.icClose.setOnClickListener {
             (activity as MainActivity).onBackPressed()
         }
+        (activity as MainActivity).onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                (activity as MainActivity).findNavController(R.id.activity_main_nav_host_fragment).popBackStack()
+                mViewModel.setListToEmpty()
+            }
+        })
     }
 
     override fun setUpObserver() {
@@ -167,36 +148,21 @@ class SearchFragment : BaseFragment<SearchFragmentBinding, SearchViewModel>(), O
             dialog.dismiss()
             mViewModel.addMusicToPlaylist(args.playlist!!.name, args.playlist!!.id, musics)
             if(args.fromdestination == 1){
-                val action = SearchFragmentDirections
+                val action = SearchInPlaylistFragmentDirections
                     .actionSearchFragmentToPlayListFragment()
                 requireActivity().findNavController(R.id.activity_main_nav_host_fragment).navigate(action)
             }
             else if(args.fromdestination == 2){
-                val action = SearchFragmentDirections
+                val action = SearchInPlaylistFragmentDirections
                     .actionSearchFragmentToPlaylistInsideFragment(args.playlist!!)
                 requireActivity().findNavController(R.id.activity_main_nav_host_fragment).navigate(action)
             }
+            mViewModel.setListToEmpty()
         }
         tvCancel.setOnClickListener {
             dialog.dismiss()
         }
         dialog.show()
-    }
-
-    override fun callBack(key: String?, data: Any?) {
-        val tran = activity?.supportFragmentManager?.beginTransaction()
-        (activity as MainActivity).let {
-            if(it.playMusicFragment == null){
-                it.playMusicFragment = PlayMusicFragment()
-                tran?.replace(R.id.container_layout_playing, it.playMusicFragment!!)
-                tran?.addToBackStack("playFragment")
-            }
-            else{
-                it.playMusicFragment!!.updateSong()
-                tran?.show(it.playMusicFragment!!)
-            }
-            tran?.commit()
-        }
     }
 
 }

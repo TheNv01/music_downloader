@@ -44,6 +44,10 @@ class SearchViewModel(application: Application) : BaseViewModel(application)  {
         return false
     }
 
+    fun setListToEmpty(){
+        _musics.postValue(ArrayList())
+    }
+
 
     fun  getMusics(musics: List<Music>, keyword: String?, offset: Int = 0){
         _musics.postValue(listOf())

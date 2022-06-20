@@ -78,7 +78,7 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
         }
 
         binding.icSearch.setOnClickListener {
-            val action = HomeFragmentDirections.actionHomeFragmentToSearchFragment( 0)
+            val action = HomeFragmentDirections.actionHomeFragmentToSearchFromHomeFragment()
             requireActivity().findNavController(R.id.activity_main_nav_host_fragment).navigate(action)
         }
 
