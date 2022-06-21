@@ -15,8 +15,7 @@
         android:id="@+id/layout_top_listened"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_ripple_black"
-        android:padding="@dimen/small_margin">
+        android:background="@drawable/bg_ripple_black">
 
         <TextView
             android:id="@+id/tv_id"
@@ -33,7 +32,10 @@
             android:layout_width="56dp"
             android:layout_height="56dp"
             app:cardCornerRadius="6dp"
+            android:layout_marginTop="@dimen/small_margin"
+            android:layout_marginBottom="@dimen/small_margin"
             android:layout_marginStart="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:cardBackgroundColor="@android:color/transparent"
             app:layout_constraintStart_toEndOf="@+id/tv_id"
             app:layout_constraintTop_toTopOf="parent">
@@ -85,8 +87,12 @@
 
         <ImageView
             android:id="@+id/popup"
-            android:layout_width="23dp"
-            android:layout_height="17dp"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:paddingHorizontal="@dimen/small_margin"
+            android:scaleType="fitCenter"
+            android:layout_marginTop="@dimen/small_margin"
+            android:layout_marginBottom="@dimen/small_margin"
             android:background="?selectableItemBackgroundBorderless"
             android:src="@drawable/kebab_menu_listened"
             app:layout_constraintEnd_toEndOf="parent"

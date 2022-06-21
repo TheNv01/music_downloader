@@ -4,6 +4,7 @@ import android.app.Application
 import android.view.Gravity
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.musicdownloader.R
 import com.example.musicdownloader.database.MusicRoomDatabase
@@ -26,6 +27,8 @@ abstract class BaseViewModel(application: Application): AndroidViewModel(applica
 
     protected val playlistRepository: PlaylistRepository
     protected val favoriteRepository: FavoriteRepository
+
+    val countItemGenres = MutableLiveData(0)
 
     init {
         initOption()

@@ -2,15 +2,11 @@ package com.example.musicdownloader
 
 import android.app.PendingIntent
 import android.app.Service
-import android.app.TaskStackBuilder
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.os.Build
 import android.os.IBinder
-import android.telephony.PhoneStateListener
-import android.telephony.TelephonyManager
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import coil.ImageLoader
 import coil.request.ImageRequest
@@ -29,6 +25,9 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class MusicService : Service() {
+
+    private val job = SupervisorJob()
+    private val scope = CoroutineScope(Dispatchers.IO + job)
 
     companion object {
         const val ACTION_START = 1
@@ -175,13 +174,13 @@ class MusicService : Service() {
 
     private fun pushNotification(music: Music ?= null) {
         val notifyIntent = Intent(this, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
         }
         val notifyPendingIntent = PendingIntent.getActivity(
             this, 0, notifyIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
-        GlobalScope.launch {
+        scope.launch {
             val builder = NotificationCompat.Builder(this@MusicService, App.CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
 
@@ -217,16 +216,18 @@ class MusicService : Service() {
     override fun onDestroy() {
         super.onDestroy()
         MediaManager.mediaPlayer!!.stop()
+        job.cancel()
     }
 
     private suspend fun getBitmapFromURL(url: String): Bitmap? {
-        val loading = ImageLoader(this)
-        val request = ImageRequest.Builder(this)
+        val loader = ImageLoader(this@MusicService)
+        val request = ImageRequest.Builder(this@MusicService)
             .data(url)
+            .allowHardware(false) // Disable hardware bitmaps.
             .build()
 
-        val result = (loading.execute(request) as SuccessResult).drawable
-        return  (result as BitmapDrawable).bitmap
+        val result = (loader.execute(request) as SuccessResult).drawable
+        return (result as BitmapDrawable).bitmap
     }
 
     private fun getIntent(action: Int): PendingIntent {
@@ -236,18 +237,6 @@ class MusicService : Service() {
             PendingIntent.getService(this, action, intent, PendingIntent.FLAG_IMMUTABLE)
         } else {
             PendingIntent.getService(this, action, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-        }
-    }
-
-    fun pauseStream() {
-        if (MediaManager.mediaPlayer!!.isPlaying) {
-            getIntent(ACTION_PAUSE)
-        }
-    }
-
-    fun resumeStream() {
-        if (! MediaManager.mediaPlayer!!.isPlaying) {
-            getIntent(ACTION_RESUME)
         }
     }
 }

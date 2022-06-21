@@ -1,12 +1,16 @@
 package com.example.musicdownloader.view.fragment
 
+import android.Manifest
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.telephony.PhoneStateListener
+import android.telephony.TelephonyCallback
 import android.telephony.TelephonyManager
 import android.util.Log
 import android.view.Gravity
@@ -16,6 +20,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.motion.widget.MotionLayout
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.fragment.app.FragmentManager
@@ -48,20 +53,6 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
     lateinit var callBack: OnActionCallBack
     private val handler by lazy { Handler(Looper.getMainLooper()) }
 
-    private val mPhoneListener: PhoneStateListener = object : PhoneStateListener() {
-        override fun onCallStateChanged(state: Int, incomingNumber: String) {
-            try {
-                when (state) {
-                    TelephonyManager.CALL_STATE_RINGING -> gotoService(MusicService.ACTION_PAUSE)
-                    TelephonyManager.CALL_STATE_OFFHOOK -> {}
-                    TelephonyManager.CALL_STATE_IDLE -> gotoService(MusicService.ACTION_RESUME)
-                    else -> {}
-                }
-            } catch (e: Exception) {
-                Log.e("TAG", e.message!!)
-            }
-        }
-    }
     private val runnableForSeekBar: Runnable by lazy{
         object : Runnable {
             override fun run() {
@@ -131,6 +122,7 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
             }
             MusicService.ACTION_NEXT,
             MusicService.ACTION_PREVIOUS ->{
+                gotoService(MusicService.ACTION_START)
                 if(MusicDonwnloadedManager.currentMusicDownloaded == null){
                     handler.removeCallbacks(runnableForSeekBar)
                     binding.imgCircle.animate().cancel()
@@ -146,6 +138,7 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
                 else{
                     playSong()
                 }
+
             }
             MusicService.ACTION_CLOSE ->{
                 (activity as MainActivity).playMusicFragment = null
@@ -157,6 +150,7 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
     }
 
     override fun initViews() {
+        mViewModel.isPrepared.postValue( false)
         (activity as MainActivity).binding.viewPlaceHolder.visibility = View.VISIBLE
         MusicManager.getCurrentMusic()?.let {
             music = it
@@ -383,6 +377,7 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
                 binding.imgBackgroundRectangle.setImageResource(R.drawable.bg_playlist)
                 binding.imgCircle.setImageResource(R.drawable.bg_playlist)
             }
+            gotoService(MusicService.ACTION_START)
         }
         MediaManager.mediaPlayer?.setOnPreparedListener {
 
@@ -392,12 +387,53 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
             if(context != null){
                 MediaManager.mediaPlayer?.start()
                 val telephonyManager = context?.getSystemService(Service.TELEPHONY_SERVICE) as TelephonyManager
-                telephonyManager.listen(mPhoneListener, PhoneStateListener.LISTEN_CALL_STATE)
+                registerReceiveCall(telephonyManager)
             }
 
         }
-        gotoService(MusicService.ACTION_START)
+        //gotoServicegotoService(MusicService.ACTION_START)
 
+    }
+
+    private fun registerReceiveCall(telephonyManager: TelephonyManager){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            context?.mainExecutor?.let {
+                if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
+                    telephonyManager.registerTelephonyCallback(
+                        it,
+                        object : TelephonyCallback(), TelephonyCallback.CallStateListener {
+                            override fun onCallStateChanged(state: Int) {
+                            try {
+                                when (state) {
+                                    TelephonyManager.CALL_STATE_RINGING -> gotoService(MusicService.ACTION_PAUSE)
+                                    TelephonyManager.CALL_STATE_OFFHOOK -> {}
+                                    TelephonyManager.CALL_STATE_IDLE -> gotoService(MusicService.ACTION_RESUME)
+                                    else -> {}
+                                }
+                            } catch (e: Exception) {
+                                Log.e("TAG", e.message!!)
+                            }
+                            }
+                        })
+                }
+                }
+
+        } else {
+            telephonyManager.listen(object : PhoneStateListener() {
+                override fun onCallStateChanged(state: Int, phoneNumber: String?) {
+                    try {
+                        when (state) {
+                            TelephonyManager.CALL_STATE_RINGING -> gotoService(MusicService.ACTION_PAUSE)
+                            TelephonyManager.CALL_STATE_OFFHOOK -> {}
+                            TelephonyManager.CALL_STATE_IDLE -> gotoService(MusicService.ACTION_RESUME)
+                            else -> {}
+                        }
+                    } catch (e: Exception) {
+                        Log.e("TAG", e.message!!)
+                    }
+                }
+            }, PhoneStateListener.LISTEN_CALL_STATE)
+        }
     }
 
     private fun bindImage(imgView: ImageView, imgUrl: String?) {
@@ -412,7 +448,7 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
         }
     }
 
-    private fun gotoService(action: Int){
+    fun gotoService(action: Int){
         callBack.callBack(KEY_SHOW_SERVICE, action)
     }
 
@@ -481,6 +517,7 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
             }
         })
         binding.layoutPlayMusic.transitionToEnd()
+
     }
 
     private fun initSeekBar() {

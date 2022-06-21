@@ -40,6 +40,8 @@ class HomeViewModel(application: Application): BaseViewModel(application) {
     private var _genres = MutableLiveData<List<Genres>>()
     val genres: LiveData<List<Genres>> = _genres
 
+    val countClickSeeAll = MutableLiveData(0)
+
     init {
         getGenresData()
         SharedPreferencesManager.get<Region>("country").let {

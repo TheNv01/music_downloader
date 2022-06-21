@@ -14,8 +14,10 @@ import android.view.View
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
+import com.example.musicdownloader.MusicService
 import com.example.musicdownloader.R
 import com.example.musicdownloader.Utils
 import com.example.musicdownloader.adapter.GenericAdapter
@@ -31,6 +33,8 @@ import com.example.musicdownloader.model.Playlist
 import com.example.musicdownloader.view.MainActivity
 import com.example.musicdownloader.view.dialog.BottomDialog
 import com.example.musicdownloader.viewmodel.PlaylistInsideViewModel
+import com.proxglobal.proxads.adsv2.ads.ProxAds
+import com.proxglobal.proxads.adsv2.callback.AdsCallback
 import java.io.BufferedInputStream
 import java.io.File
 import java.io.FileInputStream
@@ -49,7 +53,7 @@ class PlaylistInsideFragment : BaseFragment<PlaylistInsideFragmentBinding, Playl
             MusicDonwnloadedManager.currentMusicDownloaded = null
             MusicManager.setCurrentMusic(model)
             mViewModel.musics.value?.let { MusicManager.setListMusic(it) }
-            callBack.callBack(null, null)
+           showAds(null)
         }
     }
 
@@ -58,6 +62,24 @@ class PlaylistInsideFragment : BaseFragment<PlaylistInsideFragmentBinding, Playl
             openSongBottomSheet(model)
         }
     }
+
+    override fun showAds(action: NavDirections?){
+        ProxAds.getInstance().showInterstitial(requireActivity(), "inter", object: AdsCallback() {
+            override fun onShow() {
+                callBack.callBack(null, null)
+            }
+
+            override fun onClosed() {
+                (activity as MainActivity).playMusicFragment!!.gotoService(MusicService.ACTION_START)
+            }
+
+            override fun onError() {
+                Log.d("asdfasdf", "error")
+                //callBack.callBack(KEY_SHOW_PLAY_MUSIC, null)
+            }
+        })
+    }
+
     override fun initBinding(mRootView: View): PlaylistInsideFragmentBinding {
         return PlaylistInsideFragmentBinding.bind(mRootView)
     }

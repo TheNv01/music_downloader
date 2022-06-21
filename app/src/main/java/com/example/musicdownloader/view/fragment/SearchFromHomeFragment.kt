@@ -1,10 +1,13 @@
 package com.example.musicdownloader.view.fragment
 
 import android.graphics.Color
+import android.util.Log
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.SearchView
+import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
+import com.example.musicdownloader.MusicService
 import com.example.musicdownloader.R
 import com.example.musicdownloader.adapter.GenericAdapter
 import com.example.musicdownloader.adapter.SearchBinding
@@ -16,6 +19,8 @@ import com.example.musicdownloader.manager.MusicManager
 import com.example.musicdownloader.model.Music
 import com.example.musicdownloader.view.MainActivity
 import com.example.musicdownloader.viewmodel.SearchFromHomeViewModel
+import com.proxglobal.proxads.adsv2.ads.ProxAds
+import com.proxglobal.proxads.adsv2.callback.AdsCallback
 
 class SearchFromHomeFragment: BaseFragment<SearchFromHomeFragmentBinding, SearchFromHomeViewModel>(), OnActionCallBack {
 
@@ -26,8 +31,25 @@ class SearchFromHomeFragment: BaseFragment<SearchFromHomeFragmentBinding, Search
             MusicDonwnloadedManager.currentMusicDownloaded = null
             MusicManager.setCurrentMusic(model)
             mViewModel.musics.value?.let { MusicManager.setListMusic(it) }
-            callBack.callBack(null, null)
+            showAds(null)
         }
+    }
+
+    override fun showAds(action: NavDirections?){
+        ProxAds.getInstance().showInterstitial(requireActivity(), "inter", object: AdsCallback() {
+            override fun onShow() {
+                callBack.callBack(null, null)
+            }
+
+            override fun onClosed() {
+                (activity as MainActivity).playMusicFragment!!.gotoService(MusicService.ACTION_START)
+            }
+
+            override fun onError() {
+                Log.d("asdfasdf", "error")
+                //callBack.callBack(KEY_SHOW_PLAY_MUSIC, null)
+            }
+        })
     }
 
 

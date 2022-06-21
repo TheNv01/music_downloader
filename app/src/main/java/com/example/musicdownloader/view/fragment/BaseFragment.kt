@@ -3,9 +3,8 @@ package com.example.musicdownloader.view.fragment
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.os.Build
-import android.os.Bundle
-import android.os.Environment
+import android.os.*
+import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -14,9 +13,14 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavDirections
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
+import com.example.musicdownloader.MusicService
 import com.example.musicdownloader.R
 import com.example.musicdownloader.SharedPreferencesManager
 import com.example.musicdownloader.Utils
@@ -28,6 +32,8 @@ import com.example.musicdownloader.view.MainActivity
 import com.example.musicdownloader.view.dialog.AddToPlaylistBottomDialog
 import com.example.musicdownloader.view.dialog.BottomDialog
 import com.example.musicdownloader.viewmodel.BaseViewModel
+import com.proxglobal.proxads.adsv2.ads.ProxAds
+import com.proxglobal.proxads.adsv2.callback.AdsCallback
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Call
@@ -108,7 +114,7 @@ abstract class BaseFragment<K: ViewDataBinding, V: ViewModel>: Fragment() {
             file.mkdirs()
         }
         if(music.audioDownload != null){
-            (mViewModel as BaseViewModel).startDownload(music, file)
+            adsWhenDownload()
         }
         else{
             val toast = Toast.makeText(context, "Can't download", Toast.LENGTH_SHORT)
@@ -159,6 +165,39 @@ abstract class BaseFragment<K: ViewDataBinding, V: ViewModel>: Fragment() {
         val window: Window = (activity as MainActivity).window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.statusBarColor = ContextCompat.getColor(activity as MainActivity, res)
+    }
+
+    protected fun handleClickSeeAll(action: NavDirections, count: MutableLiveData<Int>){
+        if(count.value == 0){
+            count.postValue(1)
+            requireActivity().findNavController(R.id.activity_main_nav_host_fragment).navigate(action)
+        }
+        else{
+            showAds(action)
+            count.postValue(0)
+        }
+    }
+
+    private fun adsWhenDownload(){
+        ProxAds.getInstance().showInterstitial(requireActivity(), "inter", object: AdsCallback() {
+            override fun onShow() {
+                (mViewModel as BaseViewModel).startDownload(music, file)
+            }
+
+            override fun onClosed() {
+                findNavController().navigate(R.id.downloadFragment3)
+            }
+
+
+            override fun onError() {
+                Log.d("asdfasdf", "error")
+                //callBack.callBack(KEY_SHOW_PLAY_MUSIC, null)
+            }
+        })
+    }
+
+    protected open fun showAds(action:NavDirections?){
+
     }
 
     protected abstract fun initBinding(mRootView: View): K

@@ -2,6 +2,7 @@ package com.example.musicdownloader.view.fragment
 
 import android.util.Log
 import android.view.View
+import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
 import com.example.musicdownloader.R
 import com.example.musicdownloader.adapter.GenericAdapter
@@ -10,6 +11,8 @@ import com.example.musicdownloader.databinding.SeeAllGenresFragmentBinding
 import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
 import com.example.musicdownloader.model.Genres
 import com.example.musicdownloader.viewmodel.SeeAllGenresViewModel
+import com.proxglobal.proxads.adsv2.ads.ProxAds
+import com.proxglobal.proxads.adsv2.callback.AdsCallback
 
 class SeeAllGenresFragment : BaseFragment<SeeAllGenresFragmentBinding, SeeAllGenresViewModel>() {
 
@@ -45,11 +48,22 @@ class SeeAllGenresFragment : BaseFragment<SeeAllGenresFragmentBinding, SeeAllGen
             object : ItemClickListener<Genres> {
                 override fun onClickListener(model: Genres) {
                     val action = SeeAllGenresFragmentDirections.actionSeeAllGenresFragmentToInsideGenresFragment(model.name!!)
-                    requireActivity().findNavController(R.id.activity_main_nav_host_fragment).navigate(action)
+                    handleClickSeeAll(action, mViewModel.countItemGenres)
                 }
-
             })
     }
 
+    override fun showAds(action: NavDirections?){
+        ProxAds.getInstance().showInterstitial(requireActivity(), "inter", object: AdsCallback() {
+            override fun onShow() {
+                requireActivity().findNavController(R.id.activity_main_nav_host_fragment).navigate(action!!)
+            }
+            override fun onClosed() {}
+
+            override fun onError() {
+                Log.d("asdfasdf", "error")
+            }
+        })
+    }
 
 }

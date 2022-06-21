@@ -16,6 +16,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.FileProvider
 import com.example.musicdownloader.BuildConfig
+import com.example.musicdownloader.MusicService
 import com.example.musicdownloader.R
 import com.example.musicdownloader.adapter.DownloadedAdapter
 import com.example.musicdownloader.databinding.DownloadedFragmentBinding
@@ -44,7 +45,6 @@ class DownloadedFragment: BaseFragment<DownloadedFragmentBinding, DownloadViewMo
             MusicDonwnloadedManager.currentMusicDownloaded = model
             callback.callBack(HomeFragment.KEY_SHOW_PLAY_MUSIC, null)
         }
-
     }
 
     private val menuClickListener = object : ItemClickListener<MusicDownloaded> {

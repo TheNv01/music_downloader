@@ -6,10 +6,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.LiveData
+import androidx.navigation.NavDirections
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.navigation.findNavController
+import com.example.musicdownloader.MusicService
 import com.example.musicdownloader.R
 import com.example.musicdownloader.SharedPreferencesManager
 import com.example.musicdownloader.UltraDepthScaleTransformer
@@ -25,6 +27,8 @@ import com.example.musicdownloader.model.Music
 import com.example.musicdownloader.model.Region
 import com.example.musicdownloader.view.MainActivity
 import com.example.musicdownloader.viewmodel.HomeViewModel
+import com.proxglobal.proxads.adsv2.ads.ProxAds
+import com.proxglobal.proxads.adsv2.callback.AdsCallback
 
 class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnActionCallBack {
 
@@ -39,15 +43,36 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
                 if(it != null){
                     MusicManager.setListMusic(it)
                 }
-
             }
-            callBack.callBack(KEY_SHOW_PLAY_MUSIC, null)
-
+          showAds(null)
         }
     }
 
     companion object{
         const val KEY_SHOW_PLAY_MUSIC = "KEY_SHOW_PLAY_MUSIC"
+    }
+
+    override fun showAds(action:NavDirections?){
+        ProxAds.getInstance().showInterstitial(requireActivity(), "inter", object: AdsCallback() {
+            override fun onShow() {
+                if (action == null) {
+                    callBack.callBack(KEY_SHOW_PLAY_MUSIC, null)
+                } else {
+                    requireActivity().findNavController(R.id.activity_main_nav_host_fragment).navigate(action)
+                }
+            }
+
+            override fun onClosed() {
+                if (action == null) {
+                    (activity as MainActivity).playMusicFragment!!.gotoService(MusicService.ACTION_START)
+                }
+            }
+
+            override fun onError() {
+                Log.d("asdfasdf", "error")
+                //callBack.callBack(KEY_SHOW_PLAY_MUSIC, null)
+            }
+        })
     }
 
     override fun initBinding(mRootView: View): HomeFragmentBinding {
@@ -84,18 +109,19 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
 
         binding.tvSeeAllDownload.setOnClickListener {
             val action = HomeFragmentDirections.actionHomeFragmentToSeeAllFragment("download")
-            requireActivity().findNavController(R.id.activity_main_nav_host_fragment).navigate(action)
+            handleClickSeeAll(action, mViewModel.countClickSeeAll)
         }
         binding.tvSeeAllRating.setOnClickListener {
             val action = HomeFragmentDirections.actionHomeFragmentToSeeAllFragment("ranking")
-            requireActivity().findNavController(R.id.activity_main_nav_host_fragment).navigate(action)
+            handleClickSeeAll(action, mViewModel.countClickSeeAll)
         }
         binding.tvSeeAllListened.setOnClickListener {
             val action = HomeFragmentDirections.actionHomeFragmentToSeeAllFragment("listened")
-            requireActivity().findNavController(R.id.activity_main_nav_host_fragment).navigate(action)
+            handleClickSeeAll(action, mViewModel.countClickSeeAll)
         }
         binding.tvSeeAllGenres.setOnClickListener {
-            requireActivity().findNavController(R.id.activity_main_nav_host_fragment).navigate(R.id.seeAllGenresFragment)
+            val action = HomeFragmentDirections.actionHomeFragmentToSeeAllGenresFragment()
+            handleClickSeeAll(action, mViewModel.countClickSeeAll)
         }
         binding.layoutCountry.setOnClickListener {
             (activity as MainActivity).findNavController(R.id.activity_main_nav_host_fragment).navigate(R.id.changeRegionDialog)
@@ -114,6 +140,7 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
              }
         }
     }
+
 
     override fun setUpObserver() {
         binding.lifecycleOwner = viewLifecycleOwner
@@ -148,7 +175,7 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
             object : ItemClickListener<Genres> {
                 override fun onClickListener(model: Genres) {
                     val action = HomeFragmentDirections.actionHomeFragmentToInsideGenresFragment(model.name!!)
-                    requireActivity().findNavController(R.id.activity_main_nav_host_fragment).navigate(action)
+                    handleClickSeeAll(action, mViewModel.countItemGenres)
                 }
             })
     }

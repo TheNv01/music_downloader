@@ -2,6 +2,7 @@ package com.example.musicdownloader.view.dialog
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,12 +11,19 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavDirections
+import androidx.navigation.findNavController
+import com.example.musicdownloader.MusicService
 import com.example.musicdownloader.R
 import com.example.musicdownloader.adapter.ChangeRegionAdapter
 import com.example.musicdownloader.databinding.ChangeRegionFragmentBinding
 import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
 import com.example.musicdownloader.model.Region
+import com.example.musicdownloader.view.MainActivity
+import com.example.musicdownloader.view.fragment.HomeFragment
 import com.example.musicdownloader.viewmodel.ChangeRegionViewModel
+import com.proxglobal.proxads.adsv2.ads.ProxAds
+import com.proxglobal.proxads.adsv2.callback.AdsCallback
 
 
 class ChangeRegionDialog: DialogFragment(), ItemClickListener<Region> {
@@ -87,10 +95,24 @@ class ChangeRegionDialog: DialogFragment(), ItemClickListener<Region> {
     }
 
     override fun onClickListener(model: Region) {
-        val bundle = Bundle()
-        bundle.putSerializable("region", model)
-        setFragmentResult("requestKey", bundle)
-        dialog?.dismiss()
+        showAds(model)
+    }
+
+    private fun showAds(model: Region){
+        ProxAds.getInstance().showInterstitial(requireActivity(), "inter", object: AdsCallback() {
+            override fun onShow() {
+                val bundle = Bundle()
+                bundle.putSerializable("region", model)
+                setFragmentResult("requestKey", bundle)
+            }
+            override fun onClosed() {
+                dialog?.dismiss()
+            }
+            override fun onError() {
+                Log.d("asdfasdf", "error")
+                //callBack.callBack(KEY_SHOW_PLAY_MUSIC, null)
+            }
+        })
     }
 
 }

@@ -1,11 +1,11 @@
 package com.example.musicdownloader
 
-import android.app.Application
 import android.os.Build
 import android.app.NotificationManager
 import android.app.NotificationChannel
+import com.proxglobal.proxads.ads.openads.ProxOpenAdsApplication
 
-class App : Application() {
+class App : ProxOpenAdsApplication() {
 
     companion object{
         const val CHANNEL_ID = "CHANNEL_MUSIC_APP"
@@ -16,6 +16,12 @@ class App : Application() {
         createNotificationChannel()
         applicationContext?.let { SharedPreferencesManager.with(it) }
         Utils.initPath(this)
+    }
+
+    override fun getOpenAdsId(): String = ""
+
+    override fun getListTestDeviceId(): MutableList<String> {
+        return mutableListOf("")
     }
 
     private fun createNotificationChannel() {
