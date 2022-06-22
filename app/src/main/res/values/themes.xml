@@ -13,6 +13,8 @@
         <item name="android:statusBarColor" >@color/black</item>
         <!-- Customize your theme here. -->
 
+        <item name="colorControlHighlight">#878787</item>
+
     </style>
 
     <style name="full_screen_dialog" parent="Theme.AppCompat.Light.DialogWhenLarge">

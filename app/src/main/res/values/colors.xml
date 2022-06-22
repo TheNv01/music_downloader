@@ -23,5 +23,7 @@
 
     <color name="semiTransparentBlack">#6E595151</color>
 
+    <color name="lightTransparent">#16000000</color>
+
 
 </resources>
