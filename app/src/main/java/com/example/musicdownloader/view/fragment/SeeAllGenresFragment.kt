@@ -30,6 +30,7 @@ class SeeAllGenresFragment : BaseFragment<SeeAllGenresFragmentBinding, SeeAllGen
 
 
     override fun initViews() {
+        showSmallNative(binding.adContainer)
     }
 
     override fun setUpListener() {

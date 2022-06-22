@@ -94,6 +94,7 @@ class PlaylistInsideFragment : BaseFragment<PlaylistInsideFragmentBinding, Playl
 
     override fun initViews() {
         callBack = this
+        showSmallNative(binding.adContainer)
     }
 
     override fun setUpListener() {

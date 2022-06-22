@@ -27,6 +27,7 @@ class PlaylistOffFragment: BaseFragment<PlaylistOnFragmentBinding, PlaylistOffVi
     }
 
     override fun initViews() {
+        showSmallNative(binding.adContainer)
     }
 
     override fun setUpListener() {

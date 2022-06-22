@@ -56,7 +56,7 @@
             android:scaleType="fitCenter"
             android:layout_marginTop="@dimen/small_margin"
             android:layout_marginBottom="@dimen/small_margin"
-            android:foreground="@drawable/bg_ripple_setting"
+            android:foreground="?selectableItemBackgroundBorderless"
             android:src="@drawable/kebab_menu_listened"
             app:layout_constraintTop_toTopOf="@id/ic_back"
             app:layout_constraintBottom_toBottomOf="@id/ic_back"
@@ -331,6 +331,14 @@
                     android:layout_marginTop="12dp"/>
 
             </LinearLayout>
+
+            <FrameLayout
+                android:id="@+id/banner_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/normal_margin"
+                app:layout_constraintTop_toBottomOf="@+id/layout_lyrics"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

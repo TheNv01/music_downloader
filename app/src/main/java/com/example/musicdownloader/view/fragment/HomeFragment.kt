@@ -2,8 +2,10 @@ package com.example.musicdownloader.view.fragment
 
 import android.util.Log
 import android.view.View
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.LiveData
 import androidx.navigation.NavDirections
@@ -27,6 +29,8 @@ import com.example.musicdownloader.model.Music
 import com.example.musicdownloader.model.Region
 import com.example.musicdownloader.view.MainActivity
 import com.example.musicdownloader.viewmodel.HomeViewModel
+import com.proxglobal.proxads.ProxUtils
+import com.proxglobal.proxads.ads.callback.NativeAdCallback
 import com.proxglobal.proxads.adsv2.ads.ProxAds
 import com.proxglobal.proxads.adsv2.callback.AdsCallback
 
@@ -92,7 +96,30 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
         imgLanguage = mRootView.findViewById(R.id.img_language)
         callBack = this
         setStatusBarColor(R.color.black)
+        showBigNative()
+    }
 
+    private fun showBigNative(){
+//        ProxAds.getInstance().showBigNative(
+//            requireActivity(), ProxUtils.TEST_NATIVE_ID,
+//            binding.adContainer, object : AdsCallback() {
+//                override fun onShow() {
+//                    Toast.makeText(context, "Show", Toast.LENGTH_SHORT).show()
+//                }
+//
+//                override fun onError() {
+//                    binding.adContainer.removeAllViews()
+//                    Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//        )
+        ProxUtils.INSTANCE.createNativeAdWithShimmer(
+            requireActivity(), ProxUtils.TEST_NATIVE_ID,
+            binding.adContainer, R.layout.ads_native_big,
+            R.layout.layout_preloading_ads).load(
+            NativeAdCallback {
+                Toast.makeText(context, "Show", Toast.LENGTH_SHORT).show()
+            })
     }
 
     override fun setUpListener() {

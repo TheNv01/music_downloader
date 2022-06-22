@@ -6,6 +6,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.annotation.Nullable
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.DialogFragment
@@ -22,6 +24,8 @@ import com.example.musicdownloader.model.Region
 import com.example.musicdownloader.view.MainActivity
 import com.example.musicdownloader.view.fragment.HomeFragment
 import com.example.musicdownloader.viewmodel.ChangeRegionViewModel
+import com.proxglobal.proxads.ProxUtils
+import com.proxglobal.proxads.ads.callback.NativeAdCallback
 import com.proxglobal.proxads.adsv2.ads.ProxAds
 import com.proxglobal.proxads.adsv2.callback.AdsCallback
 
@@ -48,6 +52,7 @@ class ChangeRegionDialog: DialogFragment(), ItemClickListener<Region> {
         viewModel = ViewModelProvider(requireActivity())[ChangeRegionViewModel::class.java]
         binding = initBinding(mRootView)
         setTextColorHint()
+        showSmallNative()
         return mRootView
     }
 
@@ -113,6 +118,15 @@ class ChangeRegionDialog: DialogFragment(), ItemClickListener<Region> {
                 //callBack.callBack(KEY_SHOW_PLAY_MUSIC, null)
             }
         })
+    }
+
+    private fun showSmallNative(){
+        ProxUtils.INSTANCE.createMediumNativeAdWithShimmer(
+            requireActivity(), ProxUtils.TEST_NATIVE_ID,
+            binding!!.adContainer
+        ).load(
+            NativeAdCallback {
+            })
     }
 
 }

@@ -43,6 +43,9 @@ import com.example.musicdownloader.view.MainActivity
 import com.example.musicdownloader.view.dialog.AddToPlaylistBottomDialog
 import com.example.musicdownloader.view.dialog.BottomDialog
 import com.example.musicdownloader.viewmodel.PlayMusicViewModel
+import com.proxglobal.proxads.ProxUtils
+import com.proxglobal.proxads.adsv2.ads.ProxAds
+import com.proxglobal.proxads.adsv2.callback.AdsCallback
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -164,6 +167,7 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
             mViewModel.initOption(false)
             playSong()
         }
+        showBanner()
     }
 
     override fun setUpListener() {
@@ -301,6 +305,24 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
                 }
             }
         }
+    }
+
+    private fun showBanner(){
+        ProxAds.getInstance().showBanner(requireActivity(), binding.bannerContainer, ProxUtils.TEST_BANNER_ID,
+            object: AdsCallback() {
+                override fun onShow() {
+                    Toast.makeText(context, "Show", Toast.LENGTH_SHORT).show()
+                }
+
+                override fun onClosed() {
+                    Toast.makeText(context, "Close", Toast.LENGTH_SHORT).show()
+                }
+
+                override fun onError() {
+                    Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
+                }
+            }
+        )
     }
 
     override fun setUpObserver() {

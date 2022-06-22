@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.*
 import android.util.Log
 import android.view.*
+import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.annotation.Nullable
 import androidx.core.content.ContextCompat
@@ -25,6 +26,8 @@ import com.example.musicdownloader.view.MainActivity
 import com.example.musicdownloader.view.dialog.AddToPlaylistBottomDialog
 import com.example.musicdownloader.view.dialog.BottomDialog
 import com.example.musicdownloader.viewmodel.BaseViewModel
+import com.proxglobal.proxads.ProxUtils
+import com.proxglobal.proxads.ads.callback.NativeAdCallback
 import com.proxglobal.proxads.adsv2.ads.ProxAds
 import com.proxglobal.proxads.adsv2.callback.AdsCallback
 import retrofit2.Call
@@ -200,6 +203,30 @@ abstract class BaseFragment<K: ViewDataBinding, V: ViewModel>: Fragment() {
 
     protected open fun showAds(action:NavDirections?){
 
+    }
+
+    protected fun showSmallNative(fameLayout: FrameLayout){
+//        ProxAds.getInstance().showMediumNative(
+//            requireActivity(), ProxUtils.TEST_NATIVE_ID,
+//            fameLayout, object: AdsCallback() {
+//                override fun onShow() {
+//                    Toast.makeText(context, "Show", Toast.LENGTH_SHORT).show()
+//                }
+//                override fun onClosed() {
+//                    Toast.makeText(context, "Close", Toast.LENGTH_SHORT).show()
+//                }
+//
+//                override fun onError() {
+//                    Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//        )
+        ProxUtils.INSTANCE.createMediumNativeAdWithShimmer(
+            requireActivity(), ProxUtils.TEST_NATIVE_ID,
+            fameLayout
+        ).load(
+            NativeAdCallback {
+            })
     }
 
     protected abstract fun initBinding(mRootView: View): K

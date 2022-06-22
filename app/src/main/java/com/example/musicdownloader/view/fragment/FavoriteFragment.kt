@@ -64,6 +64,7 @@ class FavoriteFragment: BaseFragment<FavoriteFragmentBinding, FavoriteViewModel>
 
     override fun initViews() {
         callback = this
+        showSmallNative(binding.adContainer)
     }
 
     override fun setUpListener() {

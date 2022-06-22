@@ -79,6 +79,14 @@
     <fragment
         android:id="@+id/favoriteFragment"
         android:name="com.example.musicdownloader.view.fragment.FavoriteFragment"
-        android:label="FavoriteFragment" />
+        android:label="FavoriteFragment" >
+        <action
+            android:id="@+id/action_favoriteFragment_to_downloadFragment2"
+            app:destination="@id/downloadFragment2" />
+    </fragment>
+    <fragment
+        android:id="@+id/downloadFragment2"
+        android:name="com.example.musicdownloader.view.fragment.DownloadFragment"
+        android:label="DownloadFragment" />
 
 </navigation>

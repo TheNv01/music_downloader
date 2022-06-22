@@ -7,13 +7,6 @@
         android:layout_height="match_parent"
         android:background="@color/black">
 
-        <View
-            android:id="@+id/background_top"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_width="match_parent"
-            android:layout_height="165dp"
-            android:background="@drawable/bg_download_manager"/>
 
         <TextView
             android:id="@+id/tv_title"
@@ -44,12 +37,21 @@
             app:tabTextAppearance="@style/MineCustomTabText"
             app:tabTextColor="@color/white" />
 
+        <FrameLayout
+            android:id="@+id/ad_container"
+            android:layout_width="match_parent"
+            android:layout_height="108dp"
+            android:layout_marginTop="@dimen/normal_margin"
+            app:layout_constraintTop_toBottomOf="@id/tab_layout"
+            app:layout_constraintBottom_toTopOf="@id/view_pager"/>
+
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/view_pager"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginTop="@dimen/normal_margin"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/background_top"
+            app:layout_constraintTop_toBottomOf="@id/ad_container"
             android:layout_marginStart="10dp"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
