@@ -190,7 +190,7 @@ abstract class BaseFragment<K: ViewDataBinding, V: ViewModel>: Fragment() {
                 }
 
                 override fun onClosed() {
-                    findNavController().navigate(R.id.downloadFragment3)
+                    findNavController().navigate(R.id.action_global_downloadFragment4)
                 }
 
                 override fun onError() {

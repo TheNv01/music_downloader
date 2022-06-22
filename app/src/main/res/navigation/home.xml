@@ -25,9 +25,6 @@
         <action
             android:id="@+id/action_homeFragment_to_searchFromHomeFragment"
             app:destination="@id/searchFromHomeFragment" />
-        <action
-            android:id="@+id/action_homeFragment_to_downloadFragment3"
-            app:destination="@id/downloadFragment3" />
     </fragment>
 
     <fragment
@@ -38,9 +35,6 @@
             android:name="option"
             app:argType="string"
             app:nullable="true" />
-        <action
-            android:id="@+id/action_seeAllFragment_to_downloadFragment3"
-            app:destination="@id/downloadFragment3" />
 
     </fragment>
 
@@ -64,21 +58,10 @@
         <argument
             android:name="genres"
             app:argType="string" />
-        <action
-            android:id="@+id/action_insideGenresFragment_to_downloadFragment3"
-            app:destination="@id/downloadFragment3" />
     </fragment>
     <fragment
         android:id="@+id/searchFromHomeFragment"
         android:name="com.example.musicdownloader.view.fragment.SearchFromHomeFragment"
-        android:label="SearchFromHomeFragment" >
-        <action
-            android:id="@+id/action_searchFromHomeFragment_to_downloadFragment3"
-            app:destination="@id/downloadFragment3" />
-    </fragment>
-    <fragment
-        android:id="@+id/downloadFragment3"
-        android:name="com.example.musicdownloader.view.fragment.DownloadFragment"
-        android:label="DownloadFragment" />
+        android:label="SearchFromHomeFragment" />
 
 </navigation>

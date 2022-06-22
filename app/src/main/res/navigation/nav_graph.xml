@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@id/home">
 
@@ -9,5 +8,12 @@
     <include app:graph="@navigation/download"/>
     <include app:graph="@navigation/playlist"/>
     <include app:graph="@navigation/setting"/>
+    <fragment
+        android:id="@+id/downloadFragment4"
+        android:name="com.example.musicdownloader.view.fragment.DownloadFragment"
+        android:label="DownloadFragment" />
+    <action android:id="@+id/action_global_downloadFragment4"
+        app:destination="@id/downloadFragment4"/>
+
 
 </navigation>

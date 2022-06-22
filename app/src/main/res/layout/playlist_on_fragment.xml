@@ -25,6 +25,8 @@
                 android:id="@+id/ad_container"
                 android:layout_width="match_parent"
                 android:layout_height="108dp"
+                android:layout_marginStart="@dimen/normal_margin"
+                android:layout_marginEnd="@dimen/normal_margin"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/img_background_favorite"/>
 
