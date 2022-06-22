@@ -30,6 +30,7 @@ import com.proxglobal.proxads.ProxUtils
 import com.proxglobal.proxads.ads.callback.NativeAdCallback
 import com.proxglobal.proxads.adsv2.ads.ProxAds
 import com.proxglobal.proxads.adsv2.callback.AdsCallback
+import com.proxglobal.rate.ProxRateDialog
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -169,6 +170,19 @@ abstract class BaseFragment<K: ViewDataBinding, V: ViewModel>: Fragment() {
         else{
             showAds(action)
             count.postValue(0)
+        }
+    }
+
+    protected fun handleClickItemMusic(){
+        when((mViewModel as BaseViewModel).countItemMusic.value){
+            0 -> {
+                (mViewModel as BaseViewModel).countItemMusic.postValue(1)
+                ProxRateDialog.showIfNeed(context, (activity as MainActivity).supportFragmentManager)
+            }
+            1 -> {
+                (mViewModel as BaseViewModel).countItemMusic.postValue(2)
+                ProxRateDialog.showIfNeed(context, (activity as MainActivity).supportFragmentManager)
+            }
         }
     }
 

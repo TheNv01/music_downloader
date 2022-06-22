@@ -4,4 +4,6 @@
     <string name="title">Top %1$s</string>
     <string name="number_music">%1$s songs</string>
     <string name="text_in_confirm_dialog">%1$s will be added to the playlist soon</string>
+    <string name="_rating_title">DO YOU LIKE OUR APP?</string>
+    <string name="_rating_comment_hint">Please leave a feedback to help us improve product</string>
 </resources>

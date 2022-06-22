@@ -28,6 +28,7 @@ abstract class BaseViewModel(application: Application): AndroidViewModel(applica
     protected val favoriteRepository: FavoriteRepository
 
     val countItemGenres = MutableLiveData(0)
+    val countItemMusic = MutableLiveData(0)
 
     init {
         initOption()

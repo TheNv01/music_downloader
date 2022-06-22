@@ -160,6 +160,7 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
         }
         callBack = this
         if(MusicDonwnloadedManager.currentMusicDownloaded == null){
+            handleClickItemMusic()
             mViewModel.initOption(true)
             playSong(MusicManager.getCurrentMusic()!!)
         }
@@ -578,6 +579,7 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
             if(MediaManager.mediaPlayer!!.isPlaying){
                 MediaManager.mediaPlayer?.stop()
             }
+            handleClickItemMusic()
         }
         else{
             mViewModel.initOption(false)
