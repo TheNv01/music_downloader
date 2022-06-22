@@ -114,7 +114,6 @@
                 app:layout_constraintStart_toStartOf="@id/view"
                 app:layout_constraintTop_toBottomOf="@id/view"
                 android:layout_marginTop="17dp"
-                android:layout_marginStart="16dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 listData="@{viewmodel.existingPlaylist}"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"

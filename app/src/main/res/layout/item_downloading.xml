@@ -14,13 +14,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:background="@drawable/bg_item_downloading"
-        android:padding="9dp">
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="@dimen/normal_margin"
+        android:background="@drawable/bg_item_downloading">
 
         <ImageView
             android:id="@+id/img_music"
             android:layout_width="64dp"
             android:layout_height="64dp"
+            android:layout_marginTop="9dp"
+            android:layout_marginBottom="9dp"
+            android:layout_marginStart="9dp"
             imageUrl="@{musicdownloading.urlImage}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -88,14 +92,14 @@
 
         <ImageView
             android:id="@+id/popup"
-            android:layout_width="20dp"
-            android:layout_height="17dp"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:padding="@dimen/small_margin"
+            android:background="?selectableItemBackgroundBorderless"
             android:src="@drawable/kebab_menu_listened"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

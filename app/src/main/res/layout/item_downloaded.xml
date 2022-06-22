@@ -15,15 +15,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_ripple_black"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="10dp">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/card_view"
             android:layout_width="56dp"
             android:layout_height="56dp"
             app:cardCornerRadius="6dp"
+            android:layout_marginStart="@dimen/normal_margin"
+            android:layout_marginTop="@dimen/small_margin"
+            android:layout_marginBottom="@dimen/small_margin"
             app:cardBackgroundColor="@android:color/transparent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
@@ -75,8 +79,10 @@
 
         <ImageView
             android:id="@+id/popup"
-            android:layout_width="24dp"
-            android:layout_height="17dp"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:padding="@dimen/small_margin"
+            android:background="?selectableItemBackgroundBorderless"
             android:src="@drawable/kebab_menu_listened"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"

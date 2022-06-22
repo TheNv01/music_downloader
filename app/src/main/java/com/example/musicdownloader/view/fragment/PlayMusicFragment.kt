@@ -294,6 +294,9 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
                     }
                     R.drawable.ic_white_dowload ->{
                         download(MusicManager.getCurrentMusic()!!)
+                        if(music.audioDownload != null){
+                            binding.layoutPlayMusic.transitionToStart()
+                        }
                     }
                 }
             }
