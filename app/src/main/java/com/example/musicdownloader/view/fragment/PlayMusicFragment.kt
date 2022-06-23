@@ -60,6 +60,7 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
         object : Runnable {
             override fun run() {
                 val currentPosition: Int = MediaManager.getProgress()/1000
+                Log.d("current position", MediaManager.getProgress().toString())
                 binding.seekBar.progress = currentPosition
                 binding.tvProgress.text = formattedTime(currentPosition)
                 handler.postDelayed(this, 1000)
@@ -144,6 +145,7 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
 
             }
             MusicService.ACTION_CLOSE ->{
+                mViewModel.isPrepared.postValue(false)
                 (activity as MainActivity).playMusicFragment = null
                 (activity as MainActivity).binding.bottomView.visibility = View.VISIBLE
                 (activity as MainActivity).binding.viewPlaceHolder.visibility = View.GONE
@@ -153,7 +155,13 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
     }
 
     override fun initViews() {
-        mViewModel.isPrepared.postValue( false)
+        if(MediaManager.mediaPlayer?.isPlaying == true || MediaManager.isPause){
+            mViewModel.isPrepared.postValue( true)
+        }
+        else{
+            mViewModel.isPrepared.postValue( false)
+        }
+
         (activity as MainActivity).binding.viewPlaceHolder.visibility = View.VISIBLE
         MusicManager.getCurrentMusic()?.let {
             music = it
@@ -334,6 +342,15 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
 
         mViewModel.isPrepared.observe(viewLifecycleOwner){
             if(it){
+                if(MediaManager.isPause){
+                    binding.icPlayOrPause.setImageResource(R.drawable.ic_play_not_background)
+                    binding.imgCircle.animate().cancel()
+                }
+                else{
+                    binding.icPlayOrPause.setImageResource(R.drawable.ic_pause_not_background)
+                    rotateImageView()
+                }
+                initSeekBar()
                 binding.progressBar.alpha = 0f
                 binding.icPlayOrPause.setImageResource(R.drawable.ic_pause_not_background)
                 binding.icPlayOrPause.isClickable = true
@@ -405,10 +422,11 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
             }
             gotoService(MusicService.ACTION_START)
         }
+//        if(MediaManager.mediaPlayer?.isPlaying == true){
+//            rotateImageView()
+//            initSeekBar()
+//        }
         MediaManager.mediaPlayer?.setOnPreparedListener {
-
-            rotateImageView()
-            initSeekBar()
             mViewModel.isPrepared.postValue( true)
             if(context != null){
                 MediaManager.mediaPlayer?.start()
@@ -555,6 +573,7 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
         }
         //handler.removeCallbacks(runnable)
         handler.post(runnableForSeekBar)
+        Log.d("adfasdfasdf", "asdfasdfasdfasdf")
         binding.seekBar.onProgressChangedListener = object : ProgressListener {
             override fun invoke(progress: Int, fromUser: Boolean) {
                 if(fromUser){

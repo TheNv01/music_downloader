@@ -15,17 +15,21 @@ import androidx.navigation.ui.setupWithNavController
 import com.example.musicdownloader.R
 import com.example.musicdownloader.SharedPreferencesManager
 import com.example.musicdownloader.databinding.ActivityMainBinding
+import com.example.musicdownloader.interfaces.OnActionCallBack
+import com.example.musicdownloader.manager.MediaManager
 import com.example.musicdownloader.view.fragment.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.proxglobal.proxads.ProxUtils
 import com.proxglobal.rate.ProxRateDialog
 import com.proxglobal.rate.RatingDialogListener
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), OnActionCallBack {
 
     lateinit var binding: ActivityMainBinding
     var playMusicFragment: PlayMusicFragment ?= null
     private lateinit var navController: NavController
+
+    lateinit var callBack: OnActionCallBack
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,6 +39,11 @@ class MainActivity : AppCompatActivity() {
         setupBottomNavigation()
         initRateDialog()
         pushRateNotFirstRun()
+        if(MediaManager.mediaPlayer!!.isPlaying || MediaManager.isPause){
+            callBack = this
+            callBack.callBack(null, null)
+        }
+
     }
 
     private fun setupBottomNavigation(){
@@ -90,5 +99,11 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-
+    override fun callBack(key: String?, data: Any?) {
+        val tran = supportFragmentManager.beginTransaction()
+        playMusicFragment = PlayMusicFragment()
+        tran.replace(R.id.container_layout_playing, playMusicFragment!!)
+        tran.addToBackStack("playFragment")
+        tran.commit()
+    }
 }

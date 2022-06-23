@@ -29,6 +29,8 @@ class MusicService : Service() {
     private val job = SupervisorJob()
     private val scope = CoroutineScope(Dispatchers.IO + job)
 
+
+
     companion object {
         const val ACTION_START = 1
         const val ACTION_PAUSE = 2
@@ -174,7 +176,7 @@ class MusicService : Service() {
 
     private fun pushNotification(music: Music ?= null) {
         val notifyIntent = Intent(this, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
         val notifyPendingIntent = PendingIntent.getActivity(
             this, 0, notifyIntent,

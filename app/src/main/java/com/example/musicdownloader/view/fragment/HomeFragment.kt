@@ -2,7 +2,6 @@ package com.example.musicdownloader.view.fragment
 
 import android.util.Log
 import android.view.View
-import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -13,10 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.navigation.findNavController
-import com.example.musicdownloader.MusicService
-import com.example.musicdownloader.R
-import com.example.musicdownloader.SharedPreferencesManager
-import com.example.musicdownloader.UltraDepthScaleTransformer
+import com.example.musicdownloader.*
 import com.example.musicdownloader.adapter.*
 import com.example.musicdownloader.databinding.HomeFragmentBinding
 import com.example.musicdownloader.interfaces.OnActionCallBack
@@ -29,6 +25,10 @@ import com.example.musicdownloader.model.Music
 import com.example.musicdownloader.model.Region
 import com.example.musicdownloader.view.MainActivity
 import com.example.musicdownloader.viewmodel.HomeViewModel
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.analytics.ktx.logEvent
+import com.google.firebase.ktx.Firebase
 import com.proxglobal.proxads.ProxUtils
 import com.proxglobal.proxads.ads.callback.NativeAdCallback
 import com.proxglobal.proxads.adsv2.ads.ProxAds
@@ -39,6 +39,7 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
     lateinit var callBack: OnActionCallBack
     private lateinit var tvRegion: TextView
     private lateinit var imgLanguage: ImageView
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
     private fun setMusicClickListener(listMusicLiveData: LiveData<List<Music>> ?= null) =  object : ItemClickListener<Music> {
         override fun onClickListener(model: Music) {
             MusicDonwnloadedManager.currentMusicDownloaded = null
@@ -97,22 +98,18 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
         callBack = this
         setStatusBarColor(R.color.black)
         showBigNative()
+        firebaseAnalytics = Firebase.analytics
+        Log.d("adfasdfasd", "asdfasdfasdfasdfasdf")
+    }
+
+    private fun testAnalytics(){
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM) {
+            param(FirebaseAnalytics.Param.CONTENT_TYPE, "image")
+        }
     }
 
     private fun showBigNative(){
-//        ProxAds.getInstance().showBigNative(
-//            requireActivity(), ProxUtils.TEST_NATIVE_ID,
-//            binding.adContainer, object : AdsCallback() {
-//                override fun onShow() {
-//                    Toast.makeText(context, "Show", Toast.LENGTH_SHORT).show()
-//                }
-//
-//                override fun onError() {
-//                    binding.adContainer.removeAllViews()
-//                    Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show()
-//                }
-//            }
-//        )
+
         ProxUtils.INSTANCE.createNativeAdWithShimmer(
             requireActivity(), ProxUtils.TEST_NATIVE_ID,
             binding.adContainer, R.layout.ads_native_big,
