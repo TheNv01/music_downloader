@@ -2,14 +2,8 @@ package com.example.musicdownloader.view
 
 import android.os.Bundle
 import android.util.Log
-import android.view.Gravity
-import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
-import androidx.navigation.NavOptions
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.example.musicdownloader.R
@@ -19,7 +13,10 @@ import com.example.musicdownloader.interfaces.OnActionCallBack
 import com.example.musicdownloader.manager.MediaManager
 import com.example.musicdownloader.view.fragment.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.proxglobal.proxads.ProxUtils
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.analytics.ktx.logEvent
+import com.google.firebase.ktx.Firebase
 import com.proxglobal.rate.ProxRateDialog
 import com.proxglobal.rate.RatingDialogListener
 
@@ -28,6 +25,8 @@ class MainActivity : AppCompatActivity(), OnActionCallBack {
     lateinit var binding: ActivityMainBinding
     var playMusicFragment: PlayMusicFragment ?= null
     private lateinit var navController: NavController
+
+    lateinit var firebaseAnalytics: FirebaseAnalytics
 
     lateinit var callBack: OnActionCallBack
 
@@ -43,6 +42,7 @@ class MainActivity : AppCompatActivity(), OnActionCallBack {
             callBack = this
             callBack.callBack(null, null)
         }
+        firebaseAnalytics = Firebase.analytics
 
     }
 
@@ -79,11 +79,14 @@ class MainActivity : AppCompatActivity(), OnActionCallBack {
             }
 
             override fun onSubmitButtonClicked(rate: Int, comment: String?) {
-                if(rate in 1..3){
-                    val toast = Toast.makeText(this@MainActivity, "Thank for rating", Toast.LENGTH_SHORT)
-                    toast.setGravity(Gravity.TOP or Gravity.CENTER_HORIZONTAL, 0, 50)
-                    toast.show()
-                }
+                    firebaseAnalytics.logEvent("prox_rating_layout") {
+                        param(FirebaseAnalytics.Param.CONTENT_TYPE, "image")
+                    }
+                    firebaseAnalytics.logEvent("prox_rating_layout") {
+                        param("event_type", "rated")
+                        param("star", "$rate star")
+                        param("comment", comment.toString())
+                    }
             }
 
             override fun onLaterButtonClicked() {

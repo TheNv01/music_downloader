@@ -320,15 +320,14 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
         ProxAds.getInstance().showBanner(requireActivity(), binding.bannerContainer, ProxUtils.TEST_BANNER_ID,
             object: AdsCallback() {
                 override fun onShow() {
-                    Toast.makeText(context, "Show", Toast.LENGTH_SHORT).show()
                 }
 
                 override fun onClosed() {
-                    Toast.makeText(context, "Close", Toast.LENGTH_SHORT).show()
+
                 }
 
                 override fun onError() {
-                    Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
+
                 }
             }
         )

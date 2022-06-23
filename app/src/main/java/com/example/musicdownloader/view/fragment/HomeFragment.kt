@@ -39,7 +39,7 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
     lateinit var callBack: OnActionCallBack
     private lateinit var tvRegion: TextView
     private lateinit var imgLanguage: ImageView
-    private lateinit var firebaseAnalytics: FirebaseAnalytics
+
     private fun setMusicClickListener(listMusicLiveData: LiveData<List<Music>> ?= null) =  object : ItemClickListener<Music> {
         override fun onClickListener(model: Music) {
             MusicDonwnloadedManager.currentMusicDownloaded = null
@@ -98,15 +98,10 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
         callBack = this
         setStatusBarColor(R.color.black)
         showBigNative()
-        firebaseAnalytics = Firebase.analytics
+
         Log.d("adfasdfasd", "asdfasdfasdfasdfasdf")
     }
 
-    private fun testAnalytics(){
-        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM) {
-            param(FirebaseAnalytics.Param.CONTENT_TYPE, "image")
-        }
-    }
 
     private fun showBigNative(){
 
@@ -115,7 +110,7 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
             binding.adContainer, R.layout.ads_native_big,
             R.layout.layout_preloading_ads).load(
             NativeAdCallback {
-                Toast.makeText(context, "Show", Toast.LENGTH_SHORT).show()
+
             })
     }
 
