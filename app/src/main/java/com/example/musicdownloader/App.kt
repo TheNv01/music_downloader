@@ -16,6 +16,7 @@ class App : ProxOpenAdsApplication() {
         createNotificationChannel()
         applicationContext?.let { SharedPreferencesManager.with(it) }
         Utils.initPath(this)
+        SharedPreferencesManager.put( true, "in app")
     }
 
     override fun getOpenAdsId(): String = ""

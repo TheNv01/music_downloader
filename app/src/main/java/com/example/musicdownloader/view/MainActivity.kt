@@ -61,13 +61,16 @@ class MainActivity : AppCompatActivity(), OnActionCallBack {
     }
 
     private fun pushRateNotFirstRun(){
-        if (SharedPreferencesManager.get<Boolean>("firstrun") == null) {
 
-            Log.d("TheNv", "first time")
+        if (SharedPreferencesManager.get<Boolean>("firstrun") == null) {
             SharedPreferencesManager.put( false, "firstrun")
         }
         else{
-            ProxRateDialog.showIfNeed(this, supportFragmentManager)
+            if(SharedPreferencesManager.get<Boolean>("in app") == true){
+                ProxRateDialog.showIfNeed(this, supportFragmentManager)
+                SharedPreferencesManager.put( false, "in app")
+            }
+
         }
     }
 

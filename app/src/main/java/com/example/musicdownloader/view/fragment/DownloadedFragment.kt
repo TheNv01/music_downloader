@@ -96,6 +96,11 @@ class DownloadedFragment: BaseFragment<DownloadedFragmentBinding, DownloadViewMo
         bottomSheetDialog.itemClickListener = object : ItemClickListener<Int>{
             override fun onClickListener(model: Int) {
                 when(model){
+                    R.drawable.ic_add_to_playlist -> {
+                        val toast = Toast.makeText(context, "Comming soon", Toast.LENGTH_SHORT)
+                        toast.setGravity(Gravity.CENTER, 0, 0)
+                        toast.show()
+                    }
                     R.drawable.ic_delete ->{
                         showConfirmRemoveSongDialog(musicDownloaded)
                     }

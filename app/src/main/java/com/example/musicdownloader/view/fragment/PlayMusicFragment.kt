@@ -290,6 +290,11 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
                             val bottomSheetDialogAdd = AddToPlaylistBottomDialog(MusicManager.getCurrentMusic()!!)
                             bottomSheetDialogAdd.show((activity as MainActivity).supportFragmentManager, null)
                         }
+                        else{
+                            val toast = Toast.makeText(context, "Comming soon", Toast.LENGTH_SHORT)
+                            toast.setGravity(Gravity.CENTER, 0, 0)
+                            toast.show()
+                        }
 
                     }
                     R.drawable.ic_favorite ->{
@@ -303,6 +308,11 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
                                 insertMusicToFavorite()
                             }
 
+                        }
+                        else{
+                            val toast = Toast.makeText(context, "Comming soon", Toast.LENGTH_SHORT)
+                            toast.setGravity(Gravity.CENTER, 0, 0)
+                            toast.show()
                         }
                     }
                     R.drawable.ic_white_dowload ->{
