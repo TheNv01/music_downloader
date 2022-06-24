@@ -58,7 +58,12 @@ class SeeAllFragment: BaseFragment<SeeAllFragmentBinding, SeeAllViewModel>(), On
             mViewModel.title.postValue(args.option)
         }
         binding.tvTitle.text = getString(R.string.title, option)
-        showSmallNative(binding.adContainer)
+        if(isNetworkAvailable()){
+            showSmallNative(binding.adContainer)
+        }
+        else{
+            binding.adContainer.visibility = View.GONE
+        }
 
     }
 

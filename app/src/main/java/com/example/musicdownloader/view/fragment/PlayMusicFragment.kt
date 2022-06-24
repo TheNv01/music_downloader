@@ -176,7 +176,13 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
             mViewModel.initOption(false)
             playSong()
         }
-        showBanner()
+        if(isNetworkAvailable()){
+            showBanner()
+        }
+        else{
+            binding.bannerContainer.visibility = View.GONE
+        }
+
     }
 
     override fun setUpListener() {

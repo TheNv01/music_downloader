@@ -97,9 +97,12 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
         imgLanguage = mRootView.findViewById(R.id.img_language)
         callBack = this
         setStatusBarColor(R.color.black)
-        showBigNative()
-
-        Log.d("adfasdfasd", "asdfasdfasdfasdfasdf")
+        if(isNetworkAvailable()){
+            showBigNative()
+        }
+        else{
+            binding.adContainer.visibility = View.GONE
+        }
     }
 
 

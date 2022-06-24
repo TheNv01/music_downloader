@@ -1,6 +1,8 @@
 package com.example.musicdownloader.view.fragment
 
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
 import android.os.*
 import android.util.Log
 import android.view.*
@@ -213,6 +215,13 @@ abstract class BaseFragment<K: ViewDataBinding, V: ViewModel>: Fragment() {
                 }
             })
         }
+    }
+
+    protected fun isNetworkAvailable(): Boolean {
+        val connectivityManager =
+            requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        return connectivityManager.activeNetworkInfo != null && connectivityManager.activeNetworkInfo!!
+            .isConnected
     }
 
     protected open fun showAds(action:NavDirections?){

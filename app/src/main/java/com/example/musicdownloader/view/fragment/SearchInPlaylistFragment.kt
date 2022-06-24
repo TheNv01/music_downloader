@@ -69,7 +69,12 @@ class SearchInPlaylistFragment : BaseFragment<SearchInPlaylistFragmentBinding, S
         if(mViewModel.musics.value == null || mViewModel.musics.value!!.isEmpty()){
             mViewModel.getMusics(ArrayList(), "")
         }
-        showSmallNative(binding.adContainer)
+        if(isNetworkAvailable()){
+            showSmallNative(binding.adContainer)
+        }
+        else{
+            binding.adContainer.visibility = View.GONE
+        }
     }
 
     override fun setUpListener() {

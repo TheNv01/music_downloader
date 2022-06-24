@@ -74,7 +74,12 @@ class SearchFromHomeFragment: BaseFragment<SearchFromHomeFragmentBinding, Search
                 optionBottomDialog(model)
             }
         }
-        showSmallNative(binding.adContainer)
+        if(isNetworkAvailable()){
+            showSmallNative(binding.adContainer)
+        }
+        else{
+            binding.adContainer.visibility = View.GONE
+        }
     }
 
     override fun setUpListener() {

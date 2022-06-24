@@ -1,6 +1,8 @@
 package com.example.musicdownloader.view.dialog
 
+import android.content.Context
 import android.graphics.Color
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -52,7 +54,12 @@ class ChangeRegionDialog: DialogFragment(), ItemClickListener<Region> {
         viewModel = ViewModelProvider(requireActivity())[ChangeRegionViewModel::class.java]
         binding = initBinding(mRootView)
         setTextColorHint()
-        showSmallNative()
+        if(isNetworkAvailable()){
+            showSmallNative()
+        }
+        else{
+            binding!!.adContainer.visibility = View.GONE
+        }
         return mRootView
     }
 
@@ -78,6 +85,13 @@ class ChangeRegionDialog: DialogFragment(), ItemClickListener<Region> {
         binding?.recyclerViewRegion?.adapter = adapter
         setupSearchView()
         dialog!!.window?.setBackgroundDrawableResource(android.R.color.transparent)
+    }
+
+    private fun isNetworkAvailable(): Boolean {
+        val connectivityManager =
+            requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        return connectivityManager.activeNetworkInfo != null && connectivityManager.activeNetworkInfo!!
+            .isConnected
     }
 
     private fun setupSearchView(){
