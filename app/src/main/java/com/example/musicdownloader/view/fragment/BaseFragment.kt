@@ -200,56 +200,48 @@ abstract class BaseFragment<K: ViewDataBinding, V: ViewModel>: Fragment() {
             Toast.makeText(context, "Can't download because it was downloaded or downloading", Toast.LENGTH_SHORT).show()
         }
         else{
-            ProxAds.getInstance().showInterstitial(requireActivity(), "inter", object: AdsCallback() {
-                override fun onShow() {
-                    (mViewModel as BaseViewModel).startDownload(music, path)
-                }
-
-                override fun onClosed() {
-                    findNavController().navigate(R.id.action_global_downloadFragment4)
-                }
-
-                override fun onError() {
-                    Log.d("asdfasdf", "error")
-                    //callBack.callBack(KEY_SHOW_PLAY_MUSIC, null)
-                }
-            })
+//            ProxAds.getInstance().showInterstitialMax(requireActivity(), "inter", object: AdsCallback() {
+//                override fun onShow() {
+//                    (mViewModel as BaseViewModel).startDownload(music, path)
+//                }
+//
+//                override fun onClosed() {
+//                    (activity as MainActivity).binding.bottomView.selectedItemId  = R.id.download
+//                }
+//
+//                override fun onError() {
+//                    (mViewModel as BaseViewModel).startDownload(music, path)
+//                    (activity as MainActivity).binding.bottomView.selectedItemId  = R.id.download
+//
+//                }
+//            })
+            (mViewModel as BaseViewModel).startDownload(music, path)
+            (activity as MainActivity).binding.bottomView.selectedItemId  = R.id.download
         }
     }
 
-    protected fun isNetworkAvailable(): Boolean {
-        val connectivityManager =
-            requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        return connectivityManager.activeNetworkInfo != null && connectivityManager.activeNetworkInfo!!
-            .isConnected
-    }
 
     protected open fun showAds(action:NavDirections?){
 
     }
 
     protected fun showSmallNative(fameLayout: FrameLayout){
-//        ProxAds.getInstance().showMediumNative(
-//            requireActivity(), ProxUtils.TEST_NATIVE_ID,
-//            fameLayout, object: AdsCallback() {
-//                override fun onShow() {
-//                    Toast.makeText(context, "Show", Toast.LENGTH_SHORT).show()
-//                }
-//                override fun onClosed() {
-//                    Toast.makeText(context, "Close", Toast.LENGTH_SHORT).show()
-//                }
-//
-//                override fun onError() {
-//                    Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
-//                }
-//            }
-//        )
-        ProxUtils.INSTANCE.createMediumNativeAdWithShimmer(
-            requireActivity(), ProxUtils.TEST_NATIVE_ID,
-            fameLayout
-        ).load(
-            NativeAdCallback {
-            })
+        ProxAds.getInstance().showSmallNativeMax(requireActivity(), ProxUtils.TEST_NATIVE_MAX_ID, fameLayout, object : AdsCallback() {
+
+            override fun onShow() {
+                super.onShow()
+            }
+
+            override fun onClosed() {
+                super.onClosed()
+            }
+
+            override fun onError() {
+                super.onError()
+                fameLayout.visibility = View.GONE
+            }
+        })
+
     }
 
     protected abstract fun initBinding(mRootView: View): K

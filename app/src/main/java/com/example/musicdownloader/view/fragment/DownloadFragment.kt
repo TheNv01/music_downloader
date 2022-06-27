@@ -27,12 +27,7 @@ class DownloadFragment: BaseFragment<DownloadFragmentBinding, DownloadViewModel>
     override fun initViews() {
         setUpViewPager()
         setStatusBarColor(R.color.black)
-        if(isNetworkAvailable()){
-            showSmallNative(binding.adContainer)
-        }
-        else{
-            binding.adContainer.visibility = View.GONE
-        }
+        showSmallNative(binding.adContainer)
     }
 
     override fun setUpListener() {

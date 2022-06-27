@@ -58,13 +58,7 @@ class SeeAllFragment: BaseFragment<SeeAllFragmentBinding, SeeAllViewModel>(), On
             mViewModel.title.postValue(args.option)
         }
         binding.tvTitle.text = getString(R.string.title, option)
-        if(isNetworkAvailable()){
-            showSmallNative(binding.adContainer)
-        }
-        else{
-            binding.adContainer.visibility = View.GONE
-        }
-
+        showSmallNative(binding.adContainer)
     }
 
     override fun setUpListener() {

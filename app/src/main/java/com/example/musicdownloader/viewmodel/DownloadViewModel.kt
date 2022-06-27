@@ -4,6 +4,7 @@ import android.app.Application
 import android.graphics.BitmapFactory
 import android.os.Environment
 import com.example.musicdownloader.R
+import com.example.musicdownloader.manager.MusicDonwnloadedManager
 import com.example.musicdownloader.model.MusicDownloaded
 import com.example.musicdownloader.model.Option
 import wseemann.media.FFmpegMediaMetadataRetriever
@@ -17,6 +18,7 @@ class DownloadViewModel(app: Application) : BaseViewModel(app) {
     init {
         initOptionDownloading()
         initOptionDownloaded()
+        MusicDonwnloadedManager.getMusicFromExternal()
     }
 
     private fun initOptionDownloading(){

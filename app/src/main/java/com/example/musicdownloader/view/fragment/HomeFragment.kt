@@ -4,7 +4,6 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.LiveData
 import androidx.navigation.NavDirections
@@ -25,12 +24,7 @@ import com.example.musicdownloader.model.Music
 import com.example.musicdownloader.model.Region
 import com.example.musicdownloader.view.MainActivity
 import com.example.musicdownloader.viewmodel.HomeViewModel
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.ktx.analytics
-import com.google.firebase.analytics.ktx.logEvent
-import com.google.firebase.ktx.Firebase
 import com.proxglobal.proxads.ProxUtils
-import com.proxglobal.proxads.ads.callback.NativeAdCallback
 import com.proxglobal.proxads.adsv2.ads.ProxAds
 import com.proxglobal.proxads.adsv2.callback.AdsCallback
 
@@ -58,7 +52,7 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
     }
 
     override fun showAds(action:NavDirections?){
-        ProxAds.getInstance().showInterstitial(requireActivity(), "inter", object: AdsCallback() {
+        ProxAds.getInstance().showInterstitialMax(requireActivity(), "inter", object: AdsCallback() {
             override fun onShow() {
                 if (action == null) {
                     callBack.callBack(KEY_SHOW_PLAY_MUSIC, null)
@@ -74,8 +68,13 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
             }
 
             override fun onError() {
-                Log.d("asdfasdf", "error")
-                //callBack.callBack(KEY_SHOW_PLAY_MUSIC, null)
+                if(action == null){
+                    callBack.callBack(KEY_SHOW_PLAY_MUSIC, null)
+                    (activity as MainActivity).playMusicFragment?.gotoService(MusicService.ACTION_START)
+                }
+                else{
+                    requireActivity().findNavController(R.id.activity_main_nav_host_fragment).navigate(action)
+                }
             }
         })
     }
@@ -97,24 +96,26 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
         imgLanguage = mRootView.findViewById(R.id.img_language)
         callBack = this
         setStatusBarColor(R.color.black)
-        if(isNetworkAvailable()){
-            showBigNative()
-        }
-        else{
-            binding.adContainer.visibility = View.GONE
-        }
+        showBigNative()
     }
 
 
     private fun showBigNative(){
 
-        ProxUtils.INSTANCE.createNativeAdWithShimmer(
-            requireActivity(), ProxUtils.TEST_NATIVE_ID,
-            binding.adContainer, R.layout.ads_native_big,
-            R.layout.layout_preloading_ads).load(
-            NativeAdCallback {
+        ProxAds.getInstance().showBigNativeMax(requireActivity(), ProxUtils.TEST_NATIVE_MAX_ID, binding.adContainer, object : AdsCallback() {
+            override fun onShow() {
+                super.onShow()
+            }
 
-            })
+            override fun onClosed() {
+                super.onClosed()
+            }
+
+            override fun onError() {
+                super.onError()
+                binding.adContainer.visibility = View.GONE
+            }
+        })
     }
 
     override fun setUpListener() {

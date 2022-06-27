@@ -21,9 +21,7 @@ class App : ProxOpenAdsApplication() {
 
     override fun getOpenAdsId(): String = ""
 
-    override fun getListTestDeviceId(): MutableList<String> {
-        return mutableListOf("")
-    }
+
 
     private fun createNotificationChannel() {
         if(Build.VERSION.SDK_INT >= Build. VERSION_CODES.O){

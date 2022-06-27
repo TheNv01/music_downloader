@@ -7,6 +7,7 @@ import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.os.Build
 import android.os.IBinder
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import coil.ImageLoader
 import coil.request.ImageRequest
@@ -54,6 +55,7 @@ class MusicService : Service() {
                     if(MusicDonwnloadedManager.currentMusicDownloaded == null) {
 
                         MusicManager.getCurrentMusic()?.let { getLinkAudio(it) }
+                        Log.d("service", "starrrtta")
                     }
                     else {
                         MusicDonwnloadedManager.currentMusicDownloaded?.let { startMusicDownloaded(it) }

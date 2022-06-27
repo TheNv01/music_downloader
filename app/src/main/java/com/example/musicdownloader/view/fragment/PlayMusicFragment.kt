@@ -53,14 +53,13 @@ import java.io.File
 
 class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewModel>(), OnActionCallBack {
 
-    lateinit var callBack: OnActionCallBack
+    private var callBack: OnActionCallBack ?= null
     private val handler by lazy { Handler(Looper.getMainLooper()) }
 
     private val runnableForSeekBar: Runnable by lazy{
         object : Runnable {
             override fun run() {
                 val currentPosition: Int = MediaManager.getProgress()/1000
-                Log.d("current position", MediaManager.getProgress().toString())
                 binding.seekBar.progress = currentPosition
                 binding.tvProgress.text = formattedTime(currentPosition)
                 handler.postDelayed(this, 1000)
@@ -176,13 +175,7 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
             mViewModel.initOption(false)
             playSong()
         }
-        if(isNetworkAvailable()){
-            showBanner()
-        }
-        else{
-            binding.bannerContainer.visibility = View.GONE
-        }
-
+        showBanner()
     }
 
     override fun setUpListener() {
@@ -333,7 +326,7 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
     }
 
     private fun showBanner(){
-        ProxAds.getInstance().showBanner(requireActivity(), binding.bannerContainer, ProxUtils.TEST_BANNER_ID,
+        ProxAds.getInstance().showBannerMax(requireActivity(), binding.bannerContainer, ProxUtils.TEST_BANNER_MAX_ID,
             object: AdsCallback() {
                 override fun onShow() {
                 }
@@ -343,7 +336,7 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
                 }
 
                 override fun onError() {
-
+                    binding.bannerContainer.visibility = View.GONE
                 }
             }
         )
@@ -508,7 +501,7 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
     }
 
     fun gotoService(action: Int){
-        callBack.callBack(KEY_SHOW_SERVICE, action)
+        callBack?.callBack(KEY_SHOW_SERVICE, action)
     }
 
     private fun handleRepeatMusic() {
@@ -586,9 +579,7 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
         else{
             binding.seekBar.maxProgress = MusicDonwnloadedManager.currentMusicDownloaded?.duration!!.toInt()
         }
-        //handler.removeCallbacks(runnable)
         handler.post(runnableForSeekBar)
-        Log.d("adfasdfasdf", "asdfasdfasdfasdf")
         binding.seekBar.onProgressChangedListener = object : ProgressListener {
             override fun invoke(progress: Int, fromUser: Boolean) {
                 if(fromUser){

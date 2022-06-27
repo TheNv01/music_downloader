@@ -4,6 +4,8 @@ package com.example.musicdownloader.viewmodel
 import android.app.Application
 import android.graphics.BitmapFactory
 import android.os.Environment
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.musicdownloader.R
 import com.example.musicdownloader.model.MusicDownloaded
 import com.example.musicdownloader.model.Option
@@ -13,6 +15,8 @@ import java.io.File
 class DownloadedViewModel(val applicat: Application) : BaseViewModel(applicat) {
     val optionsDownloaded = ArrayList<Option>()
     val downloadeds =  ArrayList<MusicDownloaded>()
+
+
 
     init {
         initOption()
@@ -24,6 +28,8 @@ class DownloadedViewModel(val applicat: Application) : BaseViewModel(applicat) {
         optionsDownloaded.add(Option("Set as Ringtone", R.drawable.ic_bell))
         optionsDownloaded.add(Option("Share", R.drawable.ic_share))
     }
+
+
     fun getMusicFromExternal(){
         val file = File(Environment.getExternalStorageDirectory().toString().plus("/music downloader"))
         if (file.listFiles()?.isNotEmpty() == true) {

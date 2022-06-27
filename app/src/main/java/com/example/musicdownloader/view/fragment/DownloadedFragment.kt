@@ -68,7 +68,6 @@ class DownloadedFragment: BaseFragment<DownloadedFragmentBinding, DownloadViewMo
 
     override fun onResume() {
         super.onResume()
-        adapter.musicsDownloaded = MusicDonwnloadedManager.musicsDownloaded
         adapter.notifyItemChanged(adapter.musicsDownloaded.size + 1)
     }
 
@@ -79,7 +78,7 @@ class DownloadedFragment: BaseFragment<DownloadedFragmentBinding, DownloadViewMo
     override fun setUpListener() {}
 
     override fun setUpObserver() {
-        MusicDonwnloadedManager.getMusicFromExternal()
+
         adapter= DownloadedAdapter(
             R.layout.item_downloaded,
             MusicDonwnloadedManager.musicsDownloaded,

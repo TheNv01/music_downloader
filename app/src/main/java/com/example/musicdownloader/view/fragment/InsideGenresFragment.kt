@@ -51,12 +51,7 @@ class InsideGenresFragment : BaseFragment<InsideGenresFragmentBinding, InsideGen
         if(mViewModel.title.value != null){
             mViewModel.title.postValue(args.genres)
         }
-        if(isNetworkAvailable()){
-            showSmallNative(binding.adContainer)
-        }
-        else{
-            binding.adContainer.visibility = View.GONE
-        }
+        showSmallNative(binding.adContainer)
     }
 
     override fun setUpListener() {

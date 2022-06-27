@@ -6,4 +6,7 @@
     <string name="text_in_confirm_dialog">%1$s will be added to the playlist soon</string>
     <string name="_rating_title">DO YOU LIKE OUR APP?</string>
     <string name="_rating_comment_hint">Please leave a feedback to help us improve product</string>
+
+    <string name="test_ads_app_id">ca-app-pub-3940256099942544~3347511713</string>
+    <string name="test_sdk_key">Qp8TkoTBXLlkqGrsfHgdGlJJ3l2QCQqSJiQSksyvl1eae7yVcz8R7ClNyLxFA8Bmg-94lWMlzVBdo-vI7DTugJ</string>
 </resources>

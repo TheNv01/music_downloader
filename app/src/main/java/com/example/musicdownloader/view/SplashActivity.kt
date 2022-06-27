@@ -30,7 +30,7 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun showAds(){
-        ProxAds.getInstance().showSplash(this, object : AdsCallback() {
+        ProxAds.getInstance().showSplashMax(this, object : AdsCallback() {
             override fun onShow() {
 
             }
@@ -41,12 +41,12 @@ class SplashActivity : AppCompatActivity() {
                 gotoMainActivity()
 
             }
-        }, ProxUtils.TEST_INTERSTITIAL_ID, "vz3ebfacd56a34480da8", 12000)
+        }, ProxUtils.TEST_INTERSTITIAL_MAX_ID, 7000)
     }
 
     private fun initAds(){
         ProxAds.getInstance()
-            .initInterstitial(this, ProxUtils.TEST_INTERSTITIAL_ID, "vz3ebfacd56a34480da8", "inter")
+            .initInterstitialMax(this, ProxUtils.TEST_INTERSTITIAL_ID, "inter")
     }
 
     private fun gotoMainActivity(){

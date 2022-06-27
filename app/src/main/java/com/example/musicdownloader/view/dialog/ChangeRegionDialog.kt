@@ -1,33 +1,22 @@
 package com.example.musicdownloader.view.dialog
 
-import android.content.Context
 import android.graphics.Color
-import android.net.ConnectivityManager
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
-import android.widget.Toast
 import androidx.annotation.Nullable
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavDirections
-import androidx.navigation.findNavController
-import com.example.musicdownloader.MusicService
 import com.example.musicdownloader.R
 import com.example.musicdownloader.adapter.ChangeRegionAdapter
 import com.example.musicdownloader.databinding.ChangeRegionFragmentBinding
 import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
 import com.example.musicdownloader.model.Region
-import com.example.musicdownloader.view.MainActivity
-import com.example.musicdownloader.view.fragment.HomeFragment
 import com.example.musicdownloader.viewmodel.ChangeRegionViewModel
 import com.proxglobal.proxads.ProxUtils
-import com.proxglobal.proxads.ads.callback.NativeAdCallback
 import com.proxglobal.proxads.adsv2.ads.ProxAds
 import com.proxglobal.proxads.adsv2.callback.AdsCallback
 
@@ -54,12 +43,7 @@ class ChangeRegionDialog: DialogFragment(), ItemClickListener<Region> {
         viewModel = ViewModelProvider(requireActivity())[ChangeRegionViewModel::class.java]
         binding = initBinding(mRootView)
         setTextColorHint()
-        if(isNetworkAvailable()){
-            showSmallNative()
-        }
-        else{
-            binding!!.adContainer.visibility = View.GONE
-        }
+        showSmallNative()
         return mRootView
     }
 
@@ -87,13 +71,6 @@ class ChangeRegionDialog: DialogFragment(), ItemClickListener<Region> {
         dialog!!.window?.setBackgroundDrawableResource(android.R.color.transparent)
     }
 
-    private fun isNetworkAvailable(): Boolean {
-        val connectivityManager =
-            requireContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        return connectivityManager.activeNetworkInfo != null && connectivityManager.activeNetworkInfo!!
-            .isConnected
-    }
-
     private fun setupSearchView(){
         binding!!.searchCountry.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -118,7 +95,7 @@ class ChangeRegionDialog: DialogFragment(), ItemClickListener<Region> {
     }
 
     private fun showAds(model: Region){
-        ProxAds.getInstance().showInterstitial(requireActivity(), "inter", object: AdsCallback() {
+        ProxAds.getInstance().showInterstitialMax(requireActivity(), "inter", object: AdsCallback() {
             override fun onShow() {
                 val bundle = Bundle()
                 bundle.putSerializable("region", model)
@@ -128,19 +105,31 @@ class ChangeRegionDialog: DialogFragment(), ItemClickListener<Region> {
                 dialog?.dismiss()
             }
             override fun onError() {
-                Log.d("asdfasdf", "error")
-                //callBack.callBack(KEY_SHOW_PLAY_MUSIC, null)
+                val bundle = Bundle()
+                bundle.putSerializable("region", model)
+                setFragmentResult("requestKey", bundle)
+
+                dialog?.dismiss()
             }
         })
     }
 
     private fun showSmallNative(){
-        ProxUtils.INSTANCE.createMediumNativeAdWithShimmer(
-            requireActivity(), ProxUtils.TEST_NATIVE_ID,
-            binding!!.adContainer
-        ).load(
-            NativeAdCallback {
-            })
+        ProxAds.getInstance().showSmallNativeMax(requireActivity(), ProxUtils.TEST_NATIVE_MAX_ID, binding!!.adContainer, object : AdsCallback() {
+
+            override fun onShow() {
+                super.onShow()
+            }
+
+            override fun onClosed() {
+                super.onClosed()
+            }
+
+            override fun onError() {
+                super.onError()
+                binding!!.adContainer.visibility = View.GONE
+            }
+        })
     }
 
 }

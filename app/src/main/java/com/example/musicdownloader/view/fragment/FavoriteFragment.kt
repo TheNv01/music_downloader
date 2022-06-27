@@ -33,7 +33,7 @@ class FavoriteFragment: BaseFragment<FavoriteFragmentBinding, FavoriteViewModel>
     }
 
     override fun showAds(action: NavDirections?){
-        ProxAds.getInstance().showInterstitial(requireActivity(), "inter", object: AdsCallback() {
+        ProxAds.getInstance().showInterstitialMax(requireActivity(), "inter", object: AdsCallback() {
             override fun onShow() {
                 callback.callBack(null, null)
             }
@@ -43,8 +43,8 @@ class FavoriteFragment: BaseFragment<FavoriteFragmentBinding, FavoriteViewModel>
             }
 
             override fun onError() {
-                Log.d("asdfasdf", "error")
-                //callBack.callBack(KEY_SHOW_PLAY_MUSIC, null)
+                callback.callBack(null, null)
+                (activity as MainActivity).playMusicFragment!!.gotoService(MusicService.ACTION_START)
             }
         })
     }
@@ -64,12 +64,7 @@ class FavoriteFragment: BaseFragment<FavoriteFragmentBinding, FavoriteViewModel>
 
     override fun initViews() {
         callback = this
-        if(isNetworkAvailable()){
-            showSmallNative(binding.adContainer)
-        }
-        else{
-            binding.adContainer.visibility = View.GONE
-        }
+        showSmallNative(binding.adContainer)
     }
 
     override fun setUpListener() {

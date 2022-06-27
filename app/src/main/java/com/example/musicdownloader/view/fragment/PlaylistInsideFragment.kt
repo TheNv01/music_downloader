@@ -64,7 +64,7 @@ class PlaylistInsideFragment : BaseFragment<PlaylistInsideFragmentBinding, Playl
     }
 
     override fun showAds(action: NavDirections?){
-        ProxAds.getInstance().showInterstitial(requireActivity(), "inter", object: AdsCallback() {
+        ProxAds.getInstance().showInterstitialMax(requireActivity(), "inter", object: AdsCallback() {
             override fun onShow() {
                 callBack.callBack(null, null)
             }
@@ -74,8 +74,8 @@ class PlaylistInsideFragment : BaseFragment<PlaylistInsideFragmentBinding, Playl
             }
 
             override fun onError() {
-                Log.d("asdfasdf", "error")
-                //callBack.callBack(KEY_SHOW_PLAY_MUSIC, null)
+                callBack.callBack(null, null)
+                (activity as MainActivity).playMusicFragment!!.gotoService(MusicService.ACTION_START)
             }
         })
     }
@@ -94,12 +94,7 @@ class PlaylistInsideFragment : BaseFragment<PlaylistInsideFragmentBinding, Playl
 
     override fun initViews() {
         callBack = this
-        if(isNetworkAvailable()){
-            showSmallNative(binding.adContainer)
-        }
-        else{
-            binding.adContainer.visibility = View.GONE
-        }
+        showSmallNative(binding.adContainer)
     }
 
     override fun setUpListener() {
@@ -220,9 +215,6 @@ class PlaylistInsideFragment : BaseFragment<PlaylistInsideFragmentBinding, Playl
                             if(it){
                                 dialog?.dismiss()
                                 checkSystemWritePermission(musicSelected)
-                            }
-                            else{
-                                Log.d("adfasdfa", "asdfasdf")
                             }
                         }
 

@@ -55,7 +55,6 @@ class HomeViewModel(application: Application): BaseViewModel(application) {
                 factoryMusics("ranking", it.regionCode)
                 factoryMusics("listened", it.regionCode)
                 factoryMusics("download", it.regionCode)
-                //Log.d("thenv", mViewModel.trends.value.toString())
             }
         }
     }

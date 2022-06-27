@@ -69,7 +69,7 @@ class SettingFragment: BaseFragment<SettingFragmentBinding, SettingViewModel>() 
                         startActivity(intent)
                     }
                     R.drawable.ic_rating ->{
-                        initRateDialog()
+//                        initRateDialog()
                         ProxRateDialog.showAlways(context, (activity as MainActivity).supportFragmentManager)
                     }
                     else ->{
@@ -82,34 +82,34 @@ class SettingFragment: BaseFragment<SettingFragmentBinding, SettingViewModel>() 
             binding.layoutBottom.addView(v)
         }
     }
-    private fun initRateDialog(){
-
-        val ratingListener = object : RatingDialogListener(){
-            override fun onChangeStar(rate: Int) {
-
-            }
-
-            override fun onSubmitButtonClicked(rate: Int, comment: String?) {
-                (activity as MainActivity).firebaseAnalytics.logEvent("prox_rating_layout") {
-                    param(FirebaseAnalytics.Param.CONTENT_TYPE, "image")
-                }
-                (activity as MainActivity).firebaseAnalytics.logEvent("prox_rating_layout") {
-                    param("event_type", "rated")
-                    param("star", "$rate star")
-                    param("comment", comment.toString())
-                }
-            }
-
-            override fun onLaterButtonClicked() {
-
-            }
-
-            override fun onDone() {
-                //this method will call after dismiss tks dialog
-            }
-        }
-
-        ProxRateDialog.init(R.layout.dialog_rating, ratingListener)
-
-    }
+//    private fun initRateDialog(){
+//
+//        val ratingListener = object : RatingDialogListener(){
+//            override fun onChangeStar(rate: Int) {
+//
+//            }
+//
+//            override fun onSubmitButtonClicked(rate: Int, comment: String?) {
+//                (activity as MainActivity).firebaseAnalytics.logEvent("prox_rating_layout") {
+//                    param(FirebaseAnalytics.Param.CONTENT_TYPE, "image")
+//                }
+//                (activity as MainActivity).firebaseAnalytics.logEvent("prox_rating_layout") {
+//                    param("event_type", "rated")
+//                    param("star", "$rate star")
+//                    param("comment", comment.toString())
+//                }
+//            }
+//
+//            override fun onLaterButtonClicked() {
+//
+//            }
+//
+//            override fun onDone() {
+//                //this method will call after dismiss tks dialog
+//            }
+//        }
+//
+//        ProxRateDialog.init(R.layout.dialog_rating, ratingListener)
+//
+//    }
 }

@@ -27,12 +27,7 @@ class PlaylistOffFragment: BaseFragment<PlaylistOnFragmentBinding, PlaylistOffVi
     }
 
     override fun initViews() {
-        if(isNetworkAvailable()){
-            showSmallNative(binding.adContainer)
-        }
-        else{
-            binding.adContainer.visibility = View.GONE
-        }
+        showSmallNative(binding.adContainer)
     }
 
     override fun setUpListener() {

@@ -45,7 +45,6 @@ class DownloadingAdapter(
                     }
                     override fun onDownloadBlockUpdated(download: Download, downloadBlock: DownloadBlock, totalBlocks: Int) {}
                     override fun onError(download: Download, error: Error, throwable: Throwable?) {
-                        Log.d("error", error.name)
                         if(data.request.id == download.id){
                             DownloadingManager.fetch!!.retry(data.request.id)
                         }

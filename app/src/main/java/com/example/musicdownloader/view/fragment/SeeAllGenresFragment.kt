@@ -30,13 +30,7 @@ class SeeAllGenresFragment : BaseFragment<SeeAllGenresFragmentBinding, SeeAllGen
 
 
     override fun initViews() {
-        if(isNetworkAvailable()){
-            showSmallNative(binding.adContainer)
-        }
-        else{
-            binding.adContainer.visibility = View.GONE
-        }
-
+        showSmallNative(binding.adContainer)
     }
 
     override fun setUpListener() {
@@ -61,14 +55,14 @@ class SeeAllGenresFragment : BaseFragment<SeeAllGenresFragmentBinding, SeeAllGen
     }
 
     override fun showAds(action: NavDirections?){
-        ProxAds.getInstance().showInterstitial(requireActivity(), "inter", object: AdsCallback() {
+        ProxAds.getInstance().showInterstitialMax(requireActivity(), "inter", object: AdsCallback() {
             override fun onShow() {
                 requireActivity().findNavController(R.id.activity_main_nav_host_fragment).navigate(action!!)
             }
             override fun onClosed() {}
 
             override fun onError() {
-                Log.d("asdfasdf", "error")
+                requireActivity().findNavController(R.id.activity_main_nav_host_fragment).navigate(action!!)
             }
         })
     }
