@@ -1,5 +1,7 @@
 package com.example.musicdownloader.view.fragment
 
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
@@ -70,7 +72,9 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
             override fun onError() {
                 if(action == null){
                     callBack.callBack(KEY_SHOW_PLAY_MUSIC, null)
-                    (activity as MainActivity).playMusicFragment?.gotoService(MusicService.ACTION_START)
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        (activity as MainActivity).playMusicFragment?.gotoService(MusicService.ACTION_START)
+                    }, 10)
                 }
                 else{
                     requireActivity().findNavController(R.id.activity_main_nav_host_fragment).navigate(action)

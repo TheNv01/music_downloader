@@ -184,20 +184,26 @@ class MusicService : Service() {
             this, 0, notifyIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
+
         scope.launch {
             val builder = NotificationCompat.Builder(this@MusicService, App.CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
-
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setCategory(NotificationCompat.CATEGORY_ALARM)
                 .setSubText("Music Player")
 
                 .setContentIntent(notifyPendingIntent)
-                .addAction(R.drawable.ic_previous_notification, "Previous", getIntent(ACTION_PREVIOUS))
+                .addAction(R.drawable.ic_previous_notification,
+                    "Previous",
+                    if(MediaManager.mediaPlayer!!.isPlaying) getIntent(ACTION_PREVIOUS) else getIntent(0))
                 .addAction(
                     if (MediaManager.isPause) R.drawable.ic_play_notification else R.drawable.ic_pause_notification,
                     if (MediaManager.isPause) "Resume" else "Pause",
                     if (MediaManager.isPause) getIntent(ACTION_RESUME) else getIntent(ACTION_PAUSE)
                 )
-                .addAction(R.drawable.ic_next_notification, "Next", getIntent(ACTION_NEXT))
+                .addAction(R.drawable.ic_next_notification,
+                    "Next",
+                    if(MediaManager.mediaPlayer!!.isPlaying) getIntent(ACTION_NEXT) else getIntent(0))
                 .addAction(R.drawable.ic_close_notification, "Close", getIntent(ACTION_CLOSE))
                 .setStyle(androidx.media.app.NotificationCompat.MediaStyle()
                     .setShowActionsInCompactView(0, 1, 2, 3))

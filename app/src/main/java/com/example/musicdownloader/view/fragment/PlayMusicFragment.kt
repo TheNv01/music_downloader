@@ -56,6 +56,21 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
     private var callBack: OnActionCallBack ?= null
     private val handler by lazy { Handler(Looper.getMainLooper()) }
 
+    private val mPhoneListener: PhoneStateListener = object : PhoneStateListener() {
+        override fun onCallStateChanged(state: Int, incomingNumber: String) {
+            try {
+                when (state) {
+                    TelephonyManager.CALL_STATE_RINGING -> gotoService(MusicService.ACTION_PAUSE)
+                    TelephonyManager.CALL_STATE_OFFHOOK -> {}
+                    TelephonyManager.CALL_STATE_IDLE -> gotoService(MusicService.ACTION_RESUME)
+                    else -> {}
+                }
+            } catch (e: Exception) {
+                Log.e("TAG", e.message!!)
+            }
+        }
+    }
+
     private val runnableForSeekBar: Runnable by lazy{
         object : Runnable {
             override fun run() {
@@ -360,7 +375,6 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
                 }
                 initSeekBar()
                 binding.progressBar.alpha = 0f
-                binding.icPlayOrPause.setImageResource(R.drawable.ic_pause_not_background)
                 binding.icPlayOrPause.isClickable = true
                 binding.seekBar.isEnabled = true
                 binding.imgNext.isClickable = true
@@ -441,10 +455,7 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
                 val telephonyManager = context?.getSystemService(Service.TELEPHONY_SERVICE) as TelephonyManager
                 registerReceiveCall(telephonyManager)
             }
-
         }
-        //gotoServicegotoService(MusicService.ACTION_START)
-
     }
 
     private fun registerReceiveCall(telephonyManager: TelephonyManager){
@@ -471,20 +482,7 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
                 }
 
         } else {
-            telephonyManager.listen(object : PhoneStateListener() {
-                override fun onCallStateChanged(state: Int, phoneNumber: String?) {
-                    try {
-                        when (state) {
-                            TelephonyManager.CALL_STATE_RINGING -> gotoService(MusicService.ACTION_PAUSE)
-                            TelephonyManager.CALL_STATE_OFFHOOK -> {}
-                            TelephonyManager.CALL_STATE_IDLE -> gotoService(MusicService.ACTION_RESUME)
-                            else -> {}
-                        }
-                    } catch (e: Exception) {
-                        Log.e("TAG", e.message!!)
-                    }
-                }
-            }, PhoneStateListener.LISTEN_CALL_STATE)
+            telephonyManager.listen(mPhoneListener, PhoneStateListener.LISTEN_CALL_STATE)
         }
     }
 
