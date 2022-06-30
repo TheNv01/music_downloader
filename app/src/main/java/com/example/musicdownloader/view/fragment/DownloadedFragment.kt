@@ -7,6 +7,8 @@ import android.content.Intent
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.provider.MediaStore
 import android.provider.Settings
 import android.util.Log
@@ -15,9 +17,11 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.FileProvider
+import androidx.navigation.NavDirections
 import com.example.musicdownloader.BuildConfig
 import com.example.musicdownloader.MusicService
 import com.example.musicdownloader.R
+import com.example.musicdownloader.Utils
 import com.example.musicdownloader.adapter.DownloadedAdapter
 import com.example.musicdownloader.databinding.DownloadedFragmentBinding
 import com.example.musicdownloader.interfaces.OnActionCallBack
@@ -28,6 +32,8 @@ import com.example.musicdownloader.model.MusicDownloaded
 import com.example.musicdownloader.view.MainActivity
 import com.example.musicdownloader.view.dialog.BottomDialog
 import com.example.musicdownloader.viewmodel.DownloadViewModel
+import com.proxglobal.proxads.adsv2.ads.ProxAds
+import com.proxglobal.proxads.adsv2.callback.AdsCallback
 import java.io.BufferedInputStream
 import java.io.File
 import java.io.FileInputStream
@@ -43,7 +49,7 @@ class DownloadedFragment: BaseFragment<DownloadedFragmentBinding, DownloadViewMo
         override fun onClickListener(model: MusicDownloaded) {
             MusicManager.setCurrentMusic(null)
             MusicDonwnloadedManager.currentMusicDownloaded = model
-            callback.callBack(HomeFragment.KEY_SHOW_PLAY_MUSIC, null)
+           showAds(null)
         }
     }
 
@@ -52,6 +58,27 @@ class DownloadedFragment: BaseFragment<DownloadedFragmentBinding, DownloadViewMo
             openDownloadingBottomSheet(model)
         }
 
+    }
+
+    override fun showAds(action: NavDirections?){
+        ProxAds.getInstance().showInterstitialMax(requireActivity(), "inter", object: AdsCallback() {
+            override fun onShow() {
+                callback.callBack(null, null)
+            }
+
+            override fun onClosed() {
+                (activity as MainActivity).playMusicFragment!!.gotoService(MusicService.ACTION_START)
+            }
+
+            override fun onError() {
+                if(action == null){
+                    callback.callBack(null, null)
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        (activity as MainActivity).playMusicFragment?.gotoService(MusicService.ACTION_START)
+                    }, 10)
+                }
+            }
+        })
     }
 
     override fun initBinding(mRootView: View): DownloadedFragmentBinding {
@@ -219,8 +246,7 @@ class DownloadedFragment: BaseFragment<DownloadedFragmentBinding, DownloadViewMo
 
     override fun callBack(key: String?, data: Any?) {
         val tran = (activity as MainActivity).supportFragmentManager.beginTransaction()
-        when(key){
-            HomeFragment.KEY_SHOW_PLAY_MUSIC ->{
+
                 (activity as MainActivity).let {
                     if(it.playMusicFragment == null){
                         it.playMusicFragment = PlayMusicFragment()
@@ -233,8 +259,8 @@ class DownloadedFragment: BaseFragment<DownloadedFragmentBinding, DownloadViewMo
                     }
                     tran.commit()
                 }
-            }
-        }
+
+
     }
 
 }

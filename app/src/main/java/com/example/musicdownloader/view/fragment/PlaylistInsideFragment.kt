@@ -6,6 +6,8 @@ import android.content.Intent
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.provider.MediaStore
 import android.provider.Settings
 import android.util.Log
@@ -74,8 +76,12 @@ class PlaylistInsideFragment : BaseFragment<PlaylistInsideFragmentBinding, Playl
             }
 
             override fun onError() {
-                callBack.callBack(null, null)
-                (activity as MainActivity).playMusicFragment!!.gotoService(MusicService.ACTION_START)
+                if(action == null){
+                    callBack.callBack(null, null)
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        (activity as MainActivity).playMusicFragment?.gotoService(MusicService.ACTION_START)
+                    }, 10)
+                }
             }
         })
     }

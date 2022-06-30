@@ -38,15 +38,16 @@ class SplashActivity : AppCompatActivity() {
                 gotoMainActivity()
             }
             override fun onError() {
+                Log.d("hahahaha", "errorrrrrrrrr")
                 gotoMainActivity()
 
             }
-        }, ProxUtils.TEST_INTERSTITIAL_MAX_ID, 7000)
+        }, getString(R.string.splash_ads_id), 7000)
     }
 
     private fun initAds(){
         ProxAds.getInstance()
-            .initInterstitialMax(this, ProxUtils.TEST_INTERSTITIAL_ID, "inter")
+            .initInterstitialMax(this, getString(R.string.interstitial_id), "inter")
     }
 
     private fun gotoMainActivity(){

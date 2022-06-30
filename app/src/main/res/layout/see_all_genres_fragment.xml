@@ -45,7 +45,7 @@
             <FrameLayout
                 android:id="@+id/ad_container"
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/normal_margin"
                 android:layout_marginStart="@dimen/normal_margin"
                 android:layout_marginEnd="@dimen/normal_margin"
@@ -66,7 +66,7 @@
                 android:id="@+id/recycler_view_see_all_genres"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/normal_margin"
+                android:layout_marginTop="@dimen/small_margin"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 listData="@{viewmodel.genres}"

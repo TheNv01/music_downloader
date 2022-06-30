@@ -200,23 +200,21 @@ abstract class BaseFragment<K: ViewDataBinding, V: ViewModel>: Fragment() {
             Toast.makeText(context, "Can't download because it was downloaded or downloading", Toast.LENGTH_SHORT).show()
         }
         else{
-//            ProxAds.getInstance().showInterstitialMax(requireActivity(), "inter", object: AdsCallback() {
-//                override fun onShow() {
-//                    (mViewModel as BaseViewModel).startDownload(music, path)
-//                }
-//
-//                override fun onClosed() {
-//                    (activity as MainActivity).binding.bottomView.selectedItemId  = R.id.download
-//                }
-//
-//                override fun onError() {
-//                    (mViewModel as BaseViewModel).startDownload(music, path)
-//                    (activity as MainActivity).binding.bottomView.selectedItemId  = R.id.download
-//
-//                }
-//            })
-            (mViewModel as BaseViewModel).startDownload(music, path)
-            (activity as MainActivity).binding.bottomView.selectedItemId  = R.id.download
+            ProxAds.getInstance().showInterstitialMax(requireActivity(), "inter", object: AdsCallback() {
+                override fun onShow() {
+                    (mViewModel as BaseViewModel).startDownload(music, path)
+                }
+
+                override fun onClosed() {
+                    (activity as MainActivity).binding.bottomView.selectedItemId  = R.id.download
+                }
+
+                override fun onError() {
+                    (mViewModel as BaseViewModel).startDownload(music, path)
+                    (activity as MainActivity).binding.bottomView.selectedItemId  = R.id.download
+
+                }
+            })
         }
     }
 
@@ -226,7 +224,7 @@ abstract class BaseFragment<K: ViewDataBinding, V: ViewModel>: Fragment() {
     }
 
     protected fun showSmallNative(fameLayout: FrameLayout){
-        ProxAds.getInstance().showSmallNativeMax(requireActivity(), ProxUtils.TEST_NATIVE_MAX_ID, fameLayout, object : AdsCallback() {
+        ProxAds.getInstance().showSmallNativeMaxWithShimmer(requireActivity(), getString(R.string.native_id), fameLayout, object : AdsCallback() {
 
             override fun onShow() {
                 super.onShow()

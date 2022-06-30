@@ -1,10 +1,13 @@
 package com.example.musicdownloader.view.fragment
 
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import androidx.navigation.NavDirections
 import com.example.musicdownloader.MusicService
 import com.example.musicdownloader.R
+import com.example.musicdownloader.Utils
 import com.example.musicdownloader.adapter.GenericAdapter
 import com.example.musicdownloader.adapter.SearchBinding
 import com.example.musicdownloader.adapter.SeeAllBinding
@@ -43,8 +46,12 @@ class FavoriteFragment: BaseFragment<FavoriteFragmentBinding, FavoriteViewModel>
             }
 
             override fun onError() {
-                callback.callBack(null, null)
-                (activity as MainActivity).playMusicFragment!!.gotoService(MusicService.ACTION_START)
+                if(action == null){
+                    callback.callBack(null, null)
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        (activity as MainActivity).playMusicFragment?.gotoService(MusicService.ACTION_START)
+                    }, 10)
+                }
             }
         })
     }

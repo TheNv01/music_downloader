@@ -115,7 +115,7 @@ class ChangeRegionDialog: DialogFragment(), ItemClickListener<Region> {
     }
 
     private fun showSmallNative(){
-        ProxAds.getInstance().showSmallNativeMax(requireActivity(), ProxUtils.TEST_NATIVE_MAX_ID, binding!!.adContainer, object : AdsCallback() {
+        ProxAds.getInstance().showSmallNativeMaxWithShimmer(requireActivity(), getString(R.string.native_id), binding!!.adContainer, object : AdsCallback() {
 
             override fun onShow() {
                 super.onShow()

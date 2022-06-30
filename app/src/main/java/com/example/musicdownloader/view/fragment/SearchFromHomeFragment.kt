@@ -1,6 +1,8 @@
 package com.example.musicdownloader.view.fragment
 
 import android.graphics.Color
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import androidx.activity.OnBackPressedCallback
@@ -9,6 +11,7 @@ import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
 import com.example.musicdownloader.MusicService
 import com.example.musicdownloader.R
+import com.example.musicdownloader.Utils
 import com.example.musicdownloader.adapter.GenericAdapter
 import com.example.musicdownloader.adapter.SearchBinding
 import com.example.musicdownloader.databinding.SearchFromHomeFragmentBinding
@@ -46,8 +49,12 @@ class SearchFromHomeFragment: BaseFragment<SearchFromHomeFragmentBinding, Search
             }
 
             override fun onError() {
-                callBack.callBack(null, null)
-                (activity as MainActivity).playMusicFragment!!.gotoService(MusicService.ACTION_START)
+                if(action == null){
+                    callBack.callBack(null, null)
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        (activity as MainActivity).playMusicFragment?.gotoService(MusicService.ACTION_START)
+                    }, 10)
+                }
             }
         })
     }

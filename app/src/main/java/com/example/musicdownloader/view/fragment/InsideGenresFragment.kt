@@ -1,9 +1,14 @@
 package com.example.musicdownloader.view.fragment
 
+import android.os.Handler
+import android.os.Looper
 import android.view.View
+import androidx.navigation.NavDirections
 import androidx.navigation.fragment.navArgs
+import com.example.musicdownloader.MusicService
 import com.example.musicdownloader.R
 import com.example.musicdownloader.SharedPreferencesManager
+import com.example.musicdownloader.Utils
 import com.example.musicdownloader.adapter.GenericAdapter
 import com.example.musicdownloader.adapter.SearchBinding
 import com.example.musicdownloader.databinding.InsideGenresFragmentBinding
@@ -15,6 +20,8 @@ import com.example.musicdownloader.model.Music
 import com.example.musicdownloader.model.Region
 import com.example.musicdownloader.view.MainActivity
 import com.example.musicdownloader.viewmodel.InsideGenresViewModel
+import com.proxglobal.proxads.adsv2.ads.ProxAds
+import com.proxglobal.proxads.adsv2.callback.AdsCallback
 
 class InsideGenresFragment : BaseFragment<InsideGenresFragmentBinding, InsideGenresViewModel>(), OnActionCallBack {
 
@@ -27,8 +34,29 @@ class InsideGenresFragment : BaseFragment<InsideGenresFragmentBinding, InsideGen
             MusicDonwnloadedManager.currentMusicDownloaded = null
             MusicManager.setCurrentMusic(model)
             mViewModel.musics.value?.let { MusicManager.setListMusic(it) }
-            callBack.callBack(null, null)
+            showAds(null)
         }
+    }
+
+    override fun showAds(action: NavDirections?){
+        ProxAds.getInstance().showInterstitialMax(requireActivity(), "inter", object: AdsCallback() {
+            override fun onShow() {
+                callBack.callBack(null, null)
+            }
+
+            override fun onClosed() {
+                (activity as MainActivity).playMusicFragment!!.gotoService(MusicService.ACTION_START)
+            }
+
+            override fun onError() {
+                if(action == null){
+                    callBack.callBack(null, null)
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        (activity as MainActivity).playMusicFragment?.gotoService(MusicService.ACTION_START)
+                    }, 10)
+                }
+            }
+        })
     }
 
     override fun initBinding(mRootView: View): InsideGenresFragmentBinding {

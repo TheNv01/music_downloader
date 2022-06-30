@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "493376137168",
-    "project_id": "music-downloader-27ec9",
-    "storage_bucket": "music-downloader-27ec9.appspot.com"
+    "project_number": "162103549070",
+    "project_id": "music-download-5-the",
+    "storage_bucket": "music-download-5-the.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:493376137168:android:b1415094a239d5725cfbd5",
+        "mobilesdk_app_id": "1:162103549070:android:bd4c0417d76e4c52e83ddf",
         "android_client_info": {
-          "package_name": "com.example.musicdownloader"
+          "package_name": "music.downloader.music.download.pro"
         }
       },
       "oauth_client": [
         {
-          "client_id": "493376137168-5k8c5rua10fg60480orq198elasg4nha.apps.googleusercontent.com",
+          "client_id": "162103549070-uj70lqhja6tfr3j5q6431qvhtlsf03b8.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDVDtcbyVSvFLE0gcLbK4iIQkr0o6f1mDY"
+          "current_key": "AIzaSyCBQ70oBZaTGwPiwY7AQY1iWjnk5EbRgEM"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "493376137168-5k8c5rua10fg60480orq198elasg4nha.apps.googleusercontent.com",
+              "client_id": "162103549070-uj70lqhja6tfr3j5q6431qvhtlsf03b8.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

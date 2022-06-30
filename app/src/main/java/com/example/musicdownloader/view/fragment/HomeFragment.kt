@@ -49,15 +49,12 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
         }
     }
 
-    companion object{
-        const val KEY_SHOW_PLAY_MUSIC = "KEY_SHOW_PLAY_MUSIC"
-    }
 
     override fun showAds(action:NavDirections?){
         ProxAds.getInstance().showInterstitialMax(requireActivity(), "inter", object: AdsCallback() {
             override fun onShow() {
                 if (action == null) {
-                    callBack.callBack(KEY_SHOW_PLAY_MUSIC, null)
+                    callBack.callBack(null, null)
                 } else {
                     requireActivity().findNavController(R.id.activity_main_nav_host_fragment).navigate(action)
                 }
@@ -71,7 +68,7 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
 
             override fun onError() {
                 if(action == null){
-                    callBack.callBack(KEY_SHOW_PLAY_MUSIC, null)
+                    callBack.callBack(null, null)
                     Handler(Looper.getMainLooper()).postDelayed({
                         (activity as MainActivity).playMusicFragment?.gotoService(MusicService.ACTION_START)
                     }, 10)
@@ -106,7 +103,7 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
 
     private fun showBigNative(){
 
-        ProxAds.getInstance().showBigNativeMax(requireActivity(), ProxUtils.TEST_NATIVE_MAX_ID, binding.adContainer, object : AdsCallback() {
+        ProxAds.getInstance().showBigNativeMaxWithShimmer(requireActivity(), getString(R.string.native_id), binding.adContainer, object : AdsCallback() {
             override fun onShow() {
                 super.onShow()
             }

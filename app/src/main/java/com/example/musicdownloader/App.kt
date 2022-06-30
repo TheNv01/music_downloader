@@ -4,6 +4,7 @@ import android.os.Build
 import android.app.NotificationManager
 import android.app.NotificationChannel
 import com.proxglobal.proxads.ads.openads.ProxOpenAdsApplication
+import com.proxglobal.proxads.adsv2.ads.ProxAds
 
 class App : ProxOpenAdsApplication() {
 
@@ -14,6 +15,7 @@ class App : ProxOpenAdsApplication() {
     override fun onCreate() {
         super.onCreate()
         createNotificationChannel()
+        ProxAds.getInstance().initMax(this)
         applicationContext?.let { SharedPreferencesManager.with(it) }
         Utils.initPath(this)
         SharedPreferencesManager.put( true, "in app")

@@ -341,7 +341,7 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
     }
 
     private fun showBanner(){
-        ProxAds.getInstance().showBannerMax(requireActivity(), binding.bannerContainer, ProxUtils.TEST_BANNER_MAX_ID,
+        ProxAds.getInstance().showBannerMax(requireActivity(), binding.bannerContainer, getString(R.string.banner_id),
             object: AdsCallback() {
                 override fun onShow() {
                 }
@@ -442,12 +442,8 @@ class PlayMusicFragment: BaseFragment<PlayMusicFragmentBinding, PlayMusicViewMod
                 binding.imgBackgroundRectangle.setImageResource(R.drawable.bg_playlist)
                 binding.imgCircle.setImageResource(R.drawable.bg_playlist)
             }
-            gotoService(MusicService.ACTION_START)
         }
-//        if(MediaManager.mediaPlayer?.isPlaying == true){
-//            rotateImageView()
-//            initSeekBar()
-//        }
+
         MediaManager.mediaPlayer?.setOnPreparedListener {
             mViewModel.isPrepared.postValue( true)
             if(context != null){
