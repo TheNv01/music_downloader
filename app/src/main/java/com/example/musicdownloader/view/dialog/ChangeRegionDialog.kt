@@ -10,11 +10,14 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
+import com.example.musicdownloader.MusicService
 import com.example.musicdownloader.R
 import com.example.musicdownloader.adapter.ChangeRegionAdapter
 import com.example.musicdownloader.databinding.ChangeRegionFragmentBinding
 import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
+import com.example.musicdownloader.manager.MediaManager
 import com.example.musicdownloader.model.Region
+import com.example.musicdownloader.view.MainActivity
 import com.example.musicdownloader.viewmodel.ChangeRegionViewModel
 import com.proxglobal.proxads.ProxUtils
 import com.proxglobal.proxads.adsv2.ads.ProxAds
@@ -27,6 +30,8 @@ class ChangeRegionDialog: DialogFragment(), ItemClickListener<Region> {
     private var binding: ChangeRegionFragmentBinding ?= null
     private lateinit var viewModel: ChangeRegionViewModel
     private lateinit var adapter: ChangeRegionAdapter
+
+    private var isUserClickPause = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -97,11 +102,25 @@ class ChangeRegionDialog: DialogFragment(), ItemClickListener<Region> {
     private fun showAds(model: Region){
         ProxAds.getInstance().showInterstitialMax(requireActivity(), "inter", object: AdsCallback() {
             override fun onShow() {
+                if(!MediaManager.isPause){
+                    (activity as MainActivity).playMusicFragment?.gotoService(MusicService.ACTION_PAUSE)
+                }
+                else{
+                    isUserClickPause = true
+                }
                 val bundle = Bundle()
                 bundle.putSerializable("region", model)
                 setFragmentResult("requestKey", bundle)
             }
             override fun onClosed() {
+                if(!MediaManager.mediaPlayer!!.isPlaying){
+                    if(!isUserClickPause){
+                        (activity as MainActivity).playMusicFragment?.gotoService(MusicService.ACTION_RESUME)
+                    }
+                    else{
+                        isUserClickPause = false
+                    }
+                }
                 dialog?.dismiss()
             }
             override fun onError() {

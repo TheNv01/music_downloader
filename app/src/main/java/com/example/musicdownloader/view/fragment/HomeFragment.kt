@@ -19,6 +19,7 @@ import com.example.musicdownloader.databinding.HomeFragmentBinding
 import com.example.musicdownloader.interfaces.OnActionCallBack
 import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
 import com.example.musicdownloader.adapter.TopListenedBinding
+import com.example.musicdownloader.manager.MediaManager
 import com.example.musicdownloader.manager.MusicDonwnloadedManager
 import com.example.musicdownloader.manager.MusicManager
 import com.example.musicdownloader.model.Genres
@@ -35,6 +36,7 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
     lateinit var callBack: OnActionCallBack
     private lateinit var tvRegion: TextView
     private lateinit var imgLanguage: ImageView
+
 
     private fun setMusicClickListener(listMusicLiveData: LiveData<List<Music>> ?= null) =  object : ItemClickListener<Music> {
         override fun onClickListener(model: Music) {
@@ -56,6 +58,12 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
                 if (action == null) {
                     callBack.callBack(null, null)
                 } else {
+                    if(!MediaManager.isPause){
+                        (activity as MainActivity).playMusicFragment?.gotoService(MusicService.ACTION_PAUSE)
+                    }
+                    else{
+                        isUserClickPause = true
+                    }
                     requireActivity().findNavController(R.id.activity_main_nav_host_fragment).navigate(action)
                 }
             }
@@ -63,6 +71,16 @@ class HomeFragment: BaseFragment<HomeFragmentBinding, HomeViewModel>(), OnAction
             override fun onClosed() {
                 if (action == null) {
                     (activity as MainActivity).playMusicFragment!!.gotoService(MusicService.ACTION_START)
+                }
+                else{
+                    if(!MediaManager.mediaPlayer!!.isPlaying){
+                        if(!isUserClickPause){
+                            (activity as MainActivity).playMusicFragment?.gotoService(MusicService.ACTION_RESUME)
+                        }
+                        else{
+                            isUserClickPause = false
+                        }
+                    }
                 }
             }
 

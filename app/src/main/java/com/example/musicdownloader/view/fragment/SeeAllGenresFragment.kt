@@ -4,12 +4,15 @@ import android.util.Log
 import android.view.View
 import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
+import com.example.musicdownloader.MusicService
 import com.example.musicdownloader.R
 import com.example.musicdownloader.adapter.GenericAdapter
 import com.example.musicdownloader.adapter.GenresSeeAllBinding
 import com.example.musicdownloader.databinding.SeeAllGenresFragmentBinding
 import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
+import com.example.musicdownloader.manager.MediaManager
 import com.example.musicdownloader.model.Genres
+import com.example.musicdownloader.view.MainActivity
 import com.example.musicdownloader.viewmodel.SeeAllGenresViewModel
 import com.proxglobal.proxads.adsv2.ads.ProxAds
 import com.proxglobal.proxads.adsv2.callback.AdsCallback
@@ -57,9 +60,25 @@ class SeeAllGenresFragment : BaseFragment<SeeAllGenresFragmentBinding, SeeAllGen
     override fun showAds(action: NavDirections?){
         ProxAds.getInstance().showInterstitialMax(requireActivity(), "inter", object: AdsCallback() {
             override fun onShow() {
+                if(!MediaManager.isPause){
+                    (activity as MainActivity).playMusicFragment?.gotoService(MusicService.ACTION_PAUSE)
+                }
+                else{
+                    isUserClickPause = true
+                }
                 requireActivity().findNavController(R.id.activity_main_nav_host_fragment).navigate(action!!)
             }
-            override fun onClosed() {}
+            override fun onClosed() {
+                if(!MediaManager.mediaPlayer!!.isPlaying){
+                    Log.d("asdfasdfasdfas", isUserClickPause.toString())
+                    if(!isUserClickPause){
+                        (activity as MainActivity).playMusicFragment?.gotoService(MusicService.ACTION_RESUME)
+                    }
+                    else{
+                        isUserClickPause = false
+                    }
+                }
+            }
 
             override fun onError() {
                 requireActivity().findNavController(R.id.activity_main_nav_host_fragment).navigate(action!!)

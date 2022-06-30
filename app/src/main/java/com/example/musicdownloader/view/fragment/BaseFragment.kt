@@ -18,9 +18,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import com.example.musicdownloader.MusicService
 import com.example.musicdownloader.R
 import com.example.musicdownloader.Utils
 import com.example.musicdownloader.interfaces.itemclickinterface.ItemClickListener
+import com.example.musicdownloader.manager.MediaManager
 import com.example.musicdownloader.model.General
 import com.example.musicdownloader.model.Music
 import com.example.musicdownloader.networking.Services
@@ -45,6 +47,8 @@ abstract class BaseFragment<K: ViewDataBinding, V: ViewModel>: Fragment() {
     lateinit var binding: K
     protected lateinit var music: Music
     protected lateinit var file: File
+
+    protected var isUserClickPause = false
 
     @Nullable
     override fun onCreateView(
@@ -202,10 +206,24 @@ abstract class BaseFragment<K: ViewDataBinding, V: ViewModel>: Fragment() {
         else{
             ProxAds.getInstance().showInterstitialMax(requireActivity(), "inter", object: AdsCallback() {
                 override fun onShow() {
+                    if(!MediaManager.isPause){
+                        (activity as MainActivity).playMusicFragment?.gotoService(MusicService.ACTION_PAUSE)
+                    }
+                    else{
+                        isUserClickPause = true
+                    }
                     (mViewModel as BaseViewModel).startDownload(music, path)
                 }
 
                 override fun onClosed() {
+                    if(!MediaManager.mediaPlayer!!.isPlaying){
+                        if(!isUserClickPause){
+                            (activity as MainActivity).playMusicFragment?.gotoService(MusicService.ACTION_RESUME)
+                        }
+                        else{
+                            isUserClickPause = false
+                        }
+                    }
                     (activity as MainActivity).binding.bottomView.selectedItemId  = R.id.download
                 }
 
