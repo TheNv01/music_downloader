@@ -36,6 +36,7 @@
             android:exported="true"
             android:windowSoftInputMode="adjustPan"
             android:launchMode="singleTask"
+            android:configChanges="uiMode"
             android:excludeFromRecents="true">
         </activity>
 
